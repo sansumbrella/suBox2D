@@ -1,0 +1,6 @@
+include/b2cinder contains a wrapper for Box2D functionality. It provides a simple debugDraw method for sanity checks, and should make it easier to set up a simulation in screen space, add bodies to it, and start interacting.
+
+include/Box2D contains the source of Box2D_v2.1.2 by Erin Catto. More information is contained in that directory.
+
+API Status:
+pre-alpha
