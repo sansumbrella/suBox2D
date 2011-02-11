@@ -15,11 +15,11 @@ BoxElement::BoxElement( Vec2f pos, Vec2f size, bool isDynamic )
 {
 	mBounds = Rectf( -size.x/2.0f, -size.y/2.0f, size.x/2.0f, size.y/2.0f );
 	
-	mBodyDef.position.Set(	Conversions::screenToPhysics( pos.x ),
-							Conversions::screenToPhysics( pos.y ) );		
+	mBodyDef.position.Set(	Conversions::toPhysics( pos.x ),
+							Conversions::toPhysics( pos.y ) );		
 	
-	mShape.SetAsBox(	Conversions::screenToPhysics( size.x/2.0f ),
-						Conversions::screenToPhysics( size.y/2.0f ) );
+	mShape.SetAsBox(	Conversions::toPhysics( size.x/2.0f ),
+						Conversions::toPhysics( size.y/2.0f ) );
 	
 	//
 	mFixtureDef.shape = &mShape;
@@ -39,7 +39,7 @@ BoxElement::BoxElement( Vec2f pos, Vec2f size, bool isDynamic )
 
 void BoxElement::draw()
 {
-	Vec2f pos = Conversions::physicsToScreen( mBody->GetPosition() );
+	Vec2f pos = Conversions::toScreen( mBody->GetPosition() );
 	float t = Conversions::radiansToDegrees( mBody->GetAngle() );
 	
 	gl::color( mColor );

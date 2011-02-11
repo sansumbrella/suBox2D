@@ -28,14 +28,14 @@ void BoundaryElement::set( Rectf screenBounds, float thickness )
 	if( mScreenBounds.calcArea() != 0 )
 	{		
 		// half width and half height
-		float w = Conversions::screenToPhysics( mScreenBounds.getWidth()/2.0f );
-		float h = Conversions::screenToPhysics( mScreenBounds.getHeight()/2.0f );
+		float w = Conversions::toPhysics( mScreenBounds.getWidth()/2.0f );
+		float h = Conversions::toPhysics( mScreenBounds.getHeight()/2.0f );
 		// center x, y
 		
 		
 		Vec2f upperLeft = mScreenBounds.getUpperLeft();
-		float x = Conversions::screenToPhysics( upperLeft.x ) + w;
-		float y = Conversions::screenToPhysics( upperLeft.y ) + h;
+		float x = Conversions::toPhysics( upperLeft.x ) + w;
+		float y = Conversions::toPhysics( upperLeft.y ) + h;
 		
 		w += mBoundThickness;
 		h += mBoundThickness;

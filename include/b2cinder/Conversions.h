@@ -19,22 +19,22 @@ namespace cinder{
 			
 			const static float mScaling = 50.0f;	//50 pixels per meter sounds reasonable
 			
-			static Vec2f physicsToScreen( b2Vec2 fin )
+			static Vec2f toScreen( b2Vec2 fin )
 			{
 				return Vec2f(fin.x, fin.y) * mScaling;
 			}
 			
-			static b2Vec2 screenToPhysics( Vec2f fin )
+			static b2Vec2 toPhysics( Vec2f fin )
 			{
 				return b2Vec2( fin.x/mScaling, fin.y/mScaling );
 			}
 			
-			static float screenToPhysics( float fin )
+			static float toPhysics( float fin )
 			{
 				return fin / mScaling;
 			}
 			
-			static float physicsToScreen( float fin )
+			static float toScreen( float fin )
 			{
 				return fin * mScaling;
 			}

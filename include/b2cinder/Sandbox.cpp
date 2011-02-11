@@ -39,7 +39,7 @@ void Sandbox::update()
 
 void Sandbox::setGravity( Vec2f gravity )
 {
-	mGravity = Conversions::screenToPhysics( gravity );
+	mGravity = Conversions::toPhysics( gravity );
 	mWorld->SetGravity(mGravity);
 }
 
@@ -130,7 +130,7 @@ void Sandbox::debugDraw( bool drawBodies, bool drawContacts )
 			
 			gl::pushMatrices();
 			
-			gl::translate( Conversions::physicsToScreen(pos) );
+			gl::translate( Conversions::toScreen(pos) );
 			gl::rotate( Conversions::radiansToDegrees( angle ) );
 			
 			//draw the fixtures for this body
@@ -147,7 +147,7 @@ void Sandbox::debugDraw( bool drawBodies, bool drawContacts )
 							
 							for( int i=0; i != shape->GetVertexCount(); ++i )
 							{
-								gl::vertex( Conversions::physicsToScreen( shape->GetVertex(i) ) );
+								gl::vertex( Conversions::toScreen( shape->GetVertex(i) ) );
 							}
 							
 							glEnd();
@@ -156,7 +156,7 @@ void Sandbox::debugDraw( bool drawBodies, bool drawContacts )
 					case b2Shape::e_circle:
 						{
 							b2CircleShape* shape = (b2CircleShape*)fixtures->GetShape();
-							gl::drawSolidCircle( Conversions::physicsToScreen( shape->m_p ), Conversions::physicsToScreen( shape->m_radius ) );
+							gl::drawSolidCircle( Conversions::toScreen( shape->m_p ), Conversions::toScreen( shape->m_radius ) );
 						}
 						break;
 
@@ -190,7 +190,7 @@ void Sandbox::debugDraw( bool drawBodies, bool drawContacts )
 			
 			for( int i=0; i != b2_maxManifoldPoints; ++i )
 			{
-				Vec2f p = Conversions::physicsToScreen( m.points[i] );
+				Vec2f p = Conversions::toScreen( m.points[i] );
 				gl::vertex( p );
 			}
 			
@@ -216,15 +216,15 @@ void Sandbox::draw()
 void Sandbox::addBox( Vec2f pos, Vec2f size )
 {	
 	b2BodyDef bodyDef;
-	bodyDef.position.Set(	Conversions::screenToPhysics(pos.x),
-							Conversions::screenToPhysics( pos.y ) );
+	bodyDef.position.Set(	Conversions::toPhysics(pos.x),
+							Conversions::toPhysics( pos.y ) );
 	
 	bodyDef.type = b2_dynamicBody;
 	mTempBody = mWorld->CreateBody(&bodyDef);
 	
 	b2PolygonShape box;
-	box.SetAsBox(	Conversions::screenToPhysics(size.x),
-					Conversions::screenToPhysics( size.y ) );
+	box.SetAsBox(	Conversions::toPhysics(size.x),
+					Conversions::toPhysics( size.y ) );
 	
 	b2FixtureDef bodyFixtureDef;
 	bodyFixtureDef.shape = &box;
@@ -315,7 +315,7 @@ bool Sandbox::mouseDown( app::MouseEvent event )
 	{
 		return false;
 	}
-	b2Vec2 p = Conversions::screenToPhysics( event.getPos() );
+	b2Vec2 p = Conversions::toPhysics( event.getPos() );
 	// Make a small box.
 	b2AABB aabb;
 	b2Vec2 d;
@@ -355,7 +355,7 @@ bool Sandbox::mouseUp( app::MouseEvent event )
 bool Sandbox::mouseDrag( app::MouseEvent event )
 {
 	if(mMouseJoint){
-		mMouseJoint->SetTarget( Conversions::screenToPhysics(event.getPos()) );
+		mMouseJoint->SetTarget( Conversions::toPhysics(event.getPos()) );
 	}
 	return false;
 }

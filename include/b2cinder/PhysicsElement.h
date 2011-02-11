@@ -42,7 +42,7 @@ namespace cinder {
 			// creates a circular reference with the b2Body in the simulation
 			void setBody( b2Body* b ){ mBody = b; b->SetUserData(this); }
 			
-			void applyForce( Vec2f force, Vec2f pos ){ mBody->ApplyForce( Conversions::screenToPhysics(force), Conversions::screenToPhysics(pos) ); }
+			void applyForce( Vec2f force, Vec2f pos ){ mBody->ApplyForce( Conversions::toPhysics(force), Conversions::toPhysics(pos) ); }
 			
 			// update any settings applied to the body
 			virtual void update(){}
@@ -52,7 +52,7 @@ namespace cinder {
 			virtual bool isDead(){ return false; }
 			
 			//
-			Vec2f getScreenPos(){ return Conversions::physicsToScreen( mBody->GetPosition() ); }
+			Vec2f getScreenPos(){ return Conversions::toScreen( mBody->GetPosition() ); }
 			float getAngleDegrees(){ return Conversions::radiansToDegrees( mBody->GetAngle() ); }
 			
 			// add special attributes
