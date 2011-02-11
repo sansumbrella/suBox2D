@@ -45,7 +45,7 @@ void BasicBox2DApp::setup()
 
 void BasicBox2DApp::mouseDrag( MouseEvent event )
 {
-	if ( event.isAltDown() )
+	if ( !event.isAltDown() )
 	{
 		addBox();
 	}
@@ -54,7 +54,7 @@ void BasicBox2DApp::mouseDrag( MouseEvent event )
 
 void BasicBox2DApp::mouseDown( MouseEvent event )
 {
-	if( event.isAltDown() ) 
+	if( !event.isAltDown() ) 
 	{
 		addBox();
 	}
