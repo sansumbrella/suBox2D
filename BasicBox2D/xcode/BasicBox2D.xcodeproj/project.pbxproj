@@ -541,6 +541,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BasicBox2D_Prefix.pch;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					../../include,
 					"\"$(CINDER_PATH)/boost\"",
@@ -552,6 +553,7 @@
 					"-lcurl",
 				);
 				PRODUCT_NAME = BasicBox2D;
+				SDKROOT = "";
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include";
 				WRAPPER_EXTENSION = app;
 			};
@@ -570,6 +572,7 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = BasicBox2D_Prefix.pch;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					../../include,
 					"\"$(CINDER_PATH)/boost\"",
@@ -581,6 +584,7 @@
 					"-lcurl",
 				);
 				PRODUCT_NAME = BasicBox2D;
+				SDKROOT = "";
 				STRIP_INSTALLED_PRODUCT = YES;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include";
 				WRAPPER_EXTENSION = app;

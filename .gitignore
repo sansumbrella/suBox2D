@@ -4,3 +4,5 @@
 *.user
 .DS_Store
 build
+xcuserdata
+*.xcworkspace

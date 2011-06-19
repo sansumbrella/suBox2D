@@ -1,5 +1,5 @@
 #include "cinder/app/AppBasic.h"
-#include <b2cinder/b2cinder.h>
+#include "b2cinder/b2cinder.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -85,8 +85,8 @@ void Joint2DApp::setup()
 	mSandbox.addElement(b);
 	
 	prisJointDef.Initialize( a->getBody(), b->getBody(), a->getBody()->GetWorldCenter(), worldAxis );
-	prisJointDef.lowerTranslation = Conversions::screenToPhysics( -25.0f );
-	prisJointDef.upperTranslation = Conversions::screenToPhysics( 50.0f );
+	prisJointDef.lowerTranslation = Conversions::toScreen( -25.0f );
+	prisJointDef.upperTranslation = Conversions::toPhysics( 50.0f );
 	prisJointDef.enableLimit = true;
 //	prisJointDef.maxMotorForce = 1.0f;
 //	prisJointDef.motorSpeed = 0.0f;
@@ -102,17 +102,17 @@ void Joint2DApp::setup()
 	mSandbox.addElement(a);
 	mSandbox.addElement(b);
 	
-	b2Vec2 anchor1 = a->getBody()->GetWorldCenter() - Conversions::screenToPhysics( Vec2f(0, 20.0f) );
-	b2Vec2 anchor2 = b->getBody()->GetWorldCenter() - Conversions::screenToPhysics( Vec2f(0, 20.0f) );
-	b2Vec2 ground1 = Conversions::screenToPhysics( Vec2f( 200.0f, 0.0f ) );
-	b2Vec2 ground2 = Conversions::screenToPhysics( Vec2f( 250.0f, 0.0f ) );
+	b2Vec2 anchor1 = a->getBody()->GetWorldCenter() - Conversions::toPhysics( Vec2f(0, 20.0f) );
+	b2Vec2 anchor2 = b->getBody()->GetWorldCenter() - Conversions::toPhysics( Vec2f(0, 20.0f) );
+	b2Vec2 ground1 = Conversions::toPhysics( Vec2f( 200.0f, 0.0f ) );
+	b2Vec2 ground2 = Conversions::toPhysics( Vec2f( 250.0f, 0.0f ) );
 	
 	float32 ratio = 1.0f;
 	
 	b2PulleyJointDef pulleyJointDef;
 	pulleyJointDef.Initialize( a->getBody(), b->getBody(), ground1, ground2, anchor1, anchor2, ratio );
-	pulleyJointDef.maxLengthA = Conversions::screenToPhysics( 400.0f );
-	pulleyJointDef.maxLengthB = Conversions::screenToPhysics( 600.0f );
+	pulleyJointDef.maxLengthA = Conversions::toPhysics( 400.0f );
+	pulleyJointDef.maxLengthB = Conversions::toPhysics( 600.0f );
 	
 	mSandbox.getWorld()->CreateJoint(&pulleyJointDef);
 	
