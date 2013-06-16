@@ -2,6 +2,7 @@
 #include "cinder/gl/gl.h"
 #include "cinder/Rand.h"
 #include "sansumbrella/b2cinder.h"
+#include "cinder/Triangulate.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -14,12 +15,15 @@ class SandboxApp : public AppNative {
 	void setup();
 	void mouseDown( MouseEvent event );
   void mouseDrag( MouseEvent event );
+  void keyDown( KeyEvent event );
 	void update();
 	void draw();
 private:
   void addBox( const ci::Vec2f &loc );
+  void createCrazyShape();
 	Sandbox   mSandbox;
 	Font      mFont;
+  b2Body*   mCrazyBody = nullptr;
 };
 
 void SandboxApp::prepareSettings(Settings *settings)
@@ -31,6 +35,20 @@ void SandboxApp::setup()
   mSandbox.init();
   mSandbox.connectUserSignals( getWindow() );
   mFont = Font( "Hoefler Text", 12.0f );
+  createCrazyShape();
+}
+
+void SandboxApp::keyDown(KeyEvent event)
+{
+  switch ( event.getChar() )
+  {
+    case 'c':
+      createCrazyShape();
+      break;
+
+    default:
+      break;
+  }
 }
 
 void SandboxApp::mouseDown( MouseEvent event )
@@ -53,6 +71,31 @@ void SandboxApp::addBox( const ci::Vec2f &loc )
 {
   mSandbox.createCircle( loc, Rand::randFloat( 5.0f, 20.0f ) );
 //  mSandbox.createBox( loc, Vec2f( Rand::randFloat(10.0f,40.0f), Rand::randFloat(10.0f,40.0f) ) );
+}
+
+void SandboxApp::createCrazyShape()
+{
+  double d1 = getElapsedSeconds();
+  float d = Rand::randFloat( 0.5, 2.0f );
+  Path2d outline;
+  outline.moveTo( cos( 0 ) * d, sin( 0 ) * d );
+  for( int i = 1; i < 5; ++i )
+  {
+    float t = lmap<float>( i, 0, 5, 0, M_PI * 2 );
+    d = Rand::randFloat( 0.5, 2.0f );
+    outline.lineTo( cos( t ) * d, sin( t ) * d  );
+  }
+
+  vector<b2Vec2> hull_vertices( outline.getNumPoints() );
+  for( int i = 0; i < hull_vertices.size(); ++i )
+  {
+    hull_vertices[i] = b2Vec2{ outline.getPoint(i).x, outline.getPoint(i).y };
+  }
+  if( mCrazyBody ){ mSandbox.destroyBody( mCrazyBody ); }
+  mCrazyBody = mSandbox.createFanShape( mSandbox.toPhysics( getWindowSize() / 2 ), hull_vertices );
+//  mCrazyBody = mSandbox.createShape( mSandbox.toPhysics( getWindowSize() / 2 ), Triangulator( outline, 1.0 ).calcMesh( Triangulator::WINDING_ODD ) );
+  double d2 = getElapsedSeconds();
+  cout << "Creating shape took: " << (d2 - d1) * 1000 << "ms" << endl;
 }
 
 void SandboxApp::update()

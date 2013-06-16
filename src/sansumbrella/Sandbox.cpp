@@ -26,6 +26,8 @@
  */
 
 #include "Sandbox.h"
+#include "cinder/TriMesh.h"
+#include <array>
 
 using namespace cinder;
 using namespace sansumbrella;
@@ -129,7 +131,7 @@ b2Body* Sandbox::createBox( const ci::Vec2f &pos, const ci::Vec2f &size )
   return createBody( bodyDef, bodyFixtureDef );
 }
 
-b2Body* Sandbox::createCircle(const ci::Vec2f &pos, float radius)
+b2Body* Sandbox::createCircle( const Vec2f &pos, float radius )
 {
   b2BodyDef bodyDef;
   bodyDef.position.Set(	toPhysics(pos.x),
@@ -144,6 +146,60 @@ b2Body* Sandbox::createCircle(const ci::Vec2f &pos, float radius)
   fixtureDef.friction = 0.3f;
 
   return createBody( bodyDef, fixtureDef );
+}
+
+b2Body* Sandbox::createFanShape(const ci::Vec2f &centroid, const std::vector<b2Vec2> &hull_vertices)
+{
+  assert( hull_vertices.size() >= 3 );
+  vector<b2PolygonShape> shapes( hull_vertices.size() );
+  vector<b2FixtureDef> fixtures( hull_vertices.size() );
+  b2BodyDef bodyDef;
+  bodyDef.position.Set( centroid.x, centroid.y );
+  bodyDef.type = b2_dynamicBody;
+
+  b2Vec2 center{ 0, 0 };
+
+  for( int i = 0; i < hull_vertices.size() - 1; ++i )
+  {
+    array<b2Vec2, 3> vertices = { center, hull_vertices[i], hull_vertices[i+1] };
+    shapes.at( i ).Set( &vertices[0], vertices.size() );
+    fixtures.at( i ).shape = &shapes.at( i );
+    fixtures[i].density = 1.0f;
+    fixtures[i].friction = 0.3f;
+  }
+
+  { // connect around loop
+    array<b2Vec2, 3> vertices = { center, hull_vertices[hull_vertices.size() - 1], hull_vertices[0] };
+    shapes.back().Set( &vertices[0], vertices.size() );
+    fixtures.back().shape = &shapes.back();
+    fixtures.back().density = 1.0f;
+    fixtures.back().friction = 0.3f;
+  }
+
+  return createBody( bodyDef, fixtures );
+}
+
+b2Body* Sandbox::createShape( const ci::Vec2f &centroid, const ci::TriMesh2d &mesh )
+{
+  const auto num_triangles = mesh.getNumTriangles();
+  vector<b2PolygonShape> shapes( num_triangles );
+  vector<b2FixtureDef> fixtures( num_triangles );
+  b2BodyDef bodyDef;
+  bodyDef.position.Set( centroid.x, centroid.y );
+  bodyDef.type = b2_dynamicBody;
+
+  for( auto i = 0; i < num_triangles; ++i )
+  {
+    Vec2f a, b, c;
+    // do these come out in any specific order? CW, CCW?
+    mesh.getTriangleVertices( i, &a, &b, &c );
+    array<b2Vec2, 3> vertices = { b2Vec2{a.x, a.y}, b2Vec2{b.x, b.y}, b2Vec2{c.x, c.y} };
+    shapes[i].Set( &vertices[0], vertices.size() );
+    fixtures[i].shape = &shapes[i];
+    fixtures[i].density = 1.0f;
+    fixtures[i].friction = 0.3f;
+  }
+  return createBody( bodyDef, fixtures );
 }
 
 b2Body* Sandbox::createBoundaryRect(ci::Rectf screen_bounds, float thickness)
