@@ -16,8 +16,6 @@ Sandbox::Sandbox()
 	// set defaults
 	mDoSleep = true;
 	mGravity.Set(0.0f, 10.0f);	//since top-left is (0,0), positive gravity goes down
-	mVelocityIterations = 10;
-	mPositionIterations = 10;
 	
 	mTimeStep = 1.0f / 60.0f;
 	

@@ -86,8 +86,8 @@ namespace cinder{
 			
 			CallbackId mMouseDownId, mMouseUpId, mMouseDragId;
 			
-			int mVelocityIterations;
-			int mPositionIterations;
+			int mVelocityIterations = 8;
+			int mPositionIterations = 4;
 			float mTimeStep;
 			
 			b2Vec2 mGravity;
