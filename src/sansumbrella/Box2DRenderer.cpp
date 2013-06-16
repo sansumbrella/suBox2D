@@ -32,8 +32,7 @@ using namespace sansumbrella;
 using namespace cinder;
 using namespace std;
 
-Box2DRenderer::Box2DRenderer( float points_per_meter ):
-mPointsPerMeter( points_per_meter )
+Box2DRenderer::Box2DRenderer()
 {
   updateFlags();
 }
@@ -52,8 +51,6 @@ void Box2DRenderer::updateFlags()
 
 void Box2DRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
-  gl::pushModelView();
-  gl::scale( mPointsPerMeter, mPointsPerMeter );
 	glColor3f(color.r, color.g, color.b);
 	glBegin(GL_LINE_LOOP);
 	for (int32 i = 0; i < vertexCount; ++i)
@@ -61,12 +58,9 @@ void Box2DRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const
 		glVertex2f( vertices[i].x, vertices[i].y );
 	}
 	glEnd();
-  gl::popModelView();
 }
 void Box2DRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
-  gl::pushModelView();
-  gl::scale( mPointsPerMeter, mPointsPerMeter );
   gl::enableAlphaBlending();
   glColor4f(0.5f * color.r, 0.5f * color.g, 0.5f * color.b, 0.5f);
   glBegin(GL_TRIANGLE_FAN);
@@ -85,12 +79,9 @@ void Box2DRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, 
     glVertex2f( vertices[i].x, vertices[i].y );
   }
   glEnd();
-  gl::popModelView();
 }
 void Box2DRenderer::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
 {
-  gl::pushModelView();
-  gl::scale( mPointsPerMeter, mPointsPerMeter );
 	const float32 k_segments = 16.0f;
 	const float32 k_increment = 2.0f * b2_pi / k_segments;
 	float32 theta = 0.0f;
@@ -103,12 +94,9 @@ void Box2DRenderer::DrawCircle(const b2Vec2& center, float32 radius, const b2Col
 		theta += k_increment;
 	}
 	glEnd();
-  gl::popModelView();
 }
 void Box2DRenderer::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color)
 {
-  gl::pushModelView();
-  gl::scale( mPointsPerMeter, mPointsPerMeter );
 	const float32 k_segments = 16.0f;
 	const float32 k_increment = 2.0f * b2_pi / k_segments;
 	float32 theta = 0.0f;
@@ -140,23 +128,17 @@ void Box2DRenderer::DrawSolidCircle(const b2Vec2& center, float32 radius, const 
 	glVertex2f(center.x, center.y);
 	glVertex2f(p.x, p.y);
 	glEnd();
-  gl::popModelView();
 }
 void Box2DRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 {
-  gl::pushModelView();
-  gl::scale( mPointsPerMeter, mPointsPerMeter );
   glColor3f(color.r, color.g, color.b);
 	glBegin(GL_LINES);
 	glVertex2f(p1.x, p1.y);
 	glVertex2f(p2.x, p2.y);
 	glEnd();
-  gl::popModelView();
 }
 void Box2DRenderer::DrawTransform(const b2Transform& xf)
 {
-  gl::pushModelView();
-  gl::scale( mPointsPerMeter, mPointsPerMeter );
 	b2Vec2 p1 = xf.p, p2;
 	const float32 k_axisScale = 0.4f;
 	glBegin(GL_LINES);
@@ -172,19 +154,15 @@ void Box2DRenderer::DrawTransform(const b2Transform& xf)
 	glVertex2f(p2.x, p2.y);
 
 	glEnd();
-  gl::popModelView();
 }
 void Box2DRenderer::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 {
-  gl::pushModelView();
-  gl::scale( mPointsPerMeter, mPointsPerMeter );
 	glPointSize(size);
 	glBegin(GL_POINTS);
 	glColor3f(color.r, color.g, color.b);
 	glVertex2f(p.x, p.y);
 	glEnd();
 	glPointSize(1.0f);
-  gl::popModelView();
 }
 void Box2DRenderer::DrawString(int x, int y, const char* string, ...)
 {
@@ -192,8 +170,6 @@ void Box2DRenderer::DrawString(int x, int y, const char* string, ...)
 }
 void Box2DRenderer::DrawAABB(b2AABB* aabb, const b2Color& color)
 {
-  gl::pushModelView();
-  gl::scale( mPointsPerMeter, mPointsPerMeter );
 
 	glColor3f(color.r, color.g, color.b);
 	glBegin(GL_LINE_LOOP);
@@ -203,5 +179,4 @@ void Box2DRenderer::DrawAABB(b2AABB* aabb, const b2Color& color)
 	glVertex2f(aabb->lowerBound.x, aabb->upperBound.y);
 	glEnd();
 
-  gl::popModelView();
 }

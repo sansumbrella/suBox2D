@@ -116,6 +116,6 @@ namespace sansumbrella
     // our mouse, for simple interaction
     b2MouseJoint*   mMouseJoint = nullptr;
     b2Body*         mBoundaryBody = nullptr;
-    Box2DRenderer   mDebugRenderer = Box2DRenderer{mPointsPerMeter};
+    Box2DRenderer   mDebugRenderer;
   };
 }

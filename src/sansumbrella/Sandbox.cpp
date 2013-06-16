@@ -86,7 +86,10 @@ void Sandbox::connectUserSignals(ci::app::WindowRef window)
 
 void Sandbox::debugDraw()
 {
+	gl::pushModelView();
+	gl::scale( mPointsPerMeter, mPointsPerMeter );
   mWorld.DrawDebugData();
+  gl::popModelView();
 }
 
 b2Body* Sandbox::createBody(const b2BodyDef &body_def, const b2FixtureDef &fixture_def)

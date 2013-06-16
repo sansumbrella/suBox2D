@@ -33,7 +33,7 @@ namespace sansumbrella
 	class Box2DRenderer : public b2Draw
 	{
 	public:
-		Box2DRenderer( float points_per_meter );
+		Box2DRenderer();
 		~Box2DRenderer();
 		void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
 		void DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
@@ -45,8 +45,6 @@ namespace sansumbrella
 		void DrawString(int x, int y, const char* string, ...);
 		void DrawAABB(b2AABB* aabb, const b2Color& color);
 	private:
-		//! Conversion from physical measurements to screen units
-    float mPointsPerMeter;
     int drawShape = 1;
     int drawJoint = 1;
     int drawAABB = 0;
