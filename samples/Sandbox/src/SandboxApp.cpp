@@ -51,7 +51,8 @@ void SandboxApp::mouseDrag(MouseEvent event)
 
 void SandboxApp::addBox( const ci::Vec2f &loc )
 {
-  mSandbox.createBox( loc, Vec2f( Rand::randFloat(10.0f,40.0f), Rand::randFloat(10.0f,40.0f) ) );
+  mSandbox.createCircle( loc, Rand::randFloat( 5.0f, 20.0f ) );
+//  mSandbox.createBox( loc, Vec2f( Rand::randFloat(10.0f,40.0f), Rand::randFloat(10.0f,40.0f) ) );
 }
 
 void SandboxApp::update()

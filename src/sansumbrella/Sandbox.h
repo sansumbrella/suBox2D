@@ -33,6 +33,13 @@
 
 namespace sansumbrella
 {
+  /**
+  Sandbox creates a mapping between the window and the physics world.
+  Creates a rectangular viewing region the size of the screen by default, which
+  looks into an n1*n2 slice of the world
+
+  If desired, a boundary shape can be created.
+  */
   class Sandbox
   {
   public:
@@ -52,7 +59,8 @@ namespace sansumbrella
     b2Body* createBoundaryRect( ci::Rectf screen_bounds, float thickness=1.0f );
 
     // add a BoxElement
-    b2Body* createBox( ci::Vec2f pos, ci::Vec2f size );
+    b2Body* createBox( const ci::Vec2f &pos, const ci::Vec2f &size );
+    b2Body* createCircle( const ci::Vec2f &pos, float radius );
     b2Body* createBody( const b2BodyDef &body_def, const std::vector<b2FixtureDef> &fixture_defs );
     b2Body* createBody( const b2BodyDef &body_def, const b2FixtureDef &fixture_def );
     inline void   destroyBody( b2Body *body ){ mWorld.DestroyBody( body ); }
@@ -99,6 +107,8 @@ namespace sansumbrella
     {
       return physical_measure * mPointsPerMeter;
     }
+    //! set up the window for gl drawing of physics content
+    void setMatrices();
   private:
     int mVelocityIterations = 8;
     int mPositionIterations = 3;
@@ -107,6 +117,8 @@ namespace sansumbrella
     float mMetersPerPoint = 1.0f / mPointsPerMeter;
     // the box2d world
     b2World         mWorld = b2World( b2Vec2( 0, 10.0f ) );
+    b2AABB          mWorldBounds; // enforced by boundary line
+    ci::Rectf       mWordSection; // section of world we are viewing
     // optional contact filter (kept here to ensure it stays in scope)
     // set this if you want to control what collides with what
     b2ContactFilter mContactFilter;

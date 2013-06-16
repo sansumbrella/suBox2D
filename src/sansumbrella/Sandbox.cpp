@@ -44,6 +44,7 @@ void Sandbox::step()
 void Sandbox::setGravity( Vec2f gravity )
 {
 	mWorld.SetGravity( b2Vec2{ toPhysics( gravity.x ), toPhysics( gravity.y ) } );
+  mWorld.ClearForces();
 }
 
 void Sandbox::setPointsPerMeter(float points)
@@ -109,7 +110,7 @@ b2Body* Sandbox::createBody(const b2BodyDef &body_def, const std::vector<b2Fixtu
   return body;
 }
 
-b2Body* Sandbox::createBox(ci::Vec2f pos, ci::Vec2f size)
+b2Body* Sandbox::createBox( const ci::Vec2f &pos, const ci::Vec2f &size )
 {
   b2BodyDef bodyDef;
 	bodyDef.position.Set(	toPhysics(pos.x),
@@ -126,6 +127,23 @@ b2Body* Sandbox::createBox(ci::Vec2f pos, ci::Vec2f size)
 	bodyFixtureDef.friction = 0.3f;
 
   return createBody( bodyDef, bodyFixtureDef );
+}
+
+b2Body* Sandbox::createCircle(const ci::Vec2f &pos, float radius)
+{
+  b2BodyDef bodyDef;
+  bodyDef.position.Set(	toPhysics(pos.x),
+                       toPhysics( pos.y ) );
+	bodyDef.type = b2_dynamicBody;
+
+  b2CircleShape circle;
+  circle.m_radius = toPhysics( radius );
+  b2FixtureDef fixtureDef;
+  fixtureDef.shape = &circle;
+  fixtureDef.density = 1.0f;
+  fixtureDef.friction = 0.3f;
+
+  return createBody( bodyDef, fixtureDef );
 }
 
 b2Body* Sandbox::createBoundaryRect(ci::Rectf screen_bounds, float thickness)
