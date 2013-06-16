@@ -21,6 +21,7 @@ class SandboxApp : public AppNative {
 private:
   void addBox( const ci::Vec2f &loc );
   void createCrazyShape();
+  void applyForceToShape( const ci::Vec2f &force );
 	Sandbox   mSandbox;
 	Font      mFont;
   b2Body*   mCrazyBody = nullptr;
@@ -40,15 +41,32 @@ void SandboxApp::setup()
 
 void SandboxApp::keyDown(KeyEvent event)
 {
-  switch ( event.getChar() )
+  switch ( event.getCode() )
   {
-    case 'c':
+    case KeyEvent::KEY_c:
       createCrazyShape();
       break;
-
+    case KeyEvent::KEY_UP:
+      applyForceToShape( Vec2f{ 0, -1000.0f } );
+      break;
+    case KeyEvent::KEY_DOWN:
+      applyForceToShape( Vec2f{ 0, 1000.0f } );
+      break;
+    case KeyEvent::KEY_RIGHT:
+      applyForceToShape( Vec2f{ 1000.0f, 0.0f } );
+      break;
+    case KeyEvent::KEY_LEFT:
+      applyForceToShape( Vec2f{ -1000.0f, 0.0f } );
+      break;
     default:
       break;
   }
+}
+
+void SandboxApp::applyForceToShape(const ci::Vec2f &force)
+{
+  mCrazyBody->ApplyForceToCenter( b2Vec2{ force.x, force.y } );
+//  mCrazyBody->ApplyForce( b2Vec2{ force.x, force.y}, b2Vec2{ mSandbox.toPhysics(getWindowWidth()/2), mSandbox.toPhysics(getWindowHeight()) } );
 }
 
 void SandboxApp::mouseDown( MouseEvent event )
@@ -79,9 +97,10 @@ void SandboxApp::createCrazyShape()
   float d = Rand::randFloat( 0.5, 2.0f );
   Path2d outline;
   outline.moveTo( cos( 0 ) * d, sin( 0 ) * d );
-  for( int i = 1; i < 5; ++i )
+  const int points = 12;
+  for( int i = 1; i < points; ++i )
   {
-    float t = lmap<float>( i, 0, 5, 0, M_PI * 2 );
+    float t = lmap<float>( i, 0, points, 0, M_PI * 2 );
     d = Rand::randFloat( 0.5, 2.0f );
     outline.lineTo( cos( t ) * d, sin( t ) * d  );
   }
@@ -95,7 +114,7 @@ void SandboxApp::createCrazyShape()
   mCrazyBody = mSandbox.createFanShape( mSandbox.toPhysics( getWindowSize() / 2 ), hull_vertices );
 //  mCrazyBody = mSandbox.createShape( mSandbox.toPhysics( getWindowSize() / 2 ), Triangulator( outline, 1.0 ).calcMesh( Triangulator::WINDING_ODD ) );
   double d2 = getElapsedSeconds();
-  cout << "Creating shape took: " << (d2 - d1) * 1000 << "ms" << endl;
+  cout << "Creating shape required: " << (d2 - d1) * 1000 << "ms" << endl;
 }
 
 void SandboxApp::update()
