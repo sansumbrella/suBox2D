@@ -43,6 +43,7 @@ namespace cinder{
 			void init( bool useScreenBounds=true );
 			// create custom boundary
 			void createBoundaries( Rectf screen_bounds );
+			BoundaryElement& getBounds(){ return mBounds; }
 			
 			// add a BoxElement
 			void addBox( Vec2f pos, Vec2f size );
