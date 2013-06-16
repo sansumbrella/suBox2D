@@ -82,17 +82,15 @@ namespace cinder{
 			bool mouseDrag( app::MouseEvent event );
 			
 		private:
-			bool mDoSleep;
-			
 			CallbackId mMouseDownId, mMouseUpId, mMouseDragId;
 			
 			int mVelocityIterations = 8;
-			int mPositionIterations = 4;
-			float mTimeStep;
+			int mPositionIterations = 3;
+			float mTimeStep = 1.0f / 60.0f;
 			
-			b2Vec2 mGravity;
+			b2Vec2          mGravity = b2Vec2( 0, 10.0f );
 			// the box2d world
-			b2World* mWorld;
+			b2World*        mWorld = nullptr;
 			// optional contact filter (kept here to ensure it stays in scope)
 			// set this if you want to control what collides with what
 			b2ContactFilter mContactFilter;
@@ -102,16 +100,16 @@ namespace cinder{
 			BoundaryElement mBounds;
 			
 			// storing
-			float mBoundaryDepth;
+			float           mBoundaryDepth = 5.0f;
 			
 			// an empty body
-			b2Body* mGroundBody;
+			b2Body*         mGroundBody = nullptr;
 			
 			// used when adding bodies to mWorld
-			b2Body* mTempBody;
+			b2Body*         mTempBody = nullptr;
 			
 			// our mouse, for simple interaction
-			b2MouseJoint* mMouseJoint;			
+			b2MouseJoint*   mMouseJoint = nullptr;
 		};
 	}
 }

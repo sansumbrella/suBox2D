@@ -13,14 +13,6 @@ using namespace cinder::box2d;
 
 Sandbox::Sandbox()
 {
-	// set defaults
-	mDoSleep = true;
-	mGravity.Set(0.0f, 10.0f);	//since top-left is (0,0), positive gravity goes down
-	
-	mTimeStep = 1.0f / 60.0f;
-	
-	mMouseJoint = NULL;
-	mBoundaryDepth = 5.0f;
 }
 
 Sandbox::~Sandbox()
