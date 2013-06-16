@@ -31,6 +31,11 @@ using namespace cinder;
 using namespace sansumbrella;
 using namespace std;
 
+Sandbox::Sandbox()
+{
+  mWorld.SetDebugDraw( &mDebugRenderer );
+}
+
 void Sandbox::step()
 {
 	mWorld.Step(mTimeStep, mVelocityIterations, mPositionIterations);
@@ -79,94 +84,9 @@ void Sandbox::connectUserSignals(ci::app::WindowRef window)
   window->getSignalMouseDrag().connect( [this]( app::MouseEvent &event ){ mouseDrag( event ); } );
 }
 
-void Sandbox::debugDraw( bool drawBodies, bool drawContacts )
+void Sandbox::debugDraw()
 {
-	// should utilize an extension of b2DebugDraw (will soon)
-	//
-	if( drawBodies )
-	{
-		//draw all bodies, contact points, etc
-
-		gl::color( ColorA(1.0f, 0.0f, 0.1f, 0.5f) );
-
-		//draw bodies
-		b2Body* bodies = mWorld.GetBodyList();
-		while( bodies != NULL )
-		{
-      Vec2f pos{ bodies->GetPosition().x, bodies->GetPosition().y };
-			float32 angle = bodies->GetAngle();
-
-			gl::pushMatrices();
-
-			gl::translate( toPoints(pos).x, toPoints(pos).y );
-			gl::rotate( angle * 180 / M_PI );
-
-			//draw the fixtures for this body
-			b2Fixture* fixtures = bodies->GetFixtureList();
-			while( fixtures != NULL )
-			{
-				//not sure why the base b2Shape doesn't contain the vertex methods...
-				switch (fixtures->GetType()) {
-					case b2Shape::e_polygon:
-          {
-            b2PolygonShape* shape = (b2PolygonShape*)fixtures->GetShape();
-
-            glBegin(GL_POLYGON);
-
-            for( int i=0; i != shape->GetVertexCount(); ++i )
-            {
-              gl::vertex( toPoints( shape->GetVertex(i).x ), toPoints( shape->GetVertex(i).y ) );
-            }
-
-            glEnd();
-          }
-						break;
-					case b2Shape::e_circle:
-          {
-            b2CircleShape* shape = (b2CircleShape*)fixtures->GetShape();
-            Vec2f pos( shape->m_p.x, shape->m_p.y );
-            gl::drawSolidCircle( toPoints( pos ), toPoints( shape->m_radius ) );
-          }
-						break;
-
-					default:
-						break;
-				}
-
-
-				fixtures = fixtures->GetNext();
-			}
-
-			gl::popMatrices();
-
-			bodies = bodies->GetNext();
-		}
-	}
-
-	if( drawContacts )
-	{
-		//draw contacts
-		b2Contact* contacts = mWorld.GetContactList();
-
-		gl::color( ColorA( 0.0f, 0.0f, 1.0f, 0.8f ) );
-		glPointSize(3.0f);
-		glBegin(GL_POINTS);
-
-		while( contacts != NULL )
-		{
-			b2WorldManifold m;
-			contacts->GetWorldManifold(&m);	//grab the
-
-			for( int i=0; i != b2_maxManifoldPoints; ++i )
-			{
-				Vec2f p{ toPoints( Vec2f{ m.points[i].x, m.points[i].y } ) };
-				gl::vertex( p );
-			}
-
-			contacts = contacts->GetNext();
-		}
-		glEnd();
-	}
+  mWorld.DrawDebugData();
 }
 
 b2Body* Sandbox::createBody(const b2BodyDef &body_def, const b2FixtureDef &fixture_def)

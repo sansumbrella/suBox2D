@@ -29,13 +29,14 @@
 #include <Box2D/Box2D.h>
 #include "cinder/app/App.h"
 #include "cinder/Vector.h"
+#include "Box2DRenderer.h"
 
 namespace sansumbrella
 {
   class Sandbox
   {
   public:
-    Sandbox() = default;
+    Sandbox();
     ~Sandbox() = default;
     // run the physics timestep
     void step();
@@ -43,7 +44,7 @@ namespace sansumbrella
     void clear();
 
     // have a look at what's in the physics system (scaled up to screen space)
-    void debugDraw( bool drawBodies=true, bool drawContacts=true );
+    void debugDraw();
 
     // initialize the box2d world, optionally create boundaries at edges of screen
     void init( bool useScreenBounds=true );
@@ -115,5 +116,6 @@ namespace sansumbrella
     // our mouse, for simple interaction
     b2MouseJoint*   mMouseJoint = nullptr;
     b2Body*         mBoundaryBody = nullptr;
+    Box2DRenderer   mDebugRenderer = Box2DRenderer{mPointsPerMeter};
   };
 }

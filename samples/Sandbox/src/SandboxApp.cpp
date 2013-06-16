@@ -61,14 +61,14 @@ void SandboxApp::update()
 
 void SandboxApp::draw()
 {
-	gl::clear( Color::white() );
-  gl::enableAlphaBlending();
-//  mSandbox.draw();
-  mSandbox.debugDraw( true, true );
+	gl::clear( Color::black() );
 
-  gl::drawString( "Framerate: " + to_string(getAverageFps()), Vec2f( 10.0f, 10.0f ), Color::black(), mFont );
-	gl::drawString( "Num bodies: " + to_string(mSandbox.getBodyCount() ), Vec2f( 10.0f, 22.0f ), Color::black(), mFont );
-	gl::drawString( "Num contacts: " + to_string(mSandbox.getContactCount() ), Vec2f( 10.0f, 34.0f ), Color::black(), mFont );
+  mSandbox.debugDraw();
+
+  gl::enableAlphaBlending();
+  gl::drawString( "Framerate: " + to_string(getAverageFps()), Vec2f( 10.0f, 10.0f ), Color::white(), mFont );
+	gl::drawString( "Num bodies: " + to_string(mSandbox.getBodyCount() ), Vec2f( 10.0f, 22.0f ), Color::white(), mFont );
+	gl::drawString( "Num contacts: " + to_string(mSandbox.getContactCount() ), Vec2f( 10.0f, 34.0f ), Color::white(), mFont );
 }
 
 CINDER_APP_NATIVE( SandboxApp, RendererGl )
