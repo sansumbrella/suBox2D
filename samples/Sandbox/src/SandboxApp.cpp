@@ -1,11 +1,12 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
+#include "cinder/Rand.h"
 #include "sansumbrella/b2cinder.h"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
-using namespace ci::box2d;
+using namespace su;
 
 class SandboxApp : public AppNative {
   public:
@@ -50,22 +51,20 @@ void SandboxApp::mouseDrag(MouseEvent event)
 
 void SandboxApp::addBox( const ci::Vec2f &loc )
 {
-  BoxElement* b = new BoxElement( loc, Vec2f( Rand::randFloat(10.0f,40.0f), Rand::randFloat(10.0f,40.0f) ) );
-	b->setColor( Color( CM_HSV, Rand::randFloat(0.0f,0.19f), 0.9f, 1.0f  ) );
-	mSandbox.addElement(b);
+  mSandbox.createBox( loc, Vec2f( Rand::randFloat(10.0f,40.0f), Rand::randFloat(10.0f,40.0f) ) );
 }
 
 void SandboxApp::update()
 {
-  mSandbox.update();
+  mSandbox.step();
 }
 
 void SandboxApp::draw()
 {
 	gl::clear( Color::white() );
   gl::enableAlphaBlending();
-  mSandbox.draw();
-  mSandbox.debugDraw( false, true );
+//  mSandbox.draw();
+  mSandbox.debugDraw( true, true );
 
   gl::drawString( "Framerate: " + to_string(getAverageFps()), Vec2f( 10.0f, 10.0f ), Color::black(), mFont );
 	gl::drawString( "Num bodies: " + to_string(mSandbox.getBodyCount() ), Vec2f( 10.0f, 22.0f ), Color::black(), mFont );

@@ -11,5 +11,5 @@
 
 #include "Sandbox.h"
 #include "Conversions.h"
-#include "PhysicsElement.h"
-#include "BoxElement.h"
+
+namespace su = sansumbrella;

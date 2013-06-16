@@ -5,4 +5,9 @@ Includes:
 Sandbox for easier world creation
 Conversion methods from physics to screen coords within sandbox
 
+Goals:
+Simplify initial Box2d world setup and coordinate conversion
+Simplify Box2d body creation
+Minimize additional classes/interfaces to learn beyond Box2d
+
 Box2D is copyright Erin Catto, the source (and license) of which are in src/Box2D
