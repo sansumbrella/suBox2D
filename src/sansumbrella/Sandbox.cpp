@@ -29,6 +29,7 @@
 
 using namespace cinder;
 using namespace sansumbrella;
+using namespace std;
 
 void Sandbox::step()
 {
@@ -301,8 +302,8 @@ bool Sandbox::mouseDown( app::MouseEvent &event )
 	{
 		return false;
 	}
+	// Make a small box around the click point.
 	b2Vec2 p{ toPhysics( event.getPos().x ), toPhysics( event.getPos().y ) };
-	// Make a small box.
 	b2AABB aabb;
 	b2Vec2 d;
 	d.Set(0.001f, 0.001f);
@@ -315,14 +316,15 @@ bool Sandbox::mouseDown( app::MouseEvent &event )
 
 	if (callback.m_fixture)
 	{
+    cout << "Got a fixture" << endl;
 		b2Body* body = callback.m_fixture->GetBody();
-		b2MouseJointDef md;
-		md.bodyA = body;
-		md.bodyB = mBoundaryBody;
-		md.target = p;
-		md.maxForce = 1000.0f * body->GetMass();
-		mMouseJoint = (b2MouseJoint*)mWorld.CreateJoint(&md);
 		body->SetAwake(true);
+		b2MouseJointDef md;
+		md.bodyA = mBoundaryBody;
+		md.bodyB = body;
+		md.target = p;
+		md.maxForce = 2000.0f * body->GetMass();
+		mMouseJoint = (b2MouseJoint*)mWorld.CreateJoint(&md);
 	}
 
 	return false;
