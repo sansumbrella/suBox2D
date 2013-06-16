@@ -17,13 +17,14 @@
 
 namespace cinder {
 	namespace box2d {
-		class BoundaryElement : public PhysicsElement 
+		class BoundaryElement : public PhysicsElement
 		{
 		public:
 			BoundaryElement();
 			BoundaryElement( Rectf screenBounds, float thickness=1.0f );
 			void set( Rectf screenBounds, float thickness=1.0f );
 			void draw();
+
 		private:
 			float mBoundThickness;
 			Rectf mScreenBounds;
