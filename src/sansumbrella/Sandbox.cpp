@@ -95,20 +95,11 @@ void Sandbox::setContactFilter( b2ContactFilter filter )
 	mWorld->SetContactFilter(&mContactFilter);
 }
 
-void Sandbox::enableMouseInteraction( app::App *app, bool enable )
+void Sandbox::connectUserSignals(ci::app::WindowRef window)
 {
-	mIsMouseEnabled = enable;
-	if( mIsMouseEnabled )
-	{
-		mMouseDownId = app->registerMouseDown( this, &Sandbox::mouseDown );
-		mMouseUpId = app->registerMouseUp( this, &Sandbox::mouseUp );
-		mMouseDragId = app->registerMouseDrag( this, &Sandbox::mouseDrag );
-	} else {
-		app->unregisterMouseDown( mMouseDownId );
-		app->unregisterMouseUp( mMouseUpId );
-		app->unregisterMouseDrag( mMouseDragId );
-	}
-
+  window->getSignalMouseDown().connect( [this]( app::MouseEvent &event ){ mouseDown( event ); } );
+  window->getSignalMouseUp().connect( [this]( app::MouseEvent &event ){ mouseUp( event ); } );
+  window->getSignalMouseDrag().connect( [this]( app::MouseEvent &event ){ mouseDrag( event ); } );
 }
 
 void Sandbox::debugDraw( bool drawBodies, bool drawContacts )
@@ -259,8 +250,8 @@ void Sandbox::createBoundaries( Rectf screenBounds )
 void Sandbox::init( bool useScreenBounds )
 {	
 	// create our world
-	mWorld = new b2World(mGravity, mDoSleep);
-	
+	mWorld = new b2World(mGravity);
+
 	if( useScreenBounds ){
 		createBoundaries( app::getWindowBounds() );
 	}

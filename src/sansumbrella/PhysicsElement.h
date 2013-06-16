@@ -15,7 +15,7 @@
 
 #include <Box2D/Box2D.h>
 #include <list>
-#include "b2cinder/Conversions.h"
+#include "Conversions.h"
 #include "cinder/app/App.h"
 
 namespace cinder {

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "b2cinder/Sandbox.h"
-#include "b2cinder/Conversions.h"
-#include "b2cinder/PhysicsElement.h"
-#include "b2cinder/BoxElement.h"
+#include "Sandbox.h"
+#include "Conversions.h"
+#include "PhysicsElement.h"
+#include "BoxElement.h"

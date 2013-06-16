@@ -14,9 +14,9 @@
 #include "Conversions.h"
 #include "cinder/Rand.h"
 
-#include "b2cinder/PhysicsElement.h"
-#include "b2cinder/BoxElement.h"
-#include "b2cinder/BoundaryElement.h"
+#include "PhysicsElement.h"
+#include "BoxElement.h"
+#include "BoundaryElement.h"
 
 namespace cinder{
 	namespace box2d {
@@ -72,9 +72,9 @@ namespace cinder{
 			// set the filter function for your objects
 			void setContactFilter( b2ContactFilter filter );
 			
-			// enable user interaction (needs to know what app the interaction is coming from)
-			// currently, use causes problems on app termination (a non-allocated pointer error)
-			void enableMouseInteraction( app::App *app, bool doEnable=true );
+			// enable user interaction (needs to know what window the interaction is coming from)
+      void connectUserSignals( ci::app::WindowRef window );
+      void disconnectUserSignals(){}
 			
 			// handle user interaction
 			bool mouseDown( app::MouseEvent event );
@@ -111,9 +111,7 @@ namespace cinder{
 			b2Body* mTempBody;
 			
 			// our mouse, for simple interaction
-			b2MouseJoint* mMouseJoint;
-			bool mIsMouseEnabled;
-			
+			b2MouseJoint* mMouseJoint;			
 		};
 	}
 }

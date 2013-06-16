@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "b2cinder/PhysicsElement.h"
-#include "b2cinder/Conversions.h"
+#include "PhysicsElement.h"
+#include "Conversions.h"
 #include "cinder/Rect.h"
 #include "cinder/Vector.h"
 #include "cinder/app/App.h"
