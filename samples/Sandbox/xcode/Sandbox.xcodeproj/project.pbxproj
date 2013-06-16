@@ -21,7 +21,6 @@
 		3AD58E67B91449AEA2395AF0 /* b2TimeOfImpact.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7881B8FE25074606B2A6ED57 /* b2TimeOfImpact.cpp */; };
 		3F17105715C14883933DB1A6 /* b2Contact.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6994F46104014AA50EECD /* b2Contact.cpp */; };
 		40F45F7D4FF34851ADE4A02B /* b2GearJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F149DD8C40814E0DB6EB8A8E /* b2GearJoint.cpp */; };
-		444763C5525A4CFD969F328A /* Conversions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FFD181574F4F4A73AEAF3C51 /* Conversions.cpp */; };
 		4836A06B663B4764B977185B /* b2MouseJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 340B936D9F4E47A2ADE6AF16 /* b2MouseJoint.cpp */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
@@ -590,7 +589,6 @@
 				91ADB91620AA40C7808EF6BB /* b2WeldJoint.cpp in Sources */,
 				2DD7F432DB5E4F7A82163630 /* b2WheelJoint.cpp in Sources */,
 				E22D4FED7FC046658F5F7BF7 /* b2Rope.cpp in Sources */,
-				444763C5525A4CFD969F328A /* Conversions.cpp in Sources */,
 				F4D71674EF504B49B6AC9FDF /* Sandbox.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

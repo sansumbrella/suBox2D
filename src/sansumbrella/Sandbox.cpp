@@ -1,10 +1,28 @@
 /*
- *  Sandbox.cpp
- *  BasicBox2D
+ * Copyright (c) 2010—2013, David Wicks
+ * All rights reserved.
  *
- *  Created by David Wicks on 6/7/10.
- *  Copyright 2010 David Wicks. All rights reserved.
+ * Redistribution and use in source and binary forms, with or
+ * without modification, are permitted provided that the following
+ * conditions are met:
  *
+ * Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include "Sandbox.h"
@@ -19,8 +37,13 @@ void Sandbox::step()
 
 void Sandbox::setGravity( Vec2f gravity )
 {
-	mGravity = Conversions::toPhysics( gravity );
-	mWorld.SetGravity(mGravity);
+	mWorld.SetGravity( b2Vec2{ toPhysics( gravity.x ), toPhysics( gravity.y ) } );
+}
+
+void Sandbox::setPointsPerMeter(float points)
+{
+  mPointsPerMeter = points;
+  mMetersPerPoint = 1.0f / mPointsPerMeter;
 }
 
 void Sandbox::clear()
@@ -31,15 +54,13 @@ void Sandbox::clear()
 	{
 		b2Body* b = node;
 		node = node->GetNext();
-
-		mWorld.DestroyBody(b);
+		destroyBody(b);
 	}
 
 	b2Joint* joint = mWorld.GetJointList();
 	while (joint) {
 		b2Joint* j = joint;
 		joint = joint->GetNext();
-
 		mWorld.DestroyJoint(j);
 	}
 }
@@ -55,15 +76,6 @@ void Sandbox::connectUserSignals(ci::app::WindowRef window)
   window->getSignalMouseDown().connect( [this]( app::MouseEvent &event ){ mouseDown( event ); } );
   window->getSignalMouseUp().connect( [this]( app::MouseEvent &event ){ mouseUp( event ); } );
   window->getSignalMouseDrag().connect( [this]( app::MouseEvent &event ){ mouseDrag( event ); } );
-
-  b2BodyDef bodyDef;
-  bodyDef.type = b2_staticBody;
-  b2CircleShape shape;
-  shape.m_radius = 0.5;
-  b2FixtureDef fixtureDef;
-  fixtureDef.isSensor = true;
-  fixtureDef.shape = &shape;
-  mMouseBody = createBody( bodyDef, fixtureDef );
 }
 
 void Sandbox::debugDraw( bool drawBodies, bool drawContacts )
@@ -80,13 +92,13 @@ void Sandbox::debugDraw( bool drawBodies, bool drawContacts )
 		b2Body* bodies = mWorld.GetBodyList();
 		while( bodies != NULL )
 		{
-			b2Vec2 pos = bodies->GetPosition();
+      Vec2f pos{ bodies->GetPosition().x, bodies->GetPosition().y };
 			float32 angle = bodies->GetAngle();
 
 			gl::pushMatrices();
 
-			gl::translate( Conversions::toScreen(pos) );
-			gl::rotate( Conversions::radiansToDegrees( angle ) );
+			gl::translate( toPoints(pos).x, toPoints(pos).y );
+			gl::rotate( angle * 180 / M_PI );
 
 			//draw the fixtures for this body
 			b2Fixture* fixtures = bodies->GetFixtureList();
@@ -102,7 +114,7 @@ void Sandbox::debugDraw( bool drawBodies, bool drawContacts )
 
             for( int i=0; i != shape->GetVertexCount(); ++i )
             {
-              gl::vertex( Conversions::toScreen( shape->GetVertex(i) ) );
+              gl::vertex( toPoints( shape->GetVertex(i).x ), toPoints( shape->GetVertex(i).y ) );
             }
 
             glEnd();
@@ -111,7 +123,8 @@ void Sandbox::debugDraw( bool drawBodies, bool drawContacts )
 					case b2Shape::e_circle:
           {
             b2CircleShape* shape = (b2CircleShape*)fixtures->GetShape();
-            gl::drawSolidCircle( Conversions::toScreen( shape->m_p ), Conversions::toScreen( shape->m_radius ) );
+            Vec2f pos( shape->m_p.x, shape->m_p.y );
+            gl::drawSolidCircle( toPoints( pos ), toPoints( shape->m_radius ) );
           }
 						break;
 
@@ -145,7 +158,7 @@ void Sandbox::debugDraw( bool drawBodies, bool drawContacts )
 
 			for( int i=0; i != b2_maxManifoldPoints; ++i )
 			{
-				Vec2f p = Conversions::toScreen( m.points[i] );
+				Vec2f p{ toPoints( Vec2f{ m.points[i].x, m.points[i].y } ) };
 				gl::vertex( p );
 			}
 
@@ -175,13 +188,13 @@ b2Body* Sandbox::createBody(const b2BodyDef &body_def, const std::vector<b2Fixtu
 b2Body* Sandbox::createBox(ci::Vec2f pos, ci::Vec2f size)
 {
   b2BodyDef bodyDef;
-	bodyDef.position.Set(	Conversions::toPhysics(pos.x),
-                       Conversions::toPhysics( pos.y ) );
+	bodyDef.position.Set(	toPhysics(pos.x),
+                       toPhysics( pos.y ) );
 	bodyDef.type = b2_dynamicBody;
 
 	b2PolygonShape box;
-	box.SetAsBox(	Conversions::toPhysics(size.x),
-               Conversions::toPhysics( size.y ) );
+	box.SetAsBox(	toPhysics(size.x),
+               toPhysics( size.y ) );
 
 	b2FixtureDef bodyFixtureDef;
 	bodyFixtureDef.shape = &box;
@@ -194,10 +207,10 @@ b2Body* Sandbox::createBox(ci::Vec2f pos, ci::Vec2f size)
 b2Body* Sandbox::createBoundaryRect(ci::Rectf screen_bounds, float thickness)
 {
   // half width and half height
-  const float w = Conversions::toPhysics( screen_bounds.getWidth() / 2.0f ) + thickness;
-  const float h = Conversions::toPhysics( screen_bounds.getHeight() / 2.0f ) + thickness;
+  const float w = toPhysics( screen_bounds.getWidth() / 2.0f ) + thickness;
+  const float h = toPhysics( screen_bounds.getHeight() / 2.0f ) + thickness;
   // center x, y
-  const b2Vec2 upperLeft = Conversions::toPhysics( screen_bounds.getUpperLeft() );
+  const Vec2f upperLeft = toPhysics( screen_bounds.getUpperLeft() );
   const float x = upperLeft.x + w - thickness;
   const float y = upperLeft.y + h - thickness;
 
@@ -229,7 +242,12 @@ b2Body* Sandbox::createBoundaryRect(ci::Rectf screen_bounds, float thickness)
   bottomShape.SetAsBox( w, thickness, b2Vec2( 0, h ), 0 );
   bottom.shape = &bottomShape;
 
-  return createBody( bodyDef, { left, right, top, bottom } );
+  if( mBoundaryBody )
+  {
+    destroyBody( mBoundaryBody );
+  }
+  mBoundaryBody = createBody( bodyDef, { left, right, top, bottom } );
+  return mBoundaryBody;
 }
 
 void Sandbox::init( bool useScreenBounds )
@@ -279,11 +297,11 @@ public:
 
 bool Sandbox::mouseDown( app::MouseEvent &event )
 {
-	if (mMouseJoint != NULL)
+	if (mMouseJoint)
 	{
 		return false;
 	}
-	b2Vec2 p = Conversions::toPhysics( event.getPos() );
+	b2Vec2 p{ toPhysics( event.getPos().x ), toPhysics( event.getPos().y ) };
 	// Make a small box.
 	b2AABB aabb;
 	b2Vec2 d;
@@ -300,7 +318,7 @@ bool Sandbox::mouseDown( app::MouseEvent &event )
 		b2Body* body = callback.m_fixture->GetBody();
 		b2MouseJointDef md;
 		md.bodyA = body;
-		md.bodyB = mMouseBody;
+		md.bodyB = mBoundaryBody;
 		md.target = p;
 		md.maxForce = 1000.0f * body->GetMass();
 		mMouseJoint = (b2MouseJoint*)mWorld.CreateJoint(&md);
@@ -315,7 +333,7 @@ bool Sandbox::mouseUp( app::MouseEvent &event )
 	if (mMouseJoint)
 	{
 		mWorld.DestroyJoint(mMouseJoint);
-		mMouseJoint = NULL;
+		mMouseJoint = nullptr;
 	}
 	return false;
 }
@@ -323,7 +341,7 @@ bool Sandbox::mouseUp( app::MouseEvent &event )
 bool Sandbox::mouseDrag( app::MouseEvent &event )
 {
 	if(mMouseJoint){
-		mMouseJoint->SetTarget( Conversions::toPhysics(event.getPos()) );
+		mMouseJoint->SetTarget( b2Vec2{ toPhysics(event.getPos().x), toPhysics(event.getPos().y) } );
 	}
 	return false;
 }
