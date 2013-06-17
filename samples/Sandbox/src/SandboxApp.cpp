@@ -1,7 +1,7 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Rand.h"
-#include "sansumbrella/b2cinder.h"
+#include "sansumbrella/Box2D.h"
 #include "cinder/Triangulate.h"
 
 using namespace ci;
@@ -29,18 +29,31 @@ private:
 
 void SandboxApp::prepareSettings(Settings *settings)
 {
+  settings->setWindowSize( 1024, 768 );
+  settings->enableHighDensityDisplay();
 }
 
 void SandboxApp::setup()
 {
   mSandbox.init();
   mSandbox.connectUserSignals( getWindow() );
-  mFont = Font( "Hoefler Text", 12.0f );
+  try
+  {
+    mFont = Font( "Futura Medium", 18.0f );
+  }
+  catch( exception &exc )
+  {
+    cout << "Failed to load: " << exc.what() << endl;
+    mFont = Font( "Helvetica", 18.0f );
+  }
   createCrazyShape();
 }
 
 void SandboxApp::keyDown(KeyEvent event)
 {
+#define CINDER_IOS true
+#ifdef CINDER_IOS
+#else
   switch ( event.getCode() )
   {
     case KeyEvent::KEY_c:
@@ -61,6 +74,7 @@ void SandboxApp::keyDown(KeyEvent event)
     default:
       break;
   }
+#endif
 }
 
 void SandboxApp::applyForceToShape(const ci::Vec2f &force)
@@ -130,8 +144,8 @@ void SandboxApp::draw()
 
   gl::enableAlphaBlending();
   gl::drawString( "Framerate: " + to_string(getAverageFps()), Vec2f( 10.0f, 10.0f ), Color::white(), mFont );
-	gl::drawString( "Num bodies: " + to_string(mSandbox.getBodyCount() ), Vec2f( 10.0f, 22.0f ), Color::white(), mFont );
-	gl::drawString( "Num contacts: " + to_string(mSandbox.getContactCount() ), Vec2f( 10.0f, 34.0f ), Color::white(), mFont );
+	gl::drawString( "Num bodies: " + to_string(mSandbox.getBodyCount() ), Vec2f( 10.0f, 30.0f ), Color::white(), mFont );
+	gl::drawString( "Num contacts: " + to_string(mSandbox.getContactCount() ), Vec2f( 10.0f, 50.0f ), Color::white(), mFont );
 }
 
 CINDER_APP_NATIVE( SandboxApp, RendererGl )

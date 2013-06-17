@@ -51,118 +51,69 @@ void Box2DRenderer::updateFlags()
 
 void Box2DRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
-	glColor3f(color.r, color.g, color.b);
-	glBegin(GL_LINE_LOOP);
-	for (int32 i = 0; i < vertexCount; ++i)
-	{
-		glVertex2f( vertices[i].x, vertices[i].y );
-	}
-	glEnd();
+  Path2d path;
+  path.moveTo( vertices[0].x, vertices[0].y );
+  for( int i = 1; i < vertexCount; ++i )
+  {
+    path.lineTo( vertices[i].x, vertices[i].y );
+  }
+
+  gl::color( color.r, color.g, color.b );
+  gl::draw( path );
 }
 void Box2DRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
-  gl::enableAlphaBlending();
-  glColor4f(0.5f * color.r, 0.5f * color.g, 0.5f * color.b, 0.5f);
-  glBegin(GL_TRIANGLE_FAN);
-  for (int32 i = 0; i < vertexCount; ++i)
+  Path2d path;
+  path.moveTo( vertices[0].x, vertices[0].y );
+  for( int i = 1; i < vertexCount; ++i )
   {
-    glVertex2f( vertices[i].x, vertices[i].y );
+    path.lineTo( vertices[i].x, vertices[i].y );
   }
-  glEnd();
-  gl::disableAlphaBlending();
 
-  //  glColor4f(color.r, color.g, color.b, 1.0f);
-  gl::color( Color::white() );
-  glBegin(GL_LINE_LOOP);
-  for (int32 i = 0; i < vertexCount; ++i)
-  {
-    glVertex2f( vertices[i].x, vertices[i].y );
-  }
-  glEnd();
+  gl::enableAlphaBlending();
+  gl::color( color.r, color.g, color.b, 0.5f );
+  gl::drawSolid( path );
+  gl::disableAlphaBlending();
+  gl::draw( path );
 }
 void Box2DRenderer::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
 {
-	const float32 k_segments = 16.0f;
-	const float32 k_increment = 2.0f * b2_pi / k_segments;
-	float32 theta = 0.0f;
-	glColor3f(color.r, color.g, color.b);
-	glBegin(GL_LINE_LOOP);
-	for (int32 i = 0; i < k_segments; ++i)
-	{
-		b2Vec2 v = center + radius * b2Vec2(cosf(theta), sinf(theta));
-		glVertex2f( v.x, v.y );
-		theta += k_increment;
-	}
-	glEnd();
+  gl::color( color.r, color.g, color.b );
+  gl::drawStrokedCircle( Vec2f{center.x, center.y}, radius );
 }
 void Box2DRenderer::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color)
 {
-	const float32 k_segments = 16.0f;
-	const float32 k_increment = 2.0f * b2_pi / k_segments;
-	float32 theta = 0.0f;
-	gl::enableAlphaBlending();
-	glColor4f(0.5f * color.r, 0.5f * color.g, 0.5f * color.b, 0.5f);
-	glBegin(GL_TRIANGLE_FAN);
-	for (int32 i = 0; i < k_segments; ++i)
-	{
-		b2Vec2 v = center + radius * b2Vec2(cosf(theta), sinf(theta));
-		glVertex2f( v.x, v.y );
-		theta += k_increment;
-	}
-	glEnd();
-	gl::disableAlphaBlending();
-
-	theta = 0.0f;
-	glColor4f(color.r, color.g, color.b, 1.0f);
-	glBegin(GL_LINE_LOOP);
-	for (int32 i = 0; i < k_segments; ++i)
-	{
-		b2Vec2 v = center + radius * b2Vec2(cosf(theta), sinf(theta));
-		glVertex2f( v.x, v.y );
-		theta += k_increment;
-	}
-	glEnd();
-
-	b2Vec2 p = center + radius * axis;
-	glBegin(GL_LINES);
-	glVertex2f(center.x, center.y);
-	glVertex2f(p.x, p.y);
-	glEnd();
+  gl::enableAlphaBlending();
+  gl::color( color.r, color.g, color.b, 0.5f );
+  gl::drawSolidCircle( Vec2f{ center.x, center.y }, radius, 16 );
+  gl::disableAlphaBlending();
+  gl::drawStrokedCircle( Vec2f{center.x, center.y}, radius, 16 );
 }
 void Box2DRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 {
-  glColor3f(color.r, color.g, color.b);
-	glBegin(GL_LINES);
-	glVertex2f(p1.x, p1.y);
-	glVertex2f(p2.x, p2.y);
-	glEnd();
+  gl::color(color.r, color.g, color.b);
+  gl::drawLine( Vec2f{ p1.x, p1.y }, Vec2f{ p2.x, p2.y } );
 }
+
 void Box2DRenderer::DrawTransform(const b2Transform& xf)
 {
 	b2Vec2 p1 = xf.p, p2;
 	const float32 k_axisScale = 0.4f;
-	glBegin(GL_LINES);
 
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex2f(p1.x, p1.y);
+	gl::color(1.0f, 0.0f, 0.0f);
 	p2 = p1 + k_axisScale * xf.q.GetXAxis();
-	glVertex2f(p2.x, p2.y);
+  gl::drawLine( Vec2f{ p1.x, p1.y }, Vec2f{ p2.x, p2.y } );
 
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glVertex2f(p1.x, p1.y);
+	gl::color(0.0f, 1.0f, 0.0f);
 	p2 = p1 + k_axisScale * xf.q.GetYAxis();
-	glVertex2f(p2.x, p2.y);
-
-	glEnd();
+  gl::drawLine( Vec2f{ p1.x, p1.y }, Vec2f{ p2.x, p2.y } );
 }
 void Box2DRenderer::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 {
-	glPointSize(size);
-	glBegin(GL_POINTS);
-	glColor3f(color.r, color.g, color.b);
-	glVertex2f(p.x, p.y);
-	glEnd();
-	glPointSize(1.0f);
+  glLineWidth(size);
+	gl::color(color.r, color.g, color.b);
+  gl::drawLine( Vec2f{ p.x, p.y }, Vec2f{ p.x, p.y } );
+	glLineWidth(1.0f);
 }
 void Box2DRenderer::DrawString(int x, int y, const char* string, ...)
 {
@@ -170,13 +121,6 @@ void Box2DRenderer::DrawString(int x, int y, const char* string, ...)
 }
 void Box2DRenderer::DrawAABB(b2AABB* aabb, const b2Color& color)
 {
-
-	glColor3f(color.r, color.g, color.b);
-	glBegin(GL_LINE_LOOP);
-	glVertex2f(aabb->lowerBound.x, aabb->lowerBound.y);
-	glVertex2f(aabb->upperBound.x, aabb->lowerBound.y);
-	glVertex2f(aabb->upperBound.x, aabb->upperBound.y);
-	glVertex2f(aabb->lowerBound.x, aabb->upperBound.y);
-	glEnd();
-
+	gl::color(color.r, color.g, color.b);
+  gl::drawStrokedRect( Rectf{ aabb->upperBound.x, aabb->upperBound.y, aabb->lowerBound.x, aabb->lowerBound.y }  );
 }
