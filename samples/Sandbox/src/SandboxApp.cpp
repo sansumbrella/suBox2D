@@ -148,4 +148,4 @@ void SandboxApp::draw()
 	gl::drawString( "Num contacts: " + to_string(mSandbox.getContactCount() ), Vec2f( 10.0f, 50.0f ), Color::white(), mFont );
 }
 
-CINDER_APP_NATIVE( SandboxApp, RendererGl )
+CINDER_APP_NATIVE( SandboxApp, RendererGl( RendererGl::AA_NONE ) )
