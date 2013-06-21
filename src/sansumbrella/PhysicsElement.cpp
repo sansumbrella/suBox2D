@@ -9,9 +9,11 @@
 
 #include "PhysicsElement.h"
 
+/*
 using namespace cinder::box2d;
 
 PhysicsElement::PhysicsElement()
 {
 	mBody = NULL;
 }
+*/
