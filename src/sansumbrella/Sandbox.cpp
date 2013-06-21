@@ -41,11 +41,6 @@ Sandbox::Sandbox()
 void Sandbox::step()
 {
 	mWorld.Step(mTimeStep, mVelocityIterations, mPositionIterations);
-}
-
-void Sandbox::setGravity( Vec2f gravity )
-{
-	mWorld.SetGravity( b2Vec2{ toPhysics( gravity.x ), toPhysics( gravity.y ) } );
   mWorld.ClearForces();
 }
 
@@ -53,6 +48,12 @@ void Sandbox::setPointsPerMeter(float points)
 {
   mPointsPerMeter = points;
   mMetersPerPoint = 1.0f / mPointsPerMeter;
+}
+
+void Sandbox::setMetersPerPoint(float meters)
+{
+  mMetersPerPoint = meters;
+  mPointsPerMeter = 1.0f / mMetersPerPoint;
 }
 
 void Sandbox::clear()
@@ -305,7 +306,6 @@ bool Sandbox::mouseDown( app::MouseEvent &event )
 
 	if (callback.m_fixture)
 	{
-    cout << "Got a fixture" << endl;
 		b2Body* body = callback.m_fixture->GetBody();
 		body->SetAwake(true);
 		b2MouseJointDef md;

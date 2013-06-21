@@ -46,11 +46,9 @@ class SandboxApp : public AppNative {
 	void update();
 	void draw();
 private:
-  void addBox( const ci::Vec2f &loc );
   void createCrazyShape();
   void applyForceToShape( const ci::Vec2f &force );
 	Sandbox   mSandbox;
-	Font      mFont;
   b2Body*   mCrazyBody = nullptr;
 };
 
@@ -66,19 +64,12 @@ void SandboxApp::setup()
   mSandbox.createBoundaryRect( getWindowBounds() );
   // enable mouse interaction through a b2MouseBody
   mSandbox.connectUserSignals( getWindow() );
-  try
-  {
-    mFont = Font( "Futura Medium", 18.0f );
-  }
-  catch( exception &exc )
-  {
-    cout << "Failed to load: " << exc.what() << endl;
-    mFont = Font( "Helvetica", 18.0f );
-  }
+
   createCrazyShape();
-  for( int i = 0; i < 100; ++i )
+  for( int i = 0; i < 150; ++i )
   {
-    addBox( Vec2f{Rand::randFloat(getWindowWidth()), Rand::randFloat(getWindowHeight())} );
+    Vec2f loc{ Rand::randFloat(getWindowWidth()), getWindowHeight() / 2 + Rand::randFloat(getWindowHeight()/2) };
+    mSandbox.createCircle( loc, Rand::randFloat( 5.0f, 25.0f ) );
   }
 }
 
@@ -120,7 +111,7 @@ void SandboxApp::mouseDown( MouseEvent event )
 {
   if( !event.isAltDown() )
 	{
-		addBox( event.getPos() );
+		mSandbox.createCircle( event.getPos(), Rand::randFloat( 5.0f, 20.0f ) );
 	}
 }
 
@@ -128,14 +119,8 @@ void SandboxApp::mouseDrag(MouseEvent event)
 {
   if( !event.isAltDown() )
 	{
-		addBox( event.getPos() );
+    mSandbox.createCircle( event.getPos(), Rand::randFloat( 5.0f, 20.0f ) );
 	}
-}
-
-void SandboxApp::addBox( const ci::Vec2f &loc )
-{
-  mSandbox.createCircle( loc, Rand::randFloat( 5.0f, 20.0f ) );
-//  mSandbox.createBox( loc, Vec2f( Rand::randFloat(10.0f,40.0f), Rand::randFloat(10.0f,40.0f) ) );
 }
 
 void SandboxApp::createCrazyShape()
