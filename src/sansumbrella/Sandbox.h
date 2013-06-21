@@ -48,6 +48,7 @@ namespace sansumbrella
 
   TODO:
   Standardize on using world coordinates for adding elements.
+  Add method for setting gl matrices based on world scale (perhaps non-member, non-friend that uses the scale).
   (Maybe) create a means of panning/zooming around the physics world
   Camera controls seem like they should be someone else's job
   */
@@ -122,20 +123,20 @@ namespace sansumbrella
     //! Set the number of meters represented per screen point
     //! Default value is 0.01
     void setMetersPerPoint( float meters );
-    //! Conversion from screen units to physical measurements
+    //! Return the number of points per meter
+    inline float getPointsPerMeter() const { return mPointsPerMeter; }
+    //! Convert from screen units to physical measurements
     template<typename T>
     inline T toPhysics( const T &points )
     {
       return points * mMetersPerPoint;
     }
-    //! Conversion from physical measurements to screen units
+    //! Convert from physical measurements to screen units
     template<typename T>
     inline T toPoints( const T &physical_measure )
     {
       return physical_measure * mPointsPerMeter;
     }
-    //! set up the window for gl drawing of physics content
-    void setMatrices();
   private:
     int     mVelocityIterations = 8;
     int     mPositionIterations = 3;

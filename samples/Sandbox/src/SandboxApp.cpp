@@ -125,6 +125,7 @@ void SandboxApp::mouseDrag(MouseEvent event)
 
 void SandboxApp::createCrazyShape()
 {
+  // Measure how long shape generation and triangulation require
   double d1 = getElapsedSeconds();
   float d = Rand::randFloat( 0.5, 2.0f );
   Path2d outline;
@@ -143,7 +144,11 @@ void SandboxApp::createCrazyShape()
     hull_vertices[i] = b2Vec2{ outline.getPoint(i).x, outline.getPoint(i).y };
   }
   if( mCrazyBody ){ mSandbox.destroyBody( mCrazyBody ); }
+  // create shape as a fan (works well with the radial vertices we defined)
+  // much faster than generic triangulation, but only works on certain shapes
   mCrazyBody = mSandbox.createFanShape( mSandbox.toPhysics( getWindowSize() / 2 ), hull_vertices );
+  // create shape using Cinder's Triangulator to calculate the triangles
+  // works on any arbitrary shape; will crash in Box2D if any triangle has zero area
 //  mCrazyBody = mSandbox.createShape( mSandbox.toPhysics( getWindowSize() / 2 ), Triangulator( outline, 1.0 ).calcMesh( Triangulator::WINDING_ODD ) );
   double d2 = getElapsedSeconds();
   cout << "Creating shape required: " << (d2 - d1) * 1000 << "ms" << endl;
