@@ -52,6 +52,10 @@ namespace sansumbrella
   (Maybe) create a means of panning/zooming around the physics world
   Camera controls seem like they should be someone else's job
   */
+
+  typedef std::unique_ptr<b2Body, std::function<void(b2Body*)>> unique_body_ptr;
+  typedef std::unique_ptr<b2Joint, std::function<void(b2Joint*)>> unique_joint_ptr;
+
   class Sandbox
   {
   public:
@@ -79,10 +83,10 @@ namespace sansumbrella
     b2Body* createBody( const b2BodyDef &body_def, const b2FixtureDef &fixture_def );
 
     //! Manage the lifetime of a b2Body with a unique_ptr and a custom deleter
-    auto manage( b2Body *body ) -> std::unique_ptr<b2Body, std::function<void(b2Body*)>>
+    auto manage( b2Body *body ) -> unique_body_ptr
     { return { body, [this](b2Body *b){ destroyBody( b ); } }; }
     //! Manage the lifetime of a b2Joint with a unique_ptr and a custom deleter
-    auto manage( b2Joint *joint ) -> std::unique_ptr<b2Joint, std::function<void(b2Joint*)>>
+    auto manage( b2Joint *joint ) -> unique_joint_ptr
     { return { joint, [this](b2Joint *j){ destroyJoint( j ); } }; }
 
     //! Direct access to the box2d world

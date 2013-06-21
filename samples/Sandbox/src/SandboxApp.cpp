@@ -52,7 +52,7 @@ private:
   void createTextShape( const std::string &text, const ci::Vec2f &top_left );
   void applyForceToShape( const ci::Vec2f &force );
 	Sandbox               mSandbox;
-  shared_ptr<b2Body>    mSpikyBody;
+  su::unique_body_ptr   mSpikyBody;
 };
 
 void SandboxApp::prepareSettings(Settings *settings)
