@@ -59,14 +59,11 @@ namespace sansumbrella
     ~Sandbox() = default;
     //! Run the Box2D physics timestep
     void step();
-    //! remove all bodies from the b2world
-    void clear();
     //! have a look at what's in the physics system (scaled up to screen space)
     void debugDraw();
 
     //! Create a boundary rectangle in screen coordinates
     b2Body* createBoundaryRect( ci::Rectf screen_bounds, float thickness=1.0f );
-
     //! Create a box using screen coordinates
     b2Body* createBox( const ci::Vec2f &pos, const ci::Vec2f &size );
     //! Create a circle using screen coordinates
@@ -81,25 +78,37 @@ namespace sansumbrella
     //! Create a box2d body from the given definitions
     b2Body* createBody( const b2BodyDef &body_def, const b2FixtureDef &fixture_def );
 
-    // Wrappers for some b2world functions
+    //! Manage the lifetime of a b2Body with a unique_ptr and a custom deleter
+    auto manage( b2Body *body ) -> std::unique_ptr<b2Body, std::function<void(b2Body*)>>
+    { return { body, [this](b2Body *b){ destroyBody( b ); } }; }
+
+    //! Direct access to the box2d world
+    b2World& getWorld()
+    { return mWorld; }
+
+    // Convenience methods for some b2world functions
 
     //! Destroy \a body
-    inline void     destroyBody( b2Body *body ){ mWorld.DestroyBody( body ); }
+    inline void     destroyBody( b2Body *body )
+    { mWorld.DestroyBody( body ); }
     //! Destroy \a joint
-    inline void     destroyJoint( b2Joint *joint ){ mWorld.DestroyJoint( joint ); }
+    inline void     destroyJoint( b2Joint *joint )
+    { mWorld.DestroyJoint( joint ); }
     //! Returns the number of bodies being simulated
-    inline int32    getBodyCount(){ return mWorld.GetBodyCount(); }
+    inline int32    getBodyCount()
+    { return mWorld.GetBodyCount(); }
     //! Returns the number of contacts generated between bodies
-    inline int32    getContactCount(){ return mWorld.GetContactCount(); }
+    inline int32    getContactCount()
+    { return mWorld.GetContactCount(); }
     //! Returns the Box2D body list (a b2Body linked-list)
-    inline b2Body*  getBodyList(){ return mWorld.GetBodyList(); }
-    //! Direct access to the box2d world
-    b2World& getWorld(){ return mWorld; }
+    inline b2Body*  getBodyList()
+    { return mWorld.GetBodyList(); }
 
-    // Set the world gravity
+    //! Set the world gravity, default=(0, 10)
     inline void setGravity( const b2Vec2 &gravity ){ mWorld.SetGravity( gravity ); }
+    //! Set number of velocity iterations used per step(), default=8
     inline void setVelocityIterations( int vi ){ mVelocityIterations = vi; }
-    //!
+    //! Set number of position iterations used per step(), default=3
     inline void setPositionIterations( int pi ){ mPositionIterations = pi; }
     //! Set how much time elapses with each physics simulation step
     inline void setTimeStep( float hz ){ mTimeStep = hz; }
@@ -112,10 +121,12 @@ namespace sansumbrella
     void connectUserSignals( ci::app::WindowRef window );
     void disconnectUserSignals();
 
-    // handle user interaction
+    // handle basic user interaction
     bool mouseDown( ci::app::MouseEvent &event );
     bool mouseUp( ci::app::MouseEvent &event );
     bool mouseDrag( ci::app::MouseEvent &event );
+
+    // Conversion between screen and physics space
 
     //! Set the number of screen points contained in a world meter
     //! default value is 100 (1 pixel == 1 centimeter)
@@ -129,15 +140,11 @@ namespace sansumbrella
     //! Convert from screen units to physical measurements
     template<typename T>
     inline T toPhysics( const T &points )
-    {
-      return points * mMetersPerPoint;
-    }
+    { return points * mMetersPerPoint; }
     //! Convert from physical measurements to screen units
     template<typename T>
     inline T toPoints( const T &physical_measure )
-    {
-      return physical_measure * mPointsPerMeter;
-    }
+    { return physical_measure * mPointsPerMeter; }
   private:
     int     mVelocityIterations = 8;
     int     mPositionIterations = 3;
@@ -146,15 +153,12 @@ namespace sansumbrella
     float   mMetersPerPoint = 1.0f / mPointsPerMeter;
     // the box2d world
     b2World         mWorld = b2World( b2Vec2( 0, 10.0f ) );
-    b2AABB          mWorldBounds; // enforced by boundary line
-    ci::Rectf       mWordSection; // section of world we are viewing
     // optional contact filter (kept here to ensure it stays in scope)
     // set this if you want to control what collides with what
     b2ContactFilter mContactFilter;
 
     // our mouse, for simple interaction
     b2MouseJoint*   mMouseJoint = nullptr;
-    b2Body*         mBoundaryBody = nullptr;
     Box2DRenderer   mDebugRenderer;
   };
 }

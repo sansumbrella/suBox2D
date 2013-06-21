@@ -56,22 +56,6 @@ void Sandbox::setMetersPerPoint(float meters)
   mPointsPerMeter = 1.0f / mMetersPerPoint;
 }
 
-void Sandbox::clear()
-{	// get rid of everything
-  while( mWorld.GetBodyCount() > 0 )
-  {
-    destroyBody( mWorld.GetBodyList() );
-  }
-
-  while( mWorld.GetJointCount() > 0 )
-  {
-    destroyJoint( mWorld.GetJointList() );
-  }
-  // invalidate any pointers to physics-world objects
-  mBoundaryBody = nullptr;
-  mMouseJoint = nullptr;
-}
-
 void Sandbox::setContactFilter( const b2ContactFilter &filter )
 {
 	mContactFilter = filter;
@@ -256,12 +240,7 @@ b2Body* Sandbox::createBoundaryRect(ci::Rectf screen_bounds, float thickness)
   bottomShape.SetAsBox( w, thickness, b2Vec2( 0, h ), 0 );
   bottom.shape = &bottomShape;
 
-  if( mBoundaryBody )
-  {
-    destroyBody( mBoundaryBody );
-  }
-  mBoundaryBody = createBody( bodyDef, { left, right, top, bottom } );
-  return mBoundaryBody;
+  return createBody( bodyDef, { left, right, top, bottom } );
 }
 
 //
@@ -324,7 +303,7 @@ bool Sandbox::mouseDown( app::MouseEvent &event )
 		b2Body* body = callback.m_fixture->GetBody();
 		body->SetAwake(true);
 		b2MouseJointDef md;
-		md.bodyA = mBoundaryBody;
+//		md.bodyA = mBoundaryBody;
 		md.bodyB = body;
 		md.target = p;
 		md.maxForce = 2000.0f * body->GetMass();

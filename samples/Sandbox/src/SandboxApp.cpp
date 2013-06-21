@@ -51,8 +51,8 @@ private:
   void createCrazyShape();
   void createTextShape( const std::string &text, const ci::Vec2f &top_left );
   void applyForceToShape( const ci::Vec2f &force );
-	Sandbox   mSandbox;
-  b2Body*   mCrazyBody = nullptr;
+	Sandbox               mSandbox;
+  shared_ptr<b2Body>    mSpikyBody;
 };
 
 void SandboxApp::prepareSettings(Settings *settings)
@@ -64,14 +64,20 @@ void SandboxApp::prepareSettings(Settings *settings)
 void SandboxApp::setup()
 {
   // enable mouse interaction through a b2MouseBody
-  mSandbox.connectUserSignals( getWindow() );
+//  mSandbox.connectUserSignals( getWindow() );
   buildBodies();
 }
 
 void SandboxApp::reset()
 {
-  mSandbox.clear();
-  mCrazyBody = nullptr;
+  // release all smart pointers before iterating through the box2d list
+  mSpikyBody.reset();
+  // loop through all box2d bodies
+  while( mSandbox.getBodyCount() > 0 )
+  { // Box2D bodies are stored in a linked list;
+    // we destroy the head of the list as long as there are bodies
+    mSandbox.destroyBody( mSandbox.getBodyList() );
+  }
   buildBodies();
 }
 
@@ -126,8 +132,7 @@ void SandboxApp::keyDown(KeyEvent event)
 
 void SandboxApp::applyForceToShape(const ci::Vec2f &force)
 {
-  mCrazyBody->ApplyForceToCenter( b2Vec2{ force.x, force.y } );
-  //  mCrazyBody->ApplyForce( b2Vec2{ force.x, force.y}, b2Vec2{ mSandbox.toPhysics(getWindowWidth()/2), mSandbox.toPhysics(getWindowHeight()) } );
+  mSpikyBody->ApplyForceToCenter( b2Vec2{ force.x, force.y } );
 }
 
 void SandboxApp::mouseDown( MouseEvent event )
@@ -164,11 +169,10 @@ void SandboxApp::createCrazyShape()
   {
     hull_vertices[i] = b2Vec2{ outline.getPoint(i).x, outline.getPoint(i).y };
   }
-  if( mCrazyBody ){ mSandbox.destroyBody( mCrazyBody ); }
   // create shape as a fan (works well with the radial vertices we defined)
   // much faster than generic triangulation, but only works on certain shapes
   // will crash if the triangles have negative (clockwise) area
-  mCrazyBody = mSandbox.createFanShape( mSandbox.toPhysics( getWindowSize() / 2 ), hull_vertices );
+  mSpikyBody = mSandbox.manage( mSandbox.createFanShape( mSandbox.toPhysics( getWindowSize() / 2 ), hull_vertices ) );
 }
 
 void SandboxApp::createTextShape( const std::string &text, const ci::Vec2f &top_left )
