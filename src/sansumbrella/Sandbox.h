@@ -81,6 +81,9 @@ namespace sansumbrella
     //! Manage the lifetime of a b2Body with a unique_ptr and a custom deleter
     auto manage( b2Body *body ) -> std::unique_ptr<b2Body, std::function<void(b2Body*)>>
     { return { body, [this](b2Body *b){ destroyBody( b ); } }; }
+    //! Manage the lifetime of a b2Joint with a unique_ptr and a custom deleter
+    auto manage( b2Joint *joint ) -> std::unique_ptr<b2Joint, std::function<void(b2Joint*)>>
+    { return { joint, [this](b2Joint *j){ destroyJoint( j ); } }; }
 
     //! Direct access to the box2d world
     b2World& getWorld()
