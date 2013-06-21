@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <cinder>
 <block
-	name="Box2D Sansumbrella"
+	name="sansumbrella Box2D"
 	id="com.sansumbrella.box2d"
 	author="David Wicks"
 	summary="Box2D sandbox and conversions"
@@ -26,5 +26,5 @@
 	<sourcePattern>src/sansumbrella/*.cpp</sourcePattern>
 	<includePath system="true">src</includePath>
 </block>
-<template>templates/Basic Box2D/template.xml</template>
+<template>templates/Box2D Sandbox/template.xml</template>
 </cinder>
