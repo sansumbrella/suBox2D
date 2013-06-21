@@ -57,8 +57,6 @@ namespace sansumbrella
     // have a look at what's in the physics system (scaled up to screen space)
     void debugDraw();
 
-    // initialize the box2d world, optionally create boundaries at edges of screen
-    void init( bool useScreenBounds=true );
     // create custom boundary
     b2Body* createBoundaryRect( ci::Rectf screen_bounds, float thickness=1.0f );
 
@@ -92,10 +90,10 @@ namespace sansumbrella
     // get the world
     b2World& getWorld(){ return mWorld; }
 
-    // set the filter function for your objects
-    void setContactFilter( b2ContactFilter filter );
+    //! set the filter function for your objects
+    void setContactFilter( const b2ContactFilter &filter );
 
-    // enable user interaction (needs to know what window the interaction is coming from)
+    //! enable user interaction through a b2MouseBody
     void connectUserSignals( ci::app::WindowRef window );
     void disconnectUserSignals();
 

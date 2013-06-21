@@ -74,7 +74,7 @@ void Sandbox::clear()
 	}
 }
 
-void Sandbox::setContactFilter( b2ContactFilter filter )
+void Sandbox::setContactFilter( const b2ContactFilter &filter )
 {
 	mContactFilter = filter;
 	mWorld.SetContactFilter(&mContactFilter);
@@ -247,14 +247,6 @@ b2Body* Sandbox::createBoundaryRect(ci::Rectf screen_bounds, float thickness)
   mBoundaryBody = createBody( bodyDef, { left, right, top, bottom } );
   return mBoundaryBody;
 }
-
-void Sandbox::init( bool useScreenBounds )
-{
-	if( useScreenBounds ){
-		createBoundaryRect( app::getWindowBounds() );
-	}
-}
-
 
 //
 //	Mouse interaction

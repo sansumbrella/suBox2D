@@ -62,7 +62,9 @@ void SandboxApp::prepareSettings(Settings *settings)
 
 void SandboxApp::setup()
 {
-  mSandbox.init();
+  // create boundary shapes around the outside edges of the screen
+  mSandbox.createBoundaryRect( getWindowBounds() );
+  // enable mouse interaction through a b2MouseBody
   mSandbox.connectUserSignals( getWindow() );
   try
   {
@@ -83,6 +85,7 @@ void SandboxApp::setup()
 void SandboxApp::keyDown(KeyEvent event)
 {
 #ifdef CINDER_GLES
+// iOS doesn't support key codes
 #else
   switch ( event.getCode() )
   {
