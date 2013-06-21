@@ -28,7 +28,6 @@
 #pragma once
 #include <Box2D/Box2D.h>
 #include "Box2DRenderer.h"
-#include "cinder/Vector.h"
 
 namespace cinder
 { // forward declaration
@@ -42,14 +41,19 @@ namespace sansumbrella
   It also keeps track of the objects used with the b2World for debug drawing,
   stepping the simulation, and basic mouse interaction.
 
+  Sandbox enables easy RAII management of physics objects through the manage()
+  methods that return smart pointers to the elements in the b2World. This makes
+  it straightforward to consider a physics body as a member of some other project
+  component and properly dispose of it once the component falls out of scope.
+
   When setting the world scale, keep in mind that Box2D is designed to simulate
   objects between 10cm and 10m in size. With the Sandbox's default scale, that
   translates to screen sizes between 10 and 1000 points (DPI-agnostic pixels).
 
   TODO:
   Standardize on using world coordinates for adding elements.
-  Add method for setting gl matrices based on world scale (perhaps non-member, non-friend that uses the scale).
-  (Maybe) create a means of panning/zooming around the physics world
+  Add method for setting gl matrices based on world scale
+  (perhaps non-member, non-friend that uses the scale).
   Camera controls seem like they should be someone else's job
   */
 
