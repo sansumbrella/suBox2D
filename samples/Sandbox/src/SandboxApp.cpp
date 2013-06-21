@@ -37,7 +37,7 @@ using namespace std;
 using namespace su;
 
 class SandboxApp : public AppNative {
-  public:
+public:
   void prepareSettings( Settings *settings );
 	void setup();
 	void mouseDown( MouseEvent event );
@@ -46,7 +46,10 @@ class SandboxApp : public AppNative {
 	void update();
 	void draw();
 private:
+  void reset();
+  void buildBodies();
   void createCrazyShape();
+  void createTextShape( const std::string &text, const ci::Vec2f &top_left );
   void applyForceToShape( const ci::Vec2f &force );
 	Sandbox   mSandbox;
   b2Body*   mCrazyBody = nullptr;
@@ -60,28 +63,48 @@ void SandboxApp::prepareSettings(Settings *settings)
 
 void SandboxApp::setup()
 {
-  // create boundary shapes around the outside edges of the screen
-  mSandbox.createBoundaryRect( getWindowBounds() );
   // enable mouse interaction through a b2MouseBody
   mSandbox.connectUserSignals( getWindow() );
+  buildBodies();
+}
 
+void SandboxApp::reset()
+{
+  mSandbox.clear();
+  mCrazyBody = nullptr;
+  buildBodies();
+}
+
+void SandboxApp::buildBodies()
+{
+  // Create boundary shapes around the outside edges of the screen
+  mSandbox.createBoundaryRect( getWindowBounds() );
+  // Create text from triangulated mesh
+  createTextShape( "Collapsed", Vec2f( 200.0f, 100.0f ) );
+  // Create a randomized shape like a triangle fan
   createCrazyShape();
-  for( int i = 0; i < 150; ++i )
-  {
-    Vec2f loc{ Rand::randFloat(getWindowWidth()), getWindowHeight() / 2 + Rand::randFloat(getWindowHeight()/2) };
-    mSandbox.createCircle( loc, Rand::randFloat( 5.0f, 25.0f ) );
-  }
+  // Create a circle
+  Vec2f loc{ Rand::randFloat(getWindowWidth()), getWindowHeight() / 2 + Rand::randFloat(getWindowHeight()/2) };
+  float radius = Rand::randFloat( 20.0f, 80.0f );
+  mSandbox.createCircle( loc, radius );
+  // Create a box
+  loc = { Rand::randFloat(getWindowWidth()), getWindowHeight() / 2 + Rand::randFloat(getWindowHeight()/2) };
+  Vec2f size{ Rand::randFloat( 20.0f, 100.0f ), Rand::randFloat( 20.0f, 100.0f ) };
+  mSandbox.createBox( loc, size );
 }
 
 void SandboxApp::keyDown(KeyEvent event)
 {
 #ifdef CINDER_GLES
-// iOS doesn't support key codes
+  // iOS doesn't support key codes
 #else
   switch ( event.getCode() )
   {
     case KeyEvent::KEY_c:
       createCrazyShape();
+      break;
+    case KeyEvent::KEY_r:
+      reset();
       break;
     case KeyEvent::KEY_UP:
       applyForceToShape( Vec2f{ 0, -1000.0f } );
@@ -104,7 +127,7 @@ void SandboxApp::keyDown(KeyEvent event)
 void SandboxApp::applyForceToShape(const ci::Vec2f &force)
 {
   mCrazyBody->ApplyForceToCenter( b2Vec2{ force.x, force.y } );
-//  mCrazyBody->ApplyForce( b2Vec2{ force.x, force.y}, b2Vec2{ mSandbox.toPhysics(getWindowWidth()/2), mSandbox.toPhysics(getWindowHeight()) } );
+  //  mCrazyBody->ApplyForce( b2Vec2{ force.x, force.y}, b2Vec2{ mSandbox.toPhysics(getWindowWidth()/2), mSandbox.toPhysics(getWindowHeight()) } );
 }
 
 void SandboxApp::mouseDown( MouseEvent event )
@@ -125,16 +148,14 @@ void SandboxApp::mouseDrag(MouseEvent event)
 
 void SandboxApp::createCrazyShape()
 {
-  // Measure how long shape generation and triangulation require
-  double d1 = getElapsedSeconds();
-  float d = Rand::randFloat( 0.5, 2.0f );
+  float d = Rand::randFloat( 0.1, 2.0f );
   Path2d outline;
   outline.moveTo( cos( 0 ) * d, sin( 0 ) * d );
   const int points = 12;
   for( int i = 1; i < points; ++i )
   {
     float t = lmap<float>( i, 0, points, 0, M_PI * 2 );
-    d = Rand::randFloat( 0.5, 2.0f );
+    d = Rand::randFloat( 0.1, 2.0f );
     outline.lineTo( cos( t ) * d, sin( t ) * d  );
   }
 
@@ -146,12 +167,27 @@ void SandboxApp::createCrazyShape()
   if( mCrazyBody ){ mSandbox.destroyBody( mCrazyBody ); }
   // create shape as a fan (works well with the radial vertices we defined)
   // much faster than generic triangulation, but only works on certain shapes
+  // will crash if the triangles have negative (clockwise) area
   mCrazyBody = mSandbox.createFanShape( mSandbox.toPhysics( getWindowSize() / 2 ), hull_vertices );
+}
+
+void SandboxApp::createTextShape( const std::string &text, const ci::Vec2f &top_left )
+{
   // create shape using Cinder's Triangulator to calculate the triangles
-  // works on any arbitrary shape; will crash in Box2D if any triangle has zero area
-//  mCrazyBody = mSandbox.createShape( mSandbox.toPhysics( getWindowSize() / 2 ), Triangulator( outline, 1.0 ).calcMesh( Triangulator::WINDING_ODD ) );
-  double d2 = getElapsedSeconds();
-  cout << "Creating shape required: " << (d2 - d1) * 1000 << "ms" << endl;
+  // works on almost any arbitrary shape
+  Font f{ "Arial", 128.0f };
+  Vec2f loc{ top_left };
+  // de-res the text before getting the physics outline
+  // this scalar is just to make it much smaller when we triangulate
+  float scalar = 10000.0f;
+  for( auto &c : text )
+  {
+    auto shape = f.getGlyphShape( f.getGlyphChar( c ) );
+    shape.scale( { mSandbox.getMetersPerPoint() / scalar, mSandbox.getMetersPerPoint() / scalar } );
+    auto mesh = Triangulator( shape, 1 ).calcMesh( Triangulator::WINDING_ODD );
+    mSandbox.createShape( mSandbox.toPhysics( loc ), mesh, scalar );
+    loc.x += shape.calcBoundingBox().getWidth() * mSandbox.getPointsPerMeter() * scalar + 10.0f;
+  }
 }
 
 void SandboxApp::update()

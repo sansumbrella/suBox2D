@@ -57,22 +57,19 @@ void Sandbox::setMetersPerPoint(float meters)
 }
 
 void Sandbox::clear()
-{
-	//get rid of everything
-	b2Body* node = mWorld.GetBodyList();
-	while (node)
-	{
-		b2Body* b = node;
-		node = node->GetNext();
-		destroyBody(b);
-	}
+{	// get rid of everything
+  while( mWorld.GetBodyCount() > 0 )
+  {
+    destroyBody( mWorld.GetBodyList() );
+  }
 
-	b2Joint* joint = mWorld.GetJointList();
-	while (joint) {
-		b2Joint* j = joint;
-		joint = joint->GetNext();
-		mWorld.DestroyJoint(j);
-	}
+  while( mWorld.GetJointCount() > 0 )
+  {
+    destroyJoint( mWorld.GetJointList() );
+  }
+  // invalidate any pointers to physics-world objects
+  mBoundaryBody = nullptr;
+  mMouseJoint = nullptr;
 }
 
 void Sandbox::setContactFilter( const b2ContactFilter &filter )
@@ -180,11 +177,11 @@ b2Body* Sandbox::createFanShape(const ci::Vec2f &centroid, const std::vector<b2V
   return createBody( bodyDef, fixtures );
 }
 
-b2Body* Sandbox::createShape( const ci::Vec2f &centroid, const ci::TriMesh2d &mesh )
+b2Body* Sandbox::createShape( const ci::Vec2f &centroid, const ci::TriMesh2d &mesh, float scale )
 {
   const auto num_triangles = mesh.getNumTriangles();
   vector<b2PolygonShape> shapes( num_triangles );
-  vector<b2FixtureDef> fixtures( num_triangles );
+  vector<b2FixtureDef> fixtures;
   b2BodyDef bodyDef;
   bodyDef.position.Set( centroid.x, centroid.y );
   bodyDef.type = b2_dynamicBody;
@@ -192,13 +189,31 @@ b2Body* Sandbox::createShape( const ci::Vec2f &centroid, const ci::TriMesh2d &me
   for( auto i = 0; i < num_triangles; ++i )
   {
     Vec2f a, b, c;
-    // do these come out in any specific order? CW, CCW?
     mesh.getTriangleVertices( i, &a, &b, &c );
+    if( scale != 1.0f )
+    { // resize the triangles if necessary
+      a *= scale;
+      b *= scale;
+      c *= scale;
+    }
+    // Since we don't know anything about the quality of triangles from the mesh
+    // Check that the triangle is wound CCW (has positive area)
+    float area = (Vec2f{b-a}).cross( Vec2f{c-b} ) / 2;
     array<b2Vec2, 3> vertices = { b2Vec2{a.x, a.y}, b2Vec2{b.x, b.y}, b2Vec2{c.x, c.y} };
-    shapes[i].Set( &vertices[0], vertices.size() );
-    fixtures[i].shape = &shapes[i];
-    fixtures[i].density = 1.0f;
-    fixtures[i].friction = 0.3f;
+    if( area < 0 )
+    { // flip the vertex order to be CCW
+      vertices = { b2Vec2{a.x, a.y}, b2Vec2{c.x, c.y}, b2Vec2{b.x, b.y} };
+    }
+    if( abs(area) > b2_epsilon )
+    { // if the triangle is big enough for Box2D to consider
+      shapes[i].Set( &vertices[0], vertices.size() );
+
+      b2FixtureDef fixture;
+      fixture.shape = &shapes[i];
+      fixture.density = 1.0f;
+      fixture.friction = 0.3f;
+      fixtures.push_back( fixture );
+    }
   }
   return createBody( bodyDef, fixtures );
 }
