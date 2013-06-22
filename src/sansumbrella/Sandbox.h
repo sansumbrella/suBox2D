@@ -52,8 +52,6 @@ namespace sansumbrella
 
   TODO:
   Standardize on using world coordinates for adding elements.
-  Add method for setting gl matrices based on world scale
-  (perhaps non-member, non-friend that uses the scale).
   Camera controls seem like they should be someone else's job
   */
 
@@ -139,15 +137,14 @@ namespace sansumbrella
 
     // Conversion between screen and physics space
 
+    inline void setGlScale() const
+    { ci::gl::scale( mPointsPerMeter, mPointsPerMeter ); }
     //! Set the number of screen points contained in a world meter
     //! default value is 100 (1 pixel == 1 centimeter)
     void setPointsPerMeter( float points );
     //! Set the number of meters represented per screen point
     //! Default value is 0.01
     void setMetersPerPoint( float meters );
-    //! Return the number of points per meter
-    inline float getPointsPerMeter() const { return mPointsPerMeter; }
-    inline float getMetersPerPoint() const { return mMetersPerPoint; }
     //! Convert from screen units to physical measurements
     template<typename T>
     inline T toPhysics( const T &points )

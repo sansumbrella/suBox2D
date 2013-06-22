@@ -72,7 +72,7 @@ void Sandbox::connectUserSignals(ci::app::WindowRef window)
 void Sandbox::debugDraw()
 {
 	gl::pushModelView();
-	gl::scale( mPointsPerMeter, mPointsPerMeter );
+	setGlScale();
   mWorld.DrawDebugData();
   gl::popModelView();
 }

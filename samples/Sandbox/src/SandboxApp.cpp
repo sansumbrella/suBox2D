@@ -187,10 +187,10 @@ void SandboxApp::createTextShape( const std::string &text, const ci::Vec2f &top_
   for( auto &c : text )
   {
     auto shape = f.getGlyphShape( f.getGlyphChar( c ) );
-    shape.scale( { mSandbox.getMetersPerPoint() / scalar, mSandbox.getMetersPerPoint() / scalar } );
+    shape.scale( { mSandbox.toPhysics( 1 / scalar ), mSandbox.toPhysics( 1 / scalar ) } );
     auto mesh = Triangulator( shape, 1 ).calcMesh( Triangulator::WINDING_ODD );
     mSandbox.createShape( mSandbox.toPhysics( loc ), mesh, scalar );
-    loc.x += shape.calcBoundingBox().getWidth() * mSandbox.getPointsPerMeter() * scalar + 10.0f;
+    loc.x += mSandbox.toPoints( shape.calcBoundingBox().getWidth() * scalar ) + 10.0f;
   }
 }
 
