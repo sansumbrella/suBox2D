@@ -64,7 +64,7 @@ void SandboxApp::prepareSettings(Settings *settings)
 void SandboxApp::setup()
 {
   // enable mouse interaction through a b2MouseBody
-//  mSandbox.connectUserSignals( getWindow() );
+  mSandbox.connectUserSignals( getWindow() );
   buildBodies();
 }
 

@@ -64,9 +64,24 @@ void Sandbox::setContactFilter( const b2ContactFilter &filter )
 
 void Sandbox::connectUserSignals(ci::app::WindowRef window)
 {
-  window->getSignalMouseDown().connect( [this]( app::MouseEvent &event ){ mouseDown( event ); } );
-  window->getSignalMouseUp().connect( [this]( app::MouseEvent &event ){ mouseUp( event ); } );
-  window->getSignalMouseDrag().connect( [this]( app::MouseEvent &event ){ mouseDrag( event ); } );
+  mMouseConnections[0] = window->getSignalMouseDown().connect( [this]( app::MouseEvent &event ){ mouseDown( event ); } );
+  mMouseConnections[1] = window->getSignalMouseUp().connect( [this]( app::MouseEvent &event ){ mouseUp( event ); } );
+  mMouseConnections[2] = window->getSignalMouseDrag().connect( [this]( app::MouseEvent &event ){ mouseDrag( event ); } );
+  b2BodyDef bodyDef;
+  mMouseBody = mWorld.CreateBody(&bodyDef);
+}
+
+void Sandbox::disconnectUserSignals()
+{
+  if( mMouseBody )
+  {
+    destroyBody( mMouseBody );
+    mMouseBody = nullptr;
+  }
+  for( auto &connect : mMouseConnections )
+  {
+    connect.disconnect();
+  }
 }
 
 void Sandbox::debugDraw()
@@ -303,7 +318,7 @@ bool Sandbox::mouseDown( app::MouseEvent &event )
 		b2Body* body = callback.m_fixture->GetBody();
 		body->SetAwake(true);
 		b2MouseJointDef md;
-//		md.bodyA = mBoundaryBody;
+		md.bodyA = mMouseBody;
 		md.bodyB = body;
 		md.target = p;
 		md.maxForce = 2000.0f * body->GetMass();

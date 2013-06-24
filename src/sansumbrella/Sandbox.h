@@ -26,6 +26,7 @@
  */
 
 #pragma once
+#include <array>
 #include <Box2D/Box2D.h>
 #include "Box2DRenderer.h"
 
@@ -167,6 +168,8 @@ namespace sansumbrella
 
     // our mouse, for simple interaction
     b2MouseJoint*   mMouseJoint = nullptr;
+    b2Body*         mMouseBody = nullptr;
+    std::array<ci::signals::connection, 3> mMouseConnections;
     Box2DRenderer   mDebugRenderer;
   };
 }
