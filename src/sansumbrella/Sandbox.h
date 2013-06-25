@@ -69,8 +69,8 @@ namespace sansumbrella
     //! have a look at what's in the physics system (scaled up to screen space)
     void debugDraw();
 
-    //! Create a boundary rectangle in screen coordinates
-    b2Body* createBoundaryRect( ci::Rectf screen_bounds, float thickness=1.0f );
+    //! Create a boundary rectangle in screen coordinates; uses a b2ChainShape
+    b2Body* createBoundaryRect( ci::Rectf screen_bounds );
     //! Create a box using screen coordinates
     b2Body* createBox( const ci::Vec2f &pos, const ci::Vec2f &size );
     //! Create a circle using screen coordinates

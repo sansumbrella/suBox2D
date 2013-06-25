@@ -217,45 +217,33 @@ b2Body* Sandbox::createShape( const ci::Vec2f &centroid, const ci::TriMesh2d &me
   return createBody( bodyDef, fixtures );
 }
 
-b2Body* Sandbox::createBoundaryRect(ci::Rectf screen_bounds, float thickness)
+b2Body* Sandbox::createBoundaryRect(ci::Rectf screen_bounds)
 {
   // half width and half height
-  const float w = toPhysics( screen_bounds.getWidth() / 2.0f ) + thickness;
-  const float h = toPhysics( screen_bounds.getHeight() / 2.0f ) + thickness;
+  const float w = toPhysics( screen_bounds.getWidth() / 2.0f );
+  const float h = toPhysics( screen_bounds.getHeight() / 2.0f );
   // center x, y
   const Vec2f upperLeft = toPhysics( screen_bounds.getUpperLeft() );
-  const float x = upperLeft.x + w - thickness;
-  const float y = upperLeft.y + h - thickness;
+  const float x = upperLeft.x + w;
+  const float y = upperLeft.y + h;
 
   b2BodyDef bodyDef;
   bodyDef.position.Set( x, y );
   bodyDef.type = b2_staticBody;
 
-  // Left
-  b2FixtureDef left;
-  b2PolygonShape leftShape;
-  leftShape.SetAsBox( thickness, h, b2Vec2( -w, 0 ), 0 );
-  left.shape = &leftShape;
+  array<b2Vec2, 4> vertices = { b2Vec2{-w, -h},
+    { w, -h },
+    { w, h },
+    { -w, h }
+  };
 
-  // Right
-  b2FixtureDef right;
-  b2PolygonShape rightShape;
-  rightShape.SetAsBox( thickness, h, b2Vec2( w, 0 ), 0 );
-  right.shape = &rightShape;
+  b2ChainShape chain;
+  chain.CreateLoop( &vertices[0], vertices.size() );
 
-  // Top
-  b2FixtureDef top;
-  b2PolygonShape topShape;
-  topShape.SetAsBox( w, thickness, b2Vec2( 0, -h ), 0 );
-  top.shape = &topShape;
+  b2FixtureDef fixture;
+  fixture.shape = &chain;
 
-  // Bottom
-  b2FixtureDef bottom;
-  b2PolygonShape bottomShape;
-  bottomShape.SetAsBox( w, thickness, b2Vec2( 0, h ), 0 );
-  bottom.shape = &bottomShape;
-
-  return createBody( bodyDef, { left, right, top, bottom } );
+  return createBody( bodyDef, fixture );
 }
 
 //
