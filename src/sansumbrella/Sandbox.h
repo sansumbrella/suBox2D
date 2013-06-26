@@ -53,11 +53,22 @@ namespace sansumbrella
   TODO:
   Standardize on coordinates for adding elements. World V. Screen.
   Leaning toward using "screen" coordinates, as they are conceptually in user space.
-  However, if user has custom coordinates that don't match the physics coordinates,
-  matching positions/size will be easier if everything came out of the physics world.
-  Moving the conversions out of the sandbox file again would simplify access,
-  but confuses who is in charge of setting the scale properties.
+  Basically, we want input in screen units and output in screen units, so you
+  only ever need to think in a single set of units.
+  The bodies themselves don't know the scaling factor, which complicates output.
   */
+
+  // something like this is not so bad
+  // the duplication of the points per meter property is annoying, though
+  struct SmartBody
+  {
+    unique_b2Body_ptr body;
+    float mPointsPerMeter;  // multiply by this all the time
+    ci::Vec2f getPos() const
+    {
+      return ci::Vec2f{ body->GetPosition().x, body->GetPosition().y } * mPointsPerMeter;
+    }
+  };
 
   class Sandbox
   {
@@ -120,8 +131,6 @@ namespace sansumbrella
 
     // Conversion between screen and physics space
 
-    inline void setGlScale() const
-    { ci::gl::scale( mPointsPerMeter, mPointsPerMeter ); }
     //! Set the number of screen points contained in a world meter
     //! default value is 100 (1 pixel == 1 centimeter)
     void setPointsPerMeter( float points );
@@ -129,6 +138,7 @@ namespace sansumbrella
     //! Default value is 0.01
     void setMetersPerPoint( float meters );
     //! Convert from screen units to physical measurements
+    float getPointsPerMeter() const { return mPointsPerMeter; }
     template<typename T>
     inline T toPhysics( const T &points )
     { return points * mMetersPerPoint; }

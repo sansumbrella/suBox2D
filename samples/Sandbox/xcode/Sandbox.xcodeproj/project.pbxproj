@@ -17,7 +17,6 @@
 		0D6CAD41159549D2B064657B /* b2ChainAndPolygonContact.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23372D22B3D645C4B937C8EE /* b2ChainAndPolygonContact.cpp */; };
 		15095AF8176E39BA00D745F9 /* Box2DRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15095AF6176E39B900D745F9 /* Box2DRenderer.cpp */; };
 		15371DE1177A96F3005EAA2A /* Box2DMouseJointer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15371DDF177A96F3005EAA2A /* Box2DMouseJointer.cpp */; };
-		15371DE4177AA0F8005EAA2A /* SharedSandbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15371DE2177AA0F8005EAA2A /* SharedSandbox.cpp */; };
 		2869A9C0184843E686F9416A /* b2PolygonContact.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 043663AD84014E4D8F716055 /* b2PolygonContact.cpp */; };
 		2DD7F432DB5E4F7A82163630 /* b2WheelJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 220918D03FCE4ACCB8BB7B80 /* b2WheelJoint.cpp */; };
 		332DF4038C8243DDBFA476C3 /* b2WorldCallbacks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B484B64233954C59B326A8BD /* b2WorldCallbacks.cpp */; };
@@ -90,8 +89,6 @@
 		151869BF1B1B4E40A91062CA /* b2WeldJoint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = b2WeldJoint.cpp; path = ../../../src/Box2D/Dynamics/Joints/b2WeldJoint.cpp; sourceTree = "<group>"; };
 		15371DDF177A96F3005EAA2A /* Box2DMouseJointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Box2DMouseJointer.cpp; path = ../../../src/sansumbrella/Box2DMouseJointer.cpp; sourceTree = "<group>"; };
 		15371DE0177A96F3005EAA2A /* Box2DMouseJointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Box2DMouseJointer.h; path = ../../../src/sansumbrella/Box2DMouseJointer.h; sourceTree = "<group>"; };
-		15371DE2177AA0F8005EAA2A /* SharedSandbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SharedSandbox.cpp; path = ../../../src/sansumbrella/SharedSandbox.cpp; sourceTree = "<group>"; };
-		15371DE3177AA0F8005EAA2A /* SharedSandbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SharedSandbox.h; path = ../../../src/sansumbrella/SharedSandbox.h; sourceTree = "<group>"; };
 		16DD18DEC99D47E39AFC9369 /* b2Joint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = b2Joint.cpp; path = ../../../src/Box2D/Dynamics/Joints/b2Joint.cpp; sourceTree = "<group>"; };
 		17B8F5FB38DC4A31A36B177B /* b2WorldCallbacks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = b2WorldCallbacks.h; path = ../../../src/Box2D/Dynamics/b2WorldCallbacks.h; sourceTree = "<group>"; };
 		19E601D908BA4992B2D2CDE4 /* b2DynamicTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = b2DynamicTree.h; path = ../../../src/Box2D/Collision/b2DynamicTree.h; sourceTree = "<group>"; };
@@ -355,8 +352,6 @@
 				15095AF7176E39B900D745F9 /* Box2DRenderer.h */,
 				15371DDF177A96F3005EAA2A /* Box2DMouseJointer.cpp */,
 				15371DE0177A96F3005EAA2A /* Box2DMouseJointer.h */,
-				15371DE2177AA0F8005EAA2A /* SharedSandbox.cpp */,
-				15371DE3177AA0F8005EAA2A /* SharedSandbox.h */,
 			);
 			name = sansumbrella;
 			sourceTree = "<group>";
@@ -591,7 +586,6 @@
 				F4D71674EF504B49B6AC9FDF /* Sandbox.cpp in Sources */,
 				15095AF8176E39BA00D745F9 /* Box2DRenderer.cpp in Sources */,
 				15371DE1177A96F3005EAA2A /* Box2DMouseJointer.cpp in Sources */,
-				15371DE4177AA0F8005EAA2A /* SharedSandbox.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

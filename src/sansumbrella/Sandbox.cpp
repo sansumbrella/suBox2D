@@ -65,7 +65,7 @@ void Sandbox::setContactFilter( const b2ContactFilter &filter )
 void Sandbox::debugDraw()
 {
 	gl::pushModelView();
-	setGlScale();
+	gl::scale( mPointsPerMeter, mPointsPerMeter );
   mWorld.DrawDebugData();
   gl::popModelView();
 }

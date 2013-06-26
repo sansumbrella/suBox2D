@@ -29,7 +29,6 @@
 #include "cinder/gl/gl.h"
 #include "cinder/Rand.h"
 #include "sansumbrella/Sandbox.h"
-#include "sansumbrella/SharedSandbox.h"
 #include "sansumbrella/Box2DMouseJointer.h"
 #include "cinder/Triangulate.h"
 
@@ -63,7 +62,6 @@ void SandboxApp::prepareSettings(Settings *settings)
 {
   settings->setWindowSize( 1024, 768 );
   settings->enableHighDensityDisplay();
-  gSharedSandbox = &mSandbox;
 }
 
 void SandboxApp::setup()
@@ -71,8 +69,6 @@ void SandboxApp::setup()
   // enable mouse interaction through a b2MouseBody
   mMouseJointer.connectUserSignals( getWindow(), mSandbox );
   buildBodies();
-
-  cout << su::toPhysics( Vec2f{ getWindowSize() } ) << endl;
 }
 
 void SandboxApp::reset()
