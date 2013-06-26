@@ -83,7 +83,7 @@ void SandboxApp::reset()
 void SandboxApp::buildBodies()
 {
   // Create boundary shapes around the outside edges of the screen
-  mSandbox.createBoundaryRect( getWindowBounds() );
+  mSandbox.createBoundaryRect( mSandbox.toPhysics( Rectf{getWindowBounds()} ) );
   // Create text from triangulated mesh
   createTextShape( "Collapsed", Vec2f( 200.0f, 100.0f ) );
   // Create a randomized shape like a triangle fan
@@ -91,11 +91,11 @@ void SandboxApp::buildBodies()
   // Create a circle
   Vec2f loc{ Rand::randFloat(getWindowWidth()), getWindowHeight() / 2 + Rand::randFloat(getWindowHeight()/2) };
   float radius = Rand::randFloat( 20.0f, 80.0f );
-  mBodies.emplace_back( mSandbox.createCircle( loc, radius ) );
+  mBodies.emplace_back( mSandbox.createCircle( mSandbox.toPhysics( loc ), mSandbox.toPhysics( radius ) ) );
   // Create a box
   loc = { Rand::randFloat(getWindowWidth()), getWindowHeight() / 2 + Rand::randFloat(getWindowHeight()/2) };
   Vec2f size{ Rand::randFloat( 20.0f, 100.0f ), Rand::randFloat( 20.0f, 100.0f ) };
-  mBodies.emplace_back( mSandbox.createBox( loc, size ) );
+  mBodies.emplace_back( mSandbox.createBox( mSandbox.toPhysics(loc), mSandbox.toPhysics(size) ) );
 }
 
 void SandboxApp::keyDown(KeyEvent event)
@@ -138,7 +138,7 @@ void SandboxApp::mouseDown( MouseEvent event )
 {
   if( !event.isAltDown() )
 	{
-		mBodies.emplace_back( mSandbox.createCircle( event.getPos(), Rand::randFloat( 10.0f, 20.0f ) ) );
+		mBodies.emplace_back( mSandbox.createCircle( mSandbox.toPhysics( Vec2f{event.getPos()} ), Rand::randFloat( 0.1f, 0.2f ) ) );
 	}
 }
 
@@ -146,7 +146,7 @@ void SandboxApp::mouseDrag(MouseEvent event)
 {
   if( !event.isAltDown() )
 	{
-    mBodies.emplace_back( mSandbox.createCircle( event.getPos(), Rand::randFloat( 10.0f, 20.0f ) ) );
+    mBodies.emplace_back( mSandbox.createCircle( mSandbox.toPhysics( Vec2f{event.getPos()} ), Rand::randFloat( 0.1, 0.2f ) ) );
 	}
 }
 
@@ -189,7 +189,7 @@ void SandboxApp::createTextShape( const std::string &text, const ci::Vec2f &top_
     shape.scale( { mSandbox.toPhysics( 1 / scalar ), mSandbox.toPhysics( 1 / scalar ) } );
     auto mesh = Triangulator( shape, 1 ).calcMesh( Triangulator::WINDING_ODD );
     mBodies.emplace_back( mSandbox.createShape( mSandbox.toPhysics( loc ), mesh, scalar ) );
-    loc.x += mSandbox.toPoints( shape.calcBoundingBox().getWidth() * scalar ) + 10.0f;
+    loc.x += mSandbox.fromPhysics( shape.calcBoundingBox().getWidth() * scalar ) + 10.0f;
   }
 }
 

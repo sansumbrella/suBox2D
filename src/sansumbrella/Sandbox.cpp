@@ -95,13 +95,13 @@ unique_b2Body_ptr Sandbox::createBody(const b2BodyDef &body_def)
 unique_b2Body_ptr Sandbox::createBox( const ci::Vec2f &pos, const ci::Vec2f &size )
 {
   b2BodyDef bodyDef;
-	bodyDef.position.Set(	toPhysics(pos.x),
-                       toPhysics( pos.y ) );
+	bodyDef.position.Set(	pos.x,
+                       pos.y );
 	bodyDef.type = b2_dynamicBody;
 
 	b2PolygonShape box;
-	box.SetAsBox(	toPhysics(size.x),
-               toPhysics( size.y ) );
+	box.SetAsBox(	size.x,
+                size.y );
 
 	b2FixtureDef bodyFixtureDef;
 	bodyFixtureDef.shape = &box;
@@ -114,12 +114,11 @@ unique_b2Body_ptr Sandbox::createBox( const ci::Vec2f &pos, const ci::Vec2f &siz
 unique_b2Body_ptr Sandbox::createCircle( const Vec2f &pos, float radius )
 {
   b2BodyDef bodyDef;
-  bodyDef.position.Set(	toPhysics(pos.x),
-                       toPhysics( pos.y ) );
+  bodyDef.position.Set(	pos.x, pos.y );
 	bodyDef.type = b2_dynamicBody;
 
   b2CircleShape circle;
-  circle.m_radius = toPhysics( radius );
+  circle.m_radius = radius;
   b2FixtureDef fixtureDef;
   fixtureDef.shape = &circle;
   fixtureDef.density = 1.0f;
@@ -128,13 +127,13 @@ unique_b2Body_ptr Sandbox::createCircle( const Vec2f &pos, float radius )
   return createBody( bodyDef, fixtureDef );
 }
 
-unique_b2Body_ptr Sandbox::createFanShape(const ci::Vec2f &centroid, const std::vector<b2Vec2> &hull_vertices)
+unique_b2Body_ptr Sandbox::createFanShape(const ci::Vec2f &pos, const std::vector<b2Vec2> &hull_vertices)
 {
   assert( hull_vertices.size() >= 3 );
   vector<b2PolygonShape> shapes( hull_vertices.size() );
   vector<b2FixtureDef> fixtures( hull_vertices.size() );
   b2BodyDef bodyDef;
-  bodyDef.position.Set( centroid.x, centroid.y );
+  bodyDef.position.Set( pos.x, pos.y );
   bodyDef.type = b2_dynamicBody;
 
   b2Vec2 center{ 0, 0 };
@@ -208,10 +207,10 @@ unique_b2Joint_ptr Sandbox::createJoint(const b2JointDef &joint_def)
 void Sandbox::createBoundaryRect(ci::Rectf screen_bounds)
 {
   // half width and half height
-  const float w = toPhysics( screen_bounds.getWidth() / 2.0f );
-  const float h = toPhysics( screen_bounds.getHeight() / 2.0f );
+  const float w = screen_bounds.getWidth() / 2.0f;
+  const float h = screen_bounds.getHeight() / 2.0f;
   // center x, y
-  const Vec2f upperLeft = toPhysics( screen_bounds.getUpperLeft() );
+  const Vec2f upperLeft = screen_bounds.getUpperLeft();
   const float x = upperLeft.x + w;
   const float y = upperLeft.y + h;
 
