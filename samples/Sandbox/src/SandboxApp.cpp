@@ -51,8 +51,9 @@ private:
   void createCrazyShape();
   void createTextShape( const std::string &text, const ci::Vec2f &top_left );
   void applyForceToShape( const ci::Vec2f &force );
-	Sandbox               mSandbox;
-  su::unique_body_ptr   mSpikyBody;
+	Sandbox                       mSandbox;
+  su::unique_b2Body_ptr         mSpikyBody;
+  vector<su::unique_b2Body_ptr> mBodies;
 };
 
 void SandboxApp::prepareSettings(Settings *settings)
@@ -70,14 +71,10 @@ void SandboxApp::setup()
 
 void SandboxApp::reset()
 {
-  // release all smart pointers before iterating through the box2d list
+  // reset the spiky pointer to clear the body it refers to
   mSpikyBody.reset();
-  // loop through all box2d bodies
-  while( mSandbox.getBodyCount() > 0 )
-  { // Box2D bodies are stored in a linked list;
-    // we destroy the head of the list as long as there are bodies
-    mSandbox.destroyBody( mSandbox.getBodyList() );
-  }
+  // remove all pointers to the other bodies, clearing them from simulation
+  mBodies.clear();
   buildBodies();
 }
 
@@ -92,11 +89,11 @@ void SandboxApp::buildBodies()
   // Create a circle
   Vec2f loc{ Rand::randFloat(getWindowWidth()), getWindowHeight() / 2 + Rand::randFloat(getWindowHeight()/2) };
   float radius = Rand::randFloat( 20.0f, 80.0f );
-  mSandbox.createCircle( loc, radius );
+  mBodies.push_back( mSandbox.createCircle( loc, radius ) );
   // Create a box
   loc = { Rand::randFloat(getWindowWidth()), getWindowHeight() / 2 + Rand::randFloat(getWindowHeight()/2) };
   Vec2f size{ Rand::randFloat( 20.0f, 100.0f ), Rand::randFloat( 20.0f, 100.0f ) };
-  mSandbox.createBox( loc, size );
+  mBodies.push_back( mSandbox.createBox( loc, size ) );
 }
 
 void SandboxApp::keyDown(KeyEvent event)
@@ -139,7 +136,7 @@ void SandboxApp::mouseDown( MouseEvent event )
 {
   if( !event.isAltDown() )
 	{
-		mSandbox.createCircle( event.getPos(), Rand::randFloat( 5.0f, 20.0f ) );
+		mBodies.push_back( mSandbox.createCircle( event.getPos(), Rand::randFloat( 5.0f, 20.0f ) ) );
 	}
 }
 
@@ -147,7 +144,7 @@ void SandboxApp::mouseDrag(MouseEvent event)
 {
   if( !event.isAltDown() )
 	{
-    mSandbox.createCircle( event.getPos(), Rand::randFloat( 5.0f, 20.0f ) );
+    mBodies.push_back( mSandbox.createCircle( event.getPos(), Rand::randFloat( 5.0f, 20.0f ) ) );
 	}
 }
 
@@ -172,7 +169,7 @@ void SandboxApp::createCrazyShape()
   // create shape as a fan (works well with the radial vertices we defined)
   // much faster than generic triangulation, but only works on certain shapes
   // will crash if the triangles have negative (clockwise) area
-  mSpikyBody = mSandbox.manage( mSandbox.createFanShape( mSandbox.toPhysics( getWindowSize() / 2 ), hull_vertices ) );
+  mSpikyBody = mSandbox.createFanShape( mSandbox.toPhysics( getWindowSize() / 2 ), hull_vertices );
 }
 
 void SandboxApp::createTextShape( const std::string &text, const ci::Vec2f &top_left )
@@ -189,7 +186,7 @@ void SandboxApp::createTextShape( const std::string &text, const ci::Vec2f &top_
     auto shape = f.getGlyphShape( f.getGlyphChar( c ) );
     shape.scale( { mSandbox.toPhysics( 1 / scalar ), mSandbox.toPhysics( 1 / scalar ) } );
     auto mesh = Triangulator( shape, 1 ).calcMesh( Triangulator::WINDING_ODD );
-    mSandbox.createShape( mSandbox.toPhysics( loc ), mesh, scalar );
+    mBodies.push_back( mSandbox.createShape( mSandbox.toPhysics( loc ), mesh, scalar ) );
     loc.x += mSandbox.toPoints( shape.calcBoundingBox().getWidth() * scalar ) + 10.0f;
   }
 }

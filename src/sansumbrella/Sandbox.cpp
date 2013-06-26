@@ -92,24 +92,24 @@ void Sandbox::debugDraw()
   gl::popModelView();
 }
 
-b2Body* Sandbox::createBody(const b2BodyDef &body_def, const b2FixtureDef &fixture_def)
+unique_b2Body_ptr Sandbox::createBody(const b2BodyDef &body_def, const b2FixtureDef &fixture_def)
 {
   b2Body *body = mWorld.CreateBody( &body_def );
   body->CreateFixture( &fixture_def );
-  return body;
+  return manage( body );
 }
 
-b2Body* Sandbox::createBody(const b2BodyDef &body_def, const std::vector<b2FixtureDef> &fixture_defs)
+unique_b2Body_ptr Sandbox::createBody(const b2BodyDef &body_def, const std::vector<b2FixtureDef> &fixture_defs)
 {
   b2Body *body = mWorld.CreateBody( &body_def );
   for( auto &def : fixture_defs )
   {
     body->CreateFixture( &def );
   }
-  return body;
+  return manage( body );
 }
 
-b2Body* Sandbox::createBox( const ci::Vec2f &pos, const ci::Vec2f &size )
+unique_b2Body_ptr Sandbox::createBox( const ci::Vec2f &pos, const ci::Vec2f &size )
 {
   b2BodyDef bodyDef;
 	bodyDef.position.Set(	toPhysics(pos.x),
@@ -128,7 +128,7 @@ b2Body* Sandbox::createBox( const ci::Vec2f &pos, const ci::Vec2f &size )
   return createBody( bodyDef, bodyFixtureDef );
 }
 
-b2Body* Sandbox::createCircle( const Vec2f &pos, float radius )
+unique_b2Body_ptr Sandbox::createCircle( const Vec2f &pos, float radius )
 {
   b2BodyDef bodyDef;
   bodyDef.position.Set(	toPhysics(pos.x),
@@ -145,7 +145,7 @@ b2Body* Sandbox::createCircle( const Vec2f &pos, float radius )
   return createBody( bodyDef, fixtureDef );
 }
 
-b2Body* Sandbox::createFanShape(const ci::Vec2f &centroid, const std::vector<b2Vec2> &hull_vertices)
+unique_b2Body_ptr Sandbox::createFanShape(const ci::Vec2f &centroid, const std::vector<b2Vec2> &hull_vertices)
 {
   assert( hull_vertices.size() >= 3 );
   vector<b2PolygonShape> shapes( hull_vertices.size() );
@@ -176,7 +176,7 @@ b2Body* Sandbox::createFanShape(const ci::Vec2f &centroid, const std::vector<b2V
   return createBody( bodyDef, fixtures );
 }
 
-b2Body* Sandbox::createShape( const ci::Vec2f &centroid, const ci::TriMesh2d &mesh, float scale )
+unique_b2Body_ptr Sandbox::createShape( const ci::Vec2f &centroid, const ci::TriMesh2d &mesh, float scale )
 {
   const auto num_triangles = mesh.getNumTriangles();
   vector<b2PolygonShape> shapes( num_triangles );
@@ -217,7 +217,7 @@ b2Body* Sandbox::createShape( const ci::Vec2f &centroid, const ci::TriMesh2d &me
   return createBody( bodyDef, fixtures );
 }
 
-b2Body* Sandbox::createBoundaryRect(ci::Rectf screen_bounds)
+void Sandbox::createBoundaryRect(ci::Rectf screen_bounds)
 {
   // half width and half height
   const float w = toPhysics( screen_bounds.getWidth() / 2.0f );
@@ -243,7 +243,7 @@ b2Body* Sandbox::createBoundaryRect(ci::Rectf screen_bounds)
   b2FixtureDef fixture;
   fixture.shape = &chain;
 
-  return createBody( bodyDef, fixture );
+  mBoundaryBody = createBody( bodyDef, fixture );
 }
 
 //
