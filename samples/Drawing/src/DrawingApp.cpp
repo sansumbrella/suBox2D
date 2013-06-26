@@ -10,8 +10,9 @@ using namespace std;
 
 // something like this is a reasonable approach to managing a body in your
 // own structure
-struct Bubble
+class Bubble
 {
+public:
   Bubble( su::unique_b2Body_ptr &&b, const ci::Vec2f &l, float r ):
   body( move(b) ),
   loc( l ),
@@ -26,16 +27,13 @@ struct Bubble
   loc( other.loc ),
   radius( other.radius )
   {}
-  su::unique_b2Body_ptr body;
-  ci::Vec2f             loc;
-  float                 radius;
-  // passing in scale on update lets you change it dynamically
-  // also, objects don't need to know about where scale is stored/calculated
+  // update the bubble position from physics, using the world scale
   void update( float scale )
   {
     loc.x = body->GetPosition().x * scale;
     loc.y = body->GetPosition().y * scale;
   }
+  // draw a circle with a line at bubble location
   void draw()
   {
     gl::color( Color::white() );
@@ -47,6 +45,10 @@ struct Bubble
     gl::drawLine( Vec2f{ -radius, 0 }, Vec2f{ radius, 0 } );
     gl::popModelView();
   }
+private:
+  su::unique_b2Body_ptr body;
+  ci::Vec2f             loc;
+  float                 radius;
 };
 
 class DrawingApp : public AppNative {
