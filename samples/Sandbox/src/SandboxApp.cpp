@@ -89,11 +89,11 @@ void SandboxApp::buildBodies()
   // Create a circle
   Vec2f loc{ Rand::randFloat(getWindowWidth()), getWindowHeight() / 2 + Rand::randFloat(getWindowHeight()/2) };
   float radius = Rand::randFloat( 20.0f, 80.0f );
-  mBodies.push_back( mSandbox.createCircle( loc, radius ) );
+  mBodies.emplace_back( mSandbox.createCircle( loc, radius ) );
   // Create a box
   loc = { Rand::randFloat(getWindowWidth()), getWindowHeight() / 2 + Rand::randFloat(getWindowHeight()/2) };
   Vec2f size{ Rand::randFloat( 20.0f, 100.0f ), Rand::randFloat( 20.0f, 100.0f ) };
-  mBodies.push_back( mSandbox.createBox( loc, size ) );
+  mBodies.emplace_back( mSandbox.createBox( loc, size ) );
 }
 
 void SandboxApp::keyDown(KeyEvent event)
@@ -136,7 +136,7 @@ void SandboxApp::mouseDown( MouseEvent event )
 {
   if( !event.isAltDown() )
 	{
-		mBodies.push_back( mSandbox.createCircle( event.getPos(), Rand::randFloat( 5.0f, 20.0f ) ) );
+		mBodies.emplace_back( mSandbox.createCircle( event.getPos(), Rand::randFloat( 10.0f, 20.0f ) ) );
 	}
 }
 
@@ -144,7 +144,7 @@ void SandboxApp::mouseDrag(MouseEvent event)
 {
   if( !event.isAltDown() )
 	{
-    mBodies.push_back( mSandbox.createCircle( event.getPos(), Rand::randFloat( 5.0f, 20.0f ) ) );
+    mBodies.emplace_back( mSandbox.createCircle( event.getPos(), Rand::randFloat( 10.0f, 20.0f ) ) );
 	}
 }
 
@@ -186,7 +186,7 @@ void SandboxApp::createTextShape( const std::string &text, const ci::Vec2f &top_
     auto shape = f.getGlyphShape( f.getGlyphChar( c ) );
     shape.scale( { mSandbox.toPhysics( 1 / scalar ), mSandbox.toPhysics( 1 / scalar ) } );
     auto mesh = Triangulator( shape, 1 ).calcMesh( Triangulator::WINDING_ODD );
-    mBodies.push_back( mSandbox.createShape( mSandbox.toPhysics( loc ), mesh, scalar ) );
+    mBodies.emplace_back( mSandbox.createShape( mSandbox.toPhysics( loc ), mesh, scalar ) );
     loc.x += mSandbox.toPoints( shape.calcBoundingBox().getWidth() * scalar ) + 10.0f;
   }
 }
