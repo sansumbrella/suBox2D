@@ -62,28 +62,6 @@ void Sandbox::setContactFilter( const b2ContactFilter &filter )
 	mWorld.SetContactFilter(&mContactFilter);
 }
 
-void Sandbox::connectUserSignals(ci::app::WindowRef window)
-{
-  mMouseConnections[0] = window->getSignalMouseDown().connect( [this]( app::MouseEvent &event ){ mouseDown( event ); } );
-  mMouseConnections[1] = window->getSignalMouseUp().connect( [this]( app::MouseEvent &event ){ mouseUp( event ); } );
-  mMouseConnections[2] = window->getSignalMouseDrag().connect( [this]( app::MouseEvent &event ){ mouseDrag( event ); } );
-  b2BodyDef bodyDef;
-  mMouseBody = mWorld.CreateBody(&bodyDef);
-}
-
-void Sandbox::disconnectUserSignals()
-{
-  if( mMouseBody )
-  {
-    destroyBody( mMouseBody );
-    mMouseBody = nullptr;
-  }
-  for( auto &connect : mMouseConnections )
-  {
-    connect.disconnect();
-  }
-}
-
 void Sandbox::debugDraw()
 {
 	gl::pushModelView();
@@ -107,6 +85,11 @@ unique_b2Body_ptr Sandbox::createBody(const b2BodyDef &body_def, const std::vect
     body->CreateFixture( &def );
   }
   return manage( body );
+}
+
+unique_b2Body_ptr Sandbox::createBody(const b2BodyDef &body_def)
+{
+  return manage( mWorld.CreateBody( &body_def ) );
 }
 
 unique_b2Body_ptr Sandbox::createBox( const ci::Vec2f &pos, const ci::Vec2f &size )
@@ -217,6 +200,11 @@ unique_b2Body_ptr Sandbox::createShape( const ci::Vec2f &centroid, const ci::Tri
   return createBody( bodyDef, fixtures );
 }
 
+unique_b2Joint_ptr Sandbox::createJoint(const b2JointDef &joint_def)
+{
+  return manage( mWorld.CreateJoint( &joint_def ) );
+}
+
 void Sandbox::createBoundaryRect(ci::Rectf screen_bounds)
 {
   // half width and half height
@@ -244,92 +232,4 @@ void Sandbox::createBoundaryRect(ci::Rectf screen_bounds)
   fixture.shape = &chain;
 
   mBoundaryBody = createBody( bodyDef, fixture );
-}
-
-//
-//	Mouse interaction
-//
-
-// QueryCallback taken from box2d testbed
-class QueryCallback : public b2QueryCallback
-{
-public:
-	QueryCallback(const b2Vec2& point)
-	{
-		m_point = point;
-		m_fixture = NULL;
-	}
-
-	bool ReportFixture(b2Fixture* fixture)
-	{
-		b2Body* body = fixture->GetBody();
-		if (body->GetType() == b2_dynamicBody)
-		{
-			bool inside = fixture->TestPoint(m_point);
-			if (inside)
-			{
-				m_fixture = fixture;
-
-				// We are done, terminate the query.
-				return false;
-			}
-		}
-
-		// Continue the query.
-		return true;
-	}
-
-	b2Vec2 m_point;
-	b2Fixture* m_fixture;
-};
-
-bool Sandbox::mouseDown( app::MouseEvent &event )
-{
-	if (mMouseJoint)
-	{
-		return false;
-	}
-	// Make a small box around the click point.
-	b2Vec2 p{ toPhysics( event.getPos().x ), toPhysics( event.getPos().y ) };
-	b2AABB aabb;
-	b2Vec2 d;
-	d.Set(0.001f, 0.001f);
-	aabb.lowerBound = p - d;
-	aabb.upperBound = p + d;
-
-	// Query the world for overlapping shapes.
-	QueryCallback callback(p);
-	mWorld.QueryAABB(&callback, aabb);
-
-	if (callback.m_fixture)
-	{
-		b2Body* body = callback.m_fixture->GetBody();
-		body->SetAwake(true);
-		b2MouseJointDef md;
-		md.bodyA = mMouseBody;
-		md.bodyB = body;
-		md.target = p;
-		md.maxForce = 2000.0f * body->GetMass();
-		mMouseJoint = (b2MouseJoint*)mWorld.CreateJoint(&md);
-	}
-
-	return false;
-}
-
-bool Sandbox::mouseUp( app::MouseEvent &event )
-{
-	if (mMouseJoint)
-	{
-		mWorld.DestroyJoint(mMouseJoint);
-		mMouseJoint = nullptr;
-	}
-	return false;
-}
-
-bool Sandbox::mouseDrag( app::MouseEvent &event )
-{
-	if(mMouseJoint){
-		mMouseJoint->SetTarget( b2Vec2{ toPhysics(event.getPos().x), toPhysics(event.getPos().y) } );
-	}
-	return false;
 }

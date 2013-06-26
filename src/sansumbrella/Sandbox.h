@@ -26,11 +26,10 @@
  */
 
 #pragma once
-#include <array>
-#include <Box2D/Box2D.h>
+#include "sansumbrella.h"
 #include "Box2DRenderer.h"
 
- namespace cinder
+namespace cinder
 { // forward declaration
   class TriMesh2d;
 }
@@ -52,12 +51,13 @@ namespace sansumbrella
   translates to screen sizes between 10 and 1000 points (DPI-agnostic pixels).
 
   TODO:
-  Standardize on using world coordinates for adding elements.
-  Camera controls seem like they should be someone else's job
+  Standardize on coordinates for adding elements. World V. Screen.
+  Leaning toward using "screen" coordinates, as they are conceptually in user space.
+  However, if user has custom coordinates that don't match the physics coordinates,
+  matching positions/size will be easier if everything came out of the physics world.
+  Moving the conversions out of the sandbox file again would simplify access,
+  but confuses who is in charge of setting the scale properties.
   */
-
-  typedef std::unique_ptr<b2Body, std::function<void(b2Body*)>>   unique_b2Body_ptr;
-  typedef std::unique_ptr<b2Joint, std::function<void(b2Joint*)>> unique_b2Joint_ptr;
 
   class Sandbox
   {
@@ -86,6 +86,9 @@ namespace sansumbrella
     unique_b2Body_ptr createBody( const b2BodyDef &body_def, const std::vector<b2FixtureDef> &fixture_defs );
     //! Create a box2d body from the given definitions
     unique_b2Body_ptr createBody( const b2BodyDef &body_def, const b2FixtureDef &fixture_def );
+    unique_b2Body_ptr createBody( const b2BodyDef &body_def );
+
+    unique_b2Joint_ptr createJoint( const b2JointDef &joint_def );
 
     //! Direct access to the box2d world
     b2World& getWorld()
@@ -93,12 +96,6 @@ namespace sansumbrella
 
     // Convenience methods for some b2world functions
 
-    //! Destroy \a body
-    inline void     destroyBody( b2Body *body )
-    { mWorld.DestroyBody( body ); }
-    //! Destroy \a joint
-    inline void     destroyJoint( b2Joint *joint )
-    { mWorld.DestroyJoint( joint ); }
     //! Returns the number of bodies being simulated
     inline int32    getBodyCount()
     { return mWorld.GetBodyCount(); }
@@ -118,18 +115,8 @@ namespace sansumbrella
     //! Set how much time elapses with each physics simulation step
     inline void setTimeStep( float hz ){ mTimeStep = hz; }
 
-
     //! set the filter function for your objects
     void setContactFilter( const b2ContactFilter &filter );
-
-    //! enable user interaction through a b2MouseJoint
-    void connectUserSignals( ci::app::WindowRef window );
-    void disconnectUserSignals();
-
-    // handle basic user interaction
-    bool mouseDown( ci::app::MouseEvent &event );
-    bool mouseUp( ci::app::MouseEvent &event );
-    bool mouseDrag( ci::app::MouseEvent &event );
 
     // Conversion between screen and physics space
 
@@ -162,18 +149,13 @@ namespace sansumbrella
     b2ContactFilter mContactFilter;
     unique_b2Body_ptr mBoundaryBody;
 
-    // our mouse, for simple interaction
-    // TODO: move mouse interactor into a different file/class
-    b2MouseJoint*   mMouseJoint = nullptr;
-    b2Body*         mMouseBody = nullptr;
-    std::array<ci::signals::connection, 3> mMouseConnections;
     Box2DRenderer   mDebugRenderer;
 
     //! Manage the lifetime of a b2Body with a unique_ptr and a custom deleter
     inline auto manage( b2Body *body ) -> unique_b2Body_ptr
-    { return { body, [this](b2Body *b){ destroyBody( b ); } }; }
+    { return { body, [this](b2Body *b){ mWorld.DestroyBody( b ); } }; }
     //! Manage the lifetime of a b2Joint with a unique_ptr and a custom deleter
     inline auto manage( b2Joint *joint ) -> unique_b2Joint_ptr
-    { return { joint, [this](b2Joint *j){ destroyJoint( j ); } }; }
+    { return { joint, [this](b2Joint *j){ mWorld.DestroyJoint( j ); } }; }
   };
 }

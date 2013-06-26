@@ -28,7 +28,9 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Rand.h"
-#include "sansumbrella/Box2D.h"
+#include "sansumbrella/Sandbox.h"
+#include "sansumbrella/SharedSandbox.h"
+#include "sansumbrella/Box2DMouseJointer.h"
 #include "cinder/Triangulate.h"
 
 using namespace ci;
@@ -52,6 +54,7 @@ private:
   void createTextShape( const std::string &text, const ci::Vec2f &top_left );
   void applyForceToShape( const ci::Vec2f &force );
 	Sandbox                       mSandbox;
+  Box2DMouseJointer             mMouseJointer;
   su::unique_b2Body_ptr         mSpikyBody;
   vector<su::unique_b2Body_ptr> mBodies;
 };
@@ -60,13 +63,16 @@ void SandboxApp::prepareSettings(Settings *settings)
 {
   settings->setWindowSize( 1024, 768 );
   settings->enableHighDensityDisplay();
+  gSharedSandbox = &mSandbox;
 }
 
 void SandboxApp::setup()
 {
   // enable mouse interaction through a b2MouseBody
-  mSandbox.connectUserSignals( getWindow() );
+  mMouseJointer.connectUserSignals( getWindow(), mSandbox );
   buildBodies();
+
+  cout << su::toPhysics( Vec2f{ getWindowSize() } ) << endl;
 }
 
 void SandboxApp::reset()

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010—2013, David Wicks
+ * Copyright (c) 2013 David Wicks
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -26,7 +26,36 @@
  */
 
 #pragma once
+#include "sansumbrella.h"
+#include <array>
 
-#include "Sandbox.h"
-namespace sansumbrella{}
-namespace su = sansumbrella;
+/**
+ Wrapper to make setting up a b2MouseJoint easy.
+ Doesn't have super-great behavior in the latest version of box2d.
+*/
+
+namespace sansumbrella
+{
+  class Sandbox;
+  class Box2DMouseJointer
+  {
+  public:
+    Box2DMouseJointer();
+    ~Box2DMouseJointer();
+    //! Enable user interaction with \a Sandbox through a b2MouseJoint
+    void connectUserSignals( ci::app::WindowRef window, Sandbox &sandbox );
+    //! Disable user interaction, called in destructor
+    void disconnectUserSignals();
+  private:
+    // our mouse, for simple interaction
+    unique_b2Joint_ptr  mMouseJoint;
+    // an empty body, modeled after the earlier box2d ground_body
+    unique_b2Body_ptr   mMouseBody;
+    std::array<ci::signals::connection, 3> mMouseConnections;
+    // handlers basic user interaction
+    void mouseDown( ci::app::MouseEvent &event, Sandbox &sandbox );
+    void mouseDrag( ci::app::MouseEvent &event, Sandbox &sandbox );
+    void mouseUp( ci::app::MouseEvent &event, Sandbox &sandbox );
+  };
+}
+
