@@ -14,41 +14,44 @@ class Bubble
 {
 public:
   Bubble( su::unique_b2Body_ptr &&b, const ci::Vec2f &l, float r ):
-  body( move(b) ),
-  loc( l ),
-  radius( r )
+  mBody( move(b) ),
+  mLoc( l ),
+  mRadius( r ),
+  mColor( CM_HSV, Rand::randFloat(0.0f, 0.16f), 0.9f, 0.9f )
   { // bouncy
-    body->GetFixtureList()->SetRestitution( 0.6f );
+    mBody->GetFixtureList()->SetRestitution( 0.6f );
   }
   // we can't copy-construct because of unique_ptr, but we can move-construct
   // necessary to have this ctor for std::vector support
   Bubble( Bubble &&other ):
-  body( move( other.body ) ),
-  loc( other.loc ),
-  radius( other.radius )
+  mBody( move( other.mBody ) ),
+  mLoc( other.mLoc ),
+  mRadius( other.mRadius ),
+  mColor( other.mColor )
   {}
   // update the bubble position from physics, using the world scale
   void update( float scale )
   {
-    loc.x = body->GetPosition().x * scale;
-    loc.y = body->GetPosition().y * scale;
+    mLoc.x = mBody->GetPosition().x * scale;
+    mLoc.y = mBody->GetPosition().y * scale;
   }
   // draw a circle with a line at bubble location
   void draw()
   {
-    gl::color( Color::white() );
+    gl::color( mColor );
     gl::pushModelView();
-    gl::translate( loc );
-    gl::drawSolidCircle( Vec2f::zero(), radius );
-    gl::rotate( body->GetAngle() * 180 / M_PI );
+    gl::translate( mLoc );
+    gl::drawSolidCircle( Vec2f::zero(), mRadius );
+    gl::rotate( mBody->GetAngle() * 180 / M_PI ); // box2d stores angle in radians
     gl::color( Color::black() );
-    gl::drawLine( Vec2f{ -radius, 0 }, Vec2f{ radius, 0 } );
+    gl::drawLine( Vec2f{ -mRadius, 0 }, Vec2f{ mRadius, 0 } );
     gl::popModelView();
   }
 private:
-  su::unique_b2Body_ptr body;
-  ci::Vec2f             loc;
-  float                 radius;
+  su::unique_b2Body_ptr mBody;
+  ci::Vec2f             mLoc;
+  float                 mRadius;
+  ci::Color             mColor;
 };
 
 class DrawingApp : public AppNative {
