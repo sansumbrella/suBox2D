@@ -1,7 +1,7 @@
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
 
-#include "sansumbrella/Box2D.h"
+#include "sansumbrella/Sandbox.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -19,14 +19,14 @@ private:
 
 void _TBOX_PREFIX_App::setup()
 {
-  mSandbox.createBoundaryRect( getWindowBounds() );
+  mSandbox.createBoundaryRect( mSandbox.toPhysics( Rectf{getWindowBounds()} ) );
   // create some shapes
   Vec2f loc{ getWindowWidth() * 0.49, getWindowHeight() * 0.25 };
   Vec2f size{ 75.0f, 25.0f };
-  mSandbox.createBox( loc, size );
+  mSandbox.createBox( mSandbox.toPhysics(loc), mSandbox.toPhysics(size) ).release();
   loc = { getWindowWidth() * 0.5, getWindowHeight() * 0.5 };
   float radius = 50.0f;
-  mSandbox.createCircle( loc, radius );
+  mSandbox.createCircle( mSandbox.toPhysics(loc), mSandbox.toPhysics(radius) ).release();
 }
 
 void _TBOX_PREFIX_App::update()
