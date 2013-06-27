@@ -1,10 +1,35 @@
+/*
+ * Copyright (c) 2013 David Wicks, sansumbrella.com
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or
+ * without modification, are permitted provided that the following
+ * conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
-
-#include "sansumbrella/Sandbox.h"
-#include "sansumbrella/Box2DScale.h"
-#include "sansumbrella/Box2DMouseJointer.h"
 #include "cinder/Rand.h"
+
+#include "suBox2D.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -20,7 +45,7 @@ using namespace std;
 class Bubble
 {
 public:
-  Bubble( su::unique_b2Body_ptr &&b, const ci::Vec2f &l, float r ):
+  Bubble( b2::unique_body_ptr &&b, const ci::Vec2f &l, float r ):
   mBody( move(b) ),
   mLoc( l ),
   mRadius( r ),
@@ -55,51 +80,40 @@ public:
     gl::popModelView();
   }
 private:
-  su::unique_b2Body_ptr mBody;
-  ci::Vec2f             mLoc;
-  float                 mRadius;
-  ci::Color             mColor;
+  b2::unique_body_ptr mBody;
+  ci::Vec2f           mLoc;
+  float               mRadius;
+  Color               mColor;
 };
 
-class DrawingApp : public AppNative {
+class CustomDrawingApp : public AppNative {
 public:
   void prepareSettings( Settings *settings );
   void setup();
   void update();
   void draw();
-  void resetBubbles();
 
 private:
-  su::Sandbox   	mSandbox;
-  su::Box2DScale  mScale;
-  su::Box2DMouseJointer mMouseJointer;
-  vector<Bubble>  mBubbles;
+  // Sandbox wraps the b2World
+  b2::Sandbox         mSandbox;
+  // Scale for mapping between physics and screen coordinates
+  b2::Scale           mScale;
+  b2::SimpleControl   mControl;
+  vector<Bubble>      mBubbles;
 };
 
-void DrawingApp::prepareSettings(Settings *settings)
+void CustomDrawingApp::prepareSettings(Settings *settings)
 {
   settings->setWindowSize( 1024, 768 );
   settings->enableMultiTouch();
 }
 
-void DrawingApp::setup()
+void CustomDrawingApp::setup()
 {
   auto bounds = mScale.toPhysics( Rectf{getWindowBounds()} );
   mSandbox.createBoundaryRect( bounds );
-  mMouseJointer.connectUserSignals( getWindow(), mSandbox, mScale.getMetersPerPoint() );
-  resetBubbles();
+  mControl.connectUserSignals( getWindow(), mSandbox, mScale.getMetersPerPoint() );
 
-//  getWindow()->getSignalTouchesEnded().connect( [this]( TouchEvent &event ) -> void
-//                                               {
-//                                                 resetBubbles();
-//                                               }
-//                                               );
-}
-
-void DrawingApp::resetBubbles()
-{
-  mBubbles.clear();
-  auto bounds = mScale.toPhysics( Rectf{getWindowBounds()} );
   for( int i = 0; i < 29; ++i )
   {
     Vec2f loc{ Rand::randFloat( bounds.getX1(), bounds.getX2() ), Rand::randFloat( bounds.getY1(), bounds.getY2() ) };
@@ -108,7 +122,7 @@ void DrawingApp::resetBubbles()
   }
 }
 
-void DrawingApp::update()
+void CustomDrawingApp::update()
 {
   mSandbox.step();
   for( auto &bubble : mBubbles )
@@ -117,14 +131,13 @@ void DrawingApp::update()
   }
 }
 
-void DrawingApp::draw()
+void CustomDrawingApp::draw()
 {
-  // clear out the window with black
-  gl::clear( Color( 0, 0, 0 ) );
+  gl::clear( Color::black() );
   for( auto &bubble : mBubbles )
   {
     bubble.draw();
   }
 }
 
-CINDER_APP_NATIVE( DrawingApp, RendererGl )
+CINDER_APP_NATIVE( CustomDrawingApp, RendererGl )
