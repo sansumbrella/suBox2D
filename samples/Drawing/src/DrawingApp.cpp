@@ -2,6 +2,7 @@
 #include "cinder/gl/gl.h"
 
 #include "sansumbrella/Sandbox.h"
+#include "sansumbrella/Box2DScale.h"
 #include "cinder/Rand.h"
 
 using namespace ci;
@@ -64,6 +65,7 @@ public:
 
 private:
   su::Sandbox   	mSandbox;
+  su::Box2DScale  mScale;
   vector<Bubble>  mBubbles;
 };
 
@@ -75,7 +77,7 @@ void DrawingApp::prepareSettings(Settings *settings)
 
 void DrawingApp::setup()
 {
-  auto bounds = mSandbox.toPhysics( Rectf{getWindowBounds()} );
+  auto bounds = mScale.toPhysics( Rectf{getWindowBounds()} );
   mSandbox.createBoundaryRect( bounds );
 
   resetBubbles();
@@ -90,12 +92,12 @@ void DrawingApp::setup()
 void DrawingApp::resetBubbles()
 {
   mBubbles.clear();
-  auto bounds = mSandbox.toPhysics( Rectf{getWindowBounds()} );
+  auto bounds = mScale.toPhysics( Rectf{getWindowBounds()} );
   for( int i = 0; i < 29; ++i )
   {
     Vec2f loc{ Rand::randFloat( bounds.getX1(), bounds.getX2() ), Rand::randFloat( bounds.getY1(), bounds.getY2() ) };
     float radius = Rand::randFloat( 10.0f, 100.0f );
-    mBubbles.emplace_back( Bubble{ mSandbox.createCircle( loc, mSandbox.toPhysics(radius) ), mSandbox.fromPhysics(loc), radius } );
+    mBubbles.emplace_back( Bubble{ mSandbox.createCircle( loc, mScale.toPhysics(radius) ), mScale.fromPhysics(loc), radius } );
   }
 }
 
@@ -104,7 +106,7 @@ void DrawingApp::update()
   mSandbox.step();
   for( auto &bubble : mBubbles )
   {
-    bubble.update( mSandbox.getPointsPerMeter() );
+    bubble.update( mScale.getPointsPerMeter() );
   }
 }
 

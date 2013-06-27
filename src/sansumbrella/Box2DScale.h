@@ -27,35 +27,39 @@
 
 #pragma once
 #include "sansumbrella.h"
-#include <array>
 
 /**
- Wrapper to make setting up a b2MouseJoint easy.
- Doesn't have super-great behavior in the latest version of box2d.
-*/
+ Conversion methods for moving between screen and physics space.
 
+ When setting the world scale, keep in mind that Box2D is designed to simulate
+ objects between 10cm and 10m in size. With the Box2DScale's default scale, that
+ translates to screen sizes between 10 and 1000 points.
+*/
 namespace sansumbrella
 {
-  class Sandbox;
-  class Box2DMouseJointer
+  class Box2DScale
   {
   public:
-    Box2DMouseJointer();
-    ~Box2DMouseJointer();
-    //! Enable user interaction with \a Sandbox through a b2MouseJoint
-    void connectUserSignals( ci::app::WindowRef window, Sandbox &sandbox, float meters_per_point );
-    //! Disable user interaction, called in destructor
-    void disconnectUserSignals();
+    Box2DScale();
+    ~Box2DScale();
+    //! Set the number of screen points contained in a world meter
+    //! default value is 100 (1 pixel == 1 centimeter)
+    void setPointsPerMeter( float points );
+    //! How many meters per point? Use this as scale factor from physics
+    float getPointsPerMeter() const { return mPointsPerMeter; }
+    //! Set the number of meters represented per screen point
+    //! Default value is 0.01
+    void setMetersPerPoint( float meters );
+    //! Convert from screen units to physical measurements
+    template<typename T>
+    inline T toPhysics( const T &points )
+    { return points * mMetersPerPoint; }
+    //! Convert from physical measurements to screen units
+    template<typename T>
+    inline T fromPhysics( const T &physical_measure )
+    { return physical_measure * mPointsPerMeter; }
   private:
-    // our mouse, for simple interaction
-    unique_b2Joint_ptr  mMouseJoint;
-    // an empty body, modeled after the earlier box2d ground_body
-    unique_b2Body_ptr   mMouseBody;
-    std::array<ci::signals::connection, 3> mMouseConnections;
-    // handlers basic user interaction
-    void mouseDown( ci::app::MouseEvent &event, Sandbox &sandbox, float scale );
-    void mouseDrag( ci::app::MouseEvent &event, float scale );
-    void mouseUp( ci::app::MouseEvent &event );
+    float   mPointsPerMeter = 100.0f;
+    float   mMetersPerPoint = 1.0f / mPointsPerMeter;
   };
 }
-

@@ -46,18 +46,10 @@ namespace sansumbrella
    or b2joint will be destroyed when the smart pointer falls out of scope. Given
    how Box2D manages memory, this requires a custom deleter, which Sandbox sets
    up for your automatically.
-
-   The scale conversion factor is stored for convenience and debug drawing.
-   No conversions are made in any of the various create*() methods.
-   Either work in the box2d kg/m/s space, or convert from your units before
-   passing them to the create*() methods using the toPhysics(T) method.
-   You can get the scale by calling getPointsPerMeter() if you need to take it
-   into account when e.g. positioning objects based on physics bodies.
-   You can also convert units using the fromPhysics(T) method.
-
-   When setting the world scale, keep in mind that Box2D is designed to simulate
-   objects between 10cm and 10m in size. With the Sandbox's default scale, that
-   translates to screen sizes between 10 and 1000 points.
+   
+   All bodies are created using Box2D kg/m/s units, so use a scale factor when
+   converting to/from screen space. See Box2DScale for a convenient solution
+   to managing the scale factor and conversion methods.
    */
 
   class Sandbox
@@ -68,7 +60,7 @@ namespace sansumbrella
     //! Run the Box2D physics timestep
     void step();
     //! have a look at what's in the physics system (scaled up to screen space)
-    void debugDraw();
+    void debugDraw( float points_per_meter );
 
     //! Create a boundary rectangle in screen coordinates; uses a b2ChainShape
     void createBoundaryRect( ci::Rectf screen_bounds );
@@ -119,31 +111,10 @@ namespace sansumbrella
 
     //! set the filter function for collisions (see box2d docs)
     void setContactFilter( const b2ContactFilter &filter );
-
-    // Conversion between screen and physics space
-
-    //! Set the number of screen points contained in a world meter
-    //! default value is 100 (1 pixel == 1 centimeter)
-    void setPointsPerMeter( float points );
-    //! How many meters per point? Use this as scale factor from physics
-    float getPointsPerMeter() const { return mPointsPerMeter; }
-    //! Set the number of meters represented per screen point
-    //! Default value is 0.01
-    void setMetersPerPoint( float meters );
-    //! Convert from screen units to physical measurements
-    template<typename T>
-    inline T toPhysics( const T &points )
-    { return points * mMetersPerPoint; }
-    //! Convert from physical measurements to screen units
-    template<typename T>
-    inline T fromPhysics( const T &physical_measure )
-    { return physical_measure * mPointsPerMeter; }
   private:
     int     mVelocityIterations = 8;
     int     mPositionIterations = 3;
     float   mTimeStep = 1.0f / 60.0f;
-    float   mPointsPerMeter = 100.0f;
-    float   mMetersPerPoint = 1.0f / mPointsPerMeter;
     // the box2d world
     b2World         mWorld = b2World( b2Vec2( 0, 10.0f ) );
     // related objects

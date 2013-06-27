@@ -25,37 +25,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#pragma once
-#include "sansumbrella.h"
-#include <array>
+#include "Box2DScale.h"
 
-/**
- Wrapper to make setting up a b2MouseJoint easy.
- Doesn't have super-great behavior in the latest version of box2d.
-*/
+using namespace sansumbrella;
 
-namespace sansumbrella
+Box2DScale::Box2DScale()
+{}
+
+Box2DScale::~Box2DScale()
+{}
+
+void Box2DScale::setPointsPerMeter(float points)
 {
-  class Sandbox;
-  class Box2DMouseJointer
-  {
-  public:
-    Box2DMouseJointer();
-    ~Box2DMouseJointer();
-    //! Enable user interaction with \a Sandbox through a b2MouseJoint
-    void connectUserSignals( ci::app::WindowRef window, Sandbox &sandbox, float meters_per_point );
-    //! Disable user interaction, called in destructor
-    void disconnectUserSignals();
-  private:
-    // our mouse, for simple interaction
-    unique_b2Joint_ptr  mMouseJoint;
-    // an empty body, modeled after the earlier box2d ground_body
-    unique_b2Body_ptr   mMouseBody;
-    std::array<ci::signals::connection, 3> mMouseConnections;
-    // handlers basic user interaction
-    void mouseDown( ci::app::MouseEvent &event, Sandbox &sandbox, float scale );
-    void mouseDrag( ci::app::MouseEvent &event, float scale );
-    void mouseUp( ci::app::MouseEvent &event );
-  };
+  mPointsPerMeter = points;
+  mMetersPerPoint = 1.0f / mPointsPerMeter;
 }
 
+void Box2DScale::setMetersPerPoint(float meters)
+{
+  mMetersPerPoint = meters;
+  mPointsPerMeter = 1.0f / mMetersPerPoint;
+}

@@ -44,28 +44,16 @@ void Sandbox::step()
   mWorld.ClearForces();
 }
 
-void Sandbox::setPointsPerMeter(float points)
-{
-  mPointsPerMeter = points;
-  mMetersPerPoint = 1.0f / mPointsPerMeter;
-}
-
-void Sandbox::setMetersPerPoint(float meters)
-{
-  mMetersPerPoint = meters;
-  mPointsPerMeter = 1.0f / mMetersPerPoint;
-}
-
 void Sandbox::setContactFilter( const b2ContactFilter &filter )
 {
 	mContactFilter = filter;
 	mWorld.SetContactFilter(&mContactFilter);
 }
 
-void Sandbox::debugDraw()
+void Sandbox::debugDraw( float points_per_meter )
 {
 	gl::pushModelView();
-	gl::scale( mPointsPerMeter, mPointsPerMeter );
+	gl::scale( points_per_meter, points_per_meter );
   mWorld.DrawDebugData();
   gl::popModelView();
 }

@@ -39,14 +39,14 @@ Box2DMouseJointer::~Box2DMouseJointer()
   disconnectUserSignals();
 }
 
-void Box2DMouseJointer::connectUserSignals(ci::app::WindowRef window, Sandbox &sandbox )
+void Box2DMouseJointer::connectUserSignals(ci::app::WindowRef window, Sandbox &sandbox, float scale )
 {
   mMouseJoint.reset();
   b2BodyDef bodyDef;
   mMouseBody = sandbox.createBody(bodyDef);
-  mMouseConnections[0] = window->getSignalMouseDown().connect( [&, this]( app::MouseEvent &event ){ mouseDown( event, sandbox ); } );
-  mMouseConnections[1] = window->getSignalMouseUp().connect( [&, this]( app::MouseEvent &event ){ mouseUp( event, sandbox ); } );
-  mMouseConnections[2] = window->getSignalMouseDrag().connect( [&, this]( app::MouseEvent &event ){ mouseDrag( event, sandbox ); } );
+  mMouseConnections[0] = window->getSignalMouseDown().connect( [=, &sandbox]( app::MouseEvent &event ){ mouseDown( event, sandbox, scale ); } );
+  mMouseConnections[2] = window->getSignalMouseDrag().connect( [=]( app::MouseEvent &event ){ mouseDrag( event, scale ); } );
+  mMouseConnections[1] = window->getSignalMouseUp().connect( [=]( app::MouseEvent &event ){ mouseUp( event ); } );
 }
 
 void Box2DMouseJointer::disconnectUserSignals()
@@ -90,12 +90,12 @@ public:
 	b2Fixture* m_fixture;
 };
 
-void Box2DMouseJointer::mouseDown( app::MouseEvent &event, Sandbox &sandbox )
+void Box2DMouseJointer::mouseDown( app::MouseEvent &event, Sandbox &sandbox, float scale )
 {
 	if( !mMouseJoint )
 	{
     // Make a small box around the click point.
-    b2Vec2 p{ sandbox.toPhysics( event.getPos().x ), sandbox.toPhysics( event.getPos().y ) };
+    b2Vec2 p{ event.getPos().x * scale, event.getPos().y * scale };
     b2AABB aabb;
     b2Vec2 d;
     d.Set(0.001f, 0.001f);
@@ -120,14 +120,14 @@ void Box2DMouseJointer::mouseDown( app::MouseEvent &event, Sandbox &sandbox )
 	}
 }
 
-void Box2DMouseJointer::mouseDrag( app::MouseEvent &event, Sandbox &sandbox )
+void Box2DMouseJointer::mouseDrag( app::MouseEvent &event, float scale )
 {
 	if(mMouseJoint){
-		static_cast<b2MouseJoint*>(mMouseJoint.get())->SetTarget( b2Vec2{ sandbox.toPhysics(event.getPos().x), sandbox.toPhysics(event.getPos().y) } );
+		static_cast<b2MouseJoint*>(mMouseJoint.get())->SetTarget( b2Vec2{ event.getPos().x * scale, event.getPos().y * scale } );
 	}
 }
 
-void Box2DMouseJointer::mouseUp( app::MouseEvent &event, Sandbox &sandbox )
+void Box2DMouseJointer::mouseUp( app::MouseEvent &event )
 {
   mMouseJoint.reset();
 }
