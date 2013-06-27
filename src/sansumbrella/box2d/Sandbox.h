@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010—2013, David Wicks
+ * Copyright (c) 2010—2013, David Wicks, sansumbrella.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -26,7 +26,7 @@
  */
 
 #pragma once
-#include "sansumbrella.h"
+#include "Common.h"
 #include "Box2DRenderer.h"
 
 namespace cinder
@@ -34,7 +34,7 @@ namespace cinder
   class TriMesh2d;
 }
 
-namespace sansumbrella
+namespace box2d
 {
   /**
    Sandbox is a convenient way to manage a b2World.
@@ -46,7 +46,7 @@ namespace sansumbrella
    or b2joint will be destroyed when the smart pointer falls out of scope. Given
    how Box2D manages memory, this requires a custom deleter, which Sandbox sets
    up for your automatically.
-   
+
    All bodies are created using Box2D kg/m/s units, so use a scale factor when
    converting to/from screen space. See Box2DScale for a convenient solution
    to managing the scale factor and conversion methods.

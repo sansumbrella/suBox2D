@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 David Wicks
+ * Copyright (c) 2013 David Wicks, sansumbrella.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -25,22 +25,22 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Box2DRenderer.h"
+#include "Renderer.h"
 #include "cinder/gl/gl.h"
 
-using namespace sansumbrella;
+using namespace box2d;
 using namespace cinder;
 using namespace std;
 
-Box2DRenderer::Box2DRenderer()
+Renderer::Renderer()
 {
   updateFlags();
 }
 
-Box2DRenderer::~Box2DRenderer()
+Renderer::~Renderer()
 {}
 
-void Box2DRenderer::updateFlags()
+void Renderer::updateFlags()
 {
   SetFlags( (drawShape * e_shapeBit) |
            (drawJoint * e_jointBit) |
@@ -49,7 +49,7 @@ void Box2DRenderer::updateFlags()
            (drawCenterOfMass * e_centerOfMassBit ) );
 }
 
-void Box2DRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
+void Renderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
   Path2d path;
   path.moveTo( vertices[0].x, vertices[0].y );
@@ -61,7 +61,8 @@ void Box2DRenderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const
   gl::color( color.r, color.g, color.b );
   gl::draw( path );
 }
-void Box2DRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
+
+void Renderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 {
   Path2d path;
   path.moveTo( vertices[0].x, vertices[0].y );
@@ -76,12 +77,14 @@ void Box2DRenderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, 
   gl::disableAlphaBlending();
   gl::draw( path );
 }
-void Box2DRenderer::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
+
+void Renderer::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
 {
   gl::color( color.r, color.g, color.b );
   gl::drawStrokedCircle( Vec2f{center.x, center.y}, radius );
 }
-void Box2DRenderer::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color)
+
+void Renderer::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color)
 {
   gl::enableAlphaBlending();
   gl::color( color.r, color.g, color.b, 0.5f );
@@ -89,13 +92,14 @@ void Box2DRenderer::DrawSolidCircle(const b2Vec2& center, float32 radius, const 
   gl::disableAlphaBlending();
   gl::drawStrokedCircle( Vec2f{center.x, center.y}, radius, 16 );
 }
-void Box2DRenderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
+
+void Renderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 {
   gl::color(color.r, color.g, color.b);
   gl::drawLine( Vec2f{ p1.x, p1.y }, Vec2f{ p2.x, p2.y } );
 }
 
-void Box2DRenderer::DrawTransform(const b2Transform& xf)
+void Renderer::DrawTransform(const b2Transform& xf)
 {
 	b2Vec2 p1 = xf.p, p2;
 	const float32 k_axisScale = 0.4f;
@@ -108,18 +112,21 @@ void Box2DRenderer::DrawTransform(const b2Transform& xf)
 	p2 = p1 + k_axisScale * xf.q.GetYAxis();
   gl::drawLine( Vec2f{ p1.x, p1.y }, Vec2f{ p2.x, p2.y } );
 }
-void Box2DRenderer::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
+
+void Renderer::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 {
   glLineWidth(size);
 	gl::color(color.r, color.g, color.b);
   gl::drawLine( Vec2f{ p.x, p.y }, Vec2f{ p.x, p.y } );
 	glLineWidth(1.0f);
 }
-void Box2DRenderer::DrawString(int x, int y, const char* string, ...)
+
+void Renderer::DrawString(int x, int y, const char* string, ...)
 {
 	std::cout << "WARNING: " <<  __PRETTY_FUNCTION__ << " Not Yet Implemented" << std::endl;
 }
-void Box2DRenderer::DrawAABB(b2AABB* aabb, const b2Color& color)
+
+void Renderer::DrawAABB(b2AABB* aabb, const b2Color& color)
 {
 	gl::color(color.r, color.g, color.b);
   gl::drawStrokedRect( Rectf{ aabb->upperBound.x, aabb->upperBound.y, aabb->lowerBound.x, aabb->lowerBound.y }  );

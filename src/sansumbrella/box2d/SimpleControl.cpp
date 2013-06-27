@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 David Wicks
+ * Copyright (c) 2013 David Wicks, sansumbrella.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -25,21 +25,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Box2DMouseJointer.h"
+#include "SimpleControl.h"
 #include "Sandbox.h"
 
-using namespace sansumbrella;
+using namespace box2d;
 using namespace cinder;
 
-Box2DMouseJointer::Box2DMouseJointer()
+SimpleControl::SimpleControl()
 {}
 
-Box2DMouseJointer::~Box2DMouseJointer()
+SimpleControl::~SimpleControl()
 {
   disconnectUserSignals();
 }
 
-void Box2DMouseJointer::connectUserSignals(ci::app::WindowRef window, Sandbox &sandbox, float scale )
+void SimpleControl::connectUserSignals(ci::app::WindowRef window, Sandbox &sandbox, float scale )
 {
   mMouseJoint.reset();
   b2BodyDef bodyDef;
@@ -49,7 +49,7 @@ void Box2DMouseJointer::connectUserSignals(ci::app::WindowRef window, Sandbox &s
   mMouseConnections[1] = window->getSignalMouseUp().connect( [=]( app::MouseEvent &event ){ mouseUp( event ); } );
 }
 
-void Box2DMouseJointer::disconnectUserSignals()
+void SimpleControl::disconnectUserSignals()
 {
   for( auto &connect : mMouseConnections )
   {
@@ -90,7 +90,7 @@ public:
 	b2Fixture* m_fixture;
 };
 
-void Box2DMouseJointer::mouseDown( app::MouseEvent &event, Sandbox &sandbox, float scale )
+void SimpleControl::mouseDown( app::MouseEvent &event, Sandbox &sandbox, float scale )
 {
 	if( !mMouseJoint )
 	{
@@ -120,14 +120,14 @@ void Box2DMouseJointer::mouseDown( app::MouseEvent &event, Sandbox &sandbox, flo
 	}
 }
 
-void Box2DMouseJointer::mouseDrag( app::MouseEvent &event, float scale )
+void SimpleControl::mouseDrag( app::MouseEvent &event, float scale )
 {
 	if(mMouseJoint){
 		static_cast<b2MouseJoint*>(mMouseJoint.get())->SetTarget( b2Vec2{ event.getPos().x * scale, event.getPos().y * scale } );
 	}
 }
 
-void Box2DMouseJointer::mouseUp( app::MouseEvent &event )
+void SimpleControl::mouseUp( app::MouseEvent &event )
 {
   mMouseJoint.reset();
 }

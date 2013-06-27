@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010—2013, David Wicks
+ * Copyright (c) 2010—2013, David Wicks, sansumbrella.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -30,7 +30,7 @@
 #include <array>
 
 using namespace cinder;
-using namespace sansumbrella;
+using namespace box2d;
 using namespace std;
 
 Sandbox::Sandbox()

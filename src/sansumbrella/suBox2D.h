@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 David Wicks
+ * Copyright (c) 2010—2013, David Wicks, sansumbrella.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -25,24 +25,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Box2DScale.h"
+#pragma once
 
-using namespace sansumbrella;
+/**
+	Includes all the headers within sansumbrella::box2d
+	Consider adding to your .pch file
+ */
 
-Box2DScale::Box2DScale()
-{}
+#include "box2d/Common.h"
+#include "box2d/Sandbox.h"
+#include "box2d/Renderer.h"
+#include "box2d/SimpleControl.h"
+#include "box2d/Scale.h"
 
-Box2DScale::~Box2DScale()
-{}
-
-void Box2DScale::setPointsPerMeter(float points)
-{
-  mPointsPerMeter = points;
-  mMetersPerPoint = 1.0f / mPointsPerMeter;
-}
-
-void Box2DScale::setMetersPerPoint(float meters)
-{
-  mMetersPerPoint = meters;
-  mPointsPerMeter = 1.0f / mMetersPerPoint;
-}
+namespace b2 = box2d;
