@@ -47,9 +47,9 @@ namespace box2d
     void disconnectUserSignals();
   private:
     // our mouse, for simple interaction
-    unique_b2Joint_ptr  mMouseJoint;
+    unique_joint_ptr  mMouseJoint;
     // an empty body, modeled after the earlier box2d ground_body
-    unique_b2Body_ptr   mMouseBody;
+    unique_body_ptr   mMouseBody;
     std::array<ci::signals::connection, 3> mMouseConnections;
     // handlers basic user interaction
     void mouseDown( ci::app::MouseEvent &event, Sandbox &sandbox, float scale );

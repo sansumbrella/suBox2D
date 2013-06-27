@@ -24,6 +24,7 @@
 	<header>src/Box2D/Box2d.h</header>
 	<headerPattern>src/sansumbrella/*.h</headerPattern>
 	<sourcePattern>src/sansumbrella/*.cpp</sourcePattern>
+	<sourcePattern>src/sansumbrella/box2d/*.cpp</sourcePattern>
 	<includePath system="true">src</includePath>
 </block>
 <template>templates/Box2D Sandbox/template.xml</template>

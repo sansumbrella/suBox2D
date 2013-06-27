@@ -58,14 +58,14 @@ void Sandbox::debugDraw( float points_per_meter )
   gl::popModelView();
 }
 
-unique_b2Body_ptr Sandbox::createBody(const b2BodyDef &body_def, const b2FixtureDef &fixture_def)
+unique_body_ptr Sandbox::createBody(const b2BodyDef &body_def, const b2FixtureDef &fixture_def)
 {
   b2Body *body = mWorld.CreateBody( &body_def );
   body->CreateFixture( &fixture_def );
   return manage( body );
 }
 
-unique_b2Body_ptr Sandbox::createBody(const b2BodyDef &body_def, const std::vector<b2FixtureDef> &fixture_defs)
+unique_body_ptr Sandbox::createBody(const b2BodyDef &body_def, const std::vector<b2FixtureDef> &fixture_defs)
 {
   b2Body *body = mWorld.CreateBody( &body_def );
   for( auto &def : fixture_defs )
@@ -75,12 +75,12 @@ unique_b2Body_ptr Sandbox::createBody(const b2BodyDef &body_def, const std::vect
   return manage( body );
 }
 
-unique_b2Body_ptr Sandbox::createBody(const b2BodyDef &body_def)
+unique_body_ptr Sandbox::createBody(const b2BodyDef &body_def)
 {
   return manage( mWorld.CreateBody( &body_def ) );
 }
 
-unique_b2Body_ptr Sandbox::createBox( const ci::Vec2f &pos, const ci::Vec2f &size )
+unique_body_ptr Sandbox::createBox( const ci::Vec2f &pos, const ci::Vec2f &size )
 {
   b2BodyDef bodyDef;
 	bodyDef.position.Set(	pos.x,
@@ -99,7 +99,7 @@ unique_b2Body_ptr Sandbox::createBox( const ci::Vec2f &pos, const ci::Vec2f &siz
   return createBody( bodyDef, bodyFixtureDef );
 }
 
-unique_b2Body_ptr Sandbox::createCircle( const Vec2f &pos, float radius )
+unique_body_ptr Sandbox::createCircle( const Vec2f &pos, float radius )
 {
   b2BodyDef bodyDef;
   bodyDef.position.Set(	pos.x, pos.y );
@@ -115,7 +115,7 @@ unique_b2Body_ptr Sandbox::createCircle( const Vec2f &pos, float radius )
   return createBody( bodyDef, fixtureDef );
 }
 
-unique_b2Body_ptr Sandbox::createFanShape(const ci::Vec2f &pos, const std::vector<b2Vec2> &hull_vertices)
+unique_body_ptr Sandbox::createFanShape(const ci::Vec2f &pos, const std::vector<b2Vec2> &hull_vertices)
 {
   assert( hull_vertices.size() >= 3 );
   vector<b2PolygonShape> shapes( hull_vertices.size() );
@@ -146,7 +146,7 @@ unique_b2Body_ptr Sandbox::createFanShape(const ci::Vec2f &pos, const std::vecto
   return createBody( bodyDef, fixtures );
 }
 
-unique_b2Body_ptr Sandbox::createShape( const ci::Vec2f &centroid, const ci::TriMesh2d &mesh, float scale )
+unique_body_ptr Sandbox::createShape( const ci::Vec2f &centroid, const ci::TriMesh2d &mesh, float scale )
 {
   const auto num_triangles = mesh.getNumTriangles();
   vector<b2PolygonShape> shapes( num_triangles );
@@ -187,7 +187,7 @@ unique_b2Body_ptr Sandbox::createShape( const ci::Vec2f &centroid, const ci::Tri
   return createBody( bodyDef, fixtures );
 }
 
-unique_b2Joint_ptr Sandbox::createJoint(const b2JointDef &joint_def)
+unique_joint_ptr Sandbox::createJoint(const b2JointDef &joint_def)
 {
   return manage( mWorld.CreateJoint( &joint_def ) );
 }
