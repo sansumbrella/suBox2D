@@ -38,6 +38,16 @@ using namespace ci::app;
 using namespace std;
 using namespace su;
 
+/**
+ Example demonstrating general use of the Sandbox, creating a variety of bodies.
+ Uses the debugDraw() method to display all physics bodies on screen.
+ Uses Box2DMouseJointer to enable simple mouse interaction.
+
+ Hold alt/option when dragging to add circles to the world.
+ 'c' to create a new spiky body
+ 'r' to reset (destroy all bodies)
+ */
+
 class SandboxApp : public AppNative {
 public:
   void prepareSettings( Settings *settings );
@@ -138,7 +148,7 @@ void SandboxApp::applyForceToShape(const ci::Vec2f &force)
 
 void SandboxApp::mouseDown( MouseEvent event )
 {
-  if( !event.isAltDown() )
+  if( event.isAltDown() )
 	{
 		mBodies.emplace_back( mSandbox.createCircle( mScale.toPhysics( Vec2f{event.getPos()} ), Rand::randFloat( 0.1f, 0.2f ) ) );
 	}
@@ -146,7 +156,7 @@ void SandboxApp::mouseDown( MouseEvent event )
 
 void SandboxApp::mouseDrag(MouseEvent event)
 {
-  if( !event.isAltDown() )
+  if( event.isAltDown() )
 	{
     mBodies.emplace_back( mSandbox.createCircle( mScale.toPhysics( Vec2f{event.getPos()} ), Rand::randFloat( 0.1, 0.2f ) ) );
 	}

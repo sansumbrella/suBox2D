@@ -3,11 +3,17 @@
 
 #include "sansumbrella/Sandbox.h"
 #include "sansumbrella/Box2DScale.h"
+#include "sansumbrella/Box2DMouseJointer.h"
 #include "cinder/Rand.h"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
+
+/**
+ Example demonstrating positioning user elements with physics bodies.
+ Uses Box2DMouseJointer for basic interaction.
+ */
 
 // something like this is a reasonable approach to managing a body in your
 // own structure
@@ -66,6 +72,7 @@ public:
 private:
   su::Sandbox   	mSandbox;
   su::Box2DScale  mScale;
+  su::Box2DMouseJointer mMouseJointer;
   vector<Bubble>  mBubbles;
 };
 
@@ -79,14 +86,14 @@ void DrawingApp::setup()
 {
   auto bounds = mScale.toPhysics( Rectf{getWindowBounds()} );
   mSandbox.createBoundaryRect( bounds );
-
+  mMouseJointer.connectUserSignals( getWindow(), mSandbox, mScale.getMetersPerPoint() );
   resetBubbles();
 
-  getWindow()->getSignalTouchesEnded().connect( [this]( TouchEvent &event ) -> void
-                                               {
-                                                 resetBubbles();
-                                               }
-                                               );
+//  getWindow()->getSignalTouchesEnded().connect( [this]( TouchEvent &event ) -> void
+//                                               {
+//                                                 resetBubbles();
+//                                               }
+//                                               );
 }
 
 void DrawingApp::resetBubbles()
