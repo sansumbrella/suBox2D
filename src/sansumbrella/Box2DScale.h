@@ -50,6 +50,7 @@ namespace sansumbrella
     //! Set the number of meters represented per screen point
     //! Default value is 0.01
     void setMetersPerPoint( float meters );
+    float getMetersPerPoint() const { return mMetersPerPoint; }
     //! Convert from screen units to physical measurements
     template<typename T>
     inline T toPhysics( const T &points )

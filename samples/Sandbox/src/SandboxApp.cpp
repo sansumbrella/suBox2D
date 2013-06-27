@@ -29,6 +29,7 @@
 #include "cinder/gl/gl.h"
 #include "cinder/Rand.h"
 #include "sansumbrella/Sandbox.h"
+#include "sansumbrella/Box2DScale.h"
 #include "sansumbrella/Box2DMouseJointer.h"
 #include "cinder/Triangulate.h"
 
@@ -52,10 +53,11 @@ private:
   void createCrazyShape();
   void createTextShape( const std::string &text, const ci::Vec2f &top_left );
   void applyForceToShape( const ci::Vec2f &force );
-	Sandbox                       mSandbox;
-  Box2DMouseJointer             mMouseJointer;
-  su::unique_b2Body_ptr         mSpikyBody;
-  vector<su::unique_b2Body_ptr> mBodies;
+	Sandbox                   mSandbox;
+  Box2DMouseJointer         mMouseJointer;
+  Box2DScale                mScale;
+  unique_b2Body_ptr         mSpikyBody;
+  vector<unique_b2Body_ptr> mBodies;
 };
 
 void SandboxApp::prepareSettings(Settings *settings)
@@ -67,7 +69,7 @@ void SandboxApp::prepareSettings(Settings *settings)
 void SandboxApp::setup()
 {
   // enable mouse interaction through a b2MouseBody
-  mMouseJointer.connectUserSignals( getWindow(), mSandbox );
+  mMouseJointer.connectUserSignals( getWindow(), mSandbox, mScale.getMetersPerPoint() );
   buildBodies();
 }
 
@@ -83,7 +85,7 @@ void SandboxApp::reset()
 void SandboxApp::buildBodies()
 {
   // Create boundary shapes around the outside edges of the screen
-  mSandbox.createBoundaryRect( mSandbox.toPhysics( Rectf{getWindowBounds()} ) );
+  mSandbox.createBoundaryRect( mScale.toPhysics( Rectf{getWindowBounds()} ) );
   // Create text from triangulated mesh
   createTextShape( "Collapsed", Vec2f( 200.0f, 100.0f ) );
   // Create a randomized shape like a triangle fan
@@ -91,11 +93,11 @@ void SandboxApp::buildBodies()
   // Create a circle
   Vec2f loc{ Rand::randFloat(getWindowWidth()), getWindowHeight() / 2 + Rand::randFloat(getWindowHeight()/2) };
   float radius = Rand::randFloat( 20.0f, 80.0f );
-  mBodies.emplace_back( mSandbox.createCircle( mSandbox.toPhysics( loc ), mSandbox.toPhysics( radius ) ) );
+  mBodies.emplace_back( mSandbox.createCircle( mScale.toPhysics( loc ), mScale.toPhysics( radius ) ) );
   // Create a box
   loc = { Rand::randFloat(getWindowWidth()), getWindowHeight() / 2 + Rand::randFloat(getWindowHeight()/2) };
   Vec2f size{ Rand::randFloat( 20.0f, 100.0f ), Rand::randFloat( 20.0f, 100.0f ) };
-  mBodies.emplace_back( mSandbox.createBox( mSandbox.toPhysics(loc), mSandbox.toPhysics(size) ) );
+  mBodies.emplace_back( mSandbox.createBox( mScale.toPhysics(loc), mScale.toPhysics(size) ) );
 }
 
 void SandboxApp::keyDown(KeyEvent event)
@@ -138,7 +140,7 @@ void SandboxApp::mouseDown( MouseEvent event )
 {
   if( !event.isAltDown() )
 	{
-		mBodies.emplace_back( mSandbox.createCircle( mSandbox.toPhysics( Vec2f{event.getPos()} ), Rand::randFloat( 0.1f, 0.2f ) ) );
+		mBodies.emplace_back( mSandbox.createCircle( mScale.toPhysics( Vec2f{event.getPos()} ), Rand::randFloat( 0.1f, 0.2f ) ) );
 	}
 }
 
@@ -146,7 +148,7 @@ void SandboxApp::mouseDrag(MouseEvent event)
 {
   if( !event.isAltDown() )
 	{
-    mBodies.emplace_back( mSandbox.createCircle( mSandbox.toPhysics( Vec2f{event.getPos()} ), Rand::randFloat( 0.1, 0.2f ) ) );
+    mBodies.emplace_back( mSandbox.createCircle( mScale.toPhysics( Vec2f{event.getPos()} ), Rand::randFloat( 0.1, 0.2f ) ) );
 	}
 }
 
@@ -171,7 +173,7 @@ void SandboxApp::createCrazyShape()
   // create shape as a fan (works well with the radial vertices we defined)
   // much faster than generic triangulation, but only works on certain shapes
   // will crash if the triangles have negative (clockwise) area
-  mSpikyBody = mSandbox.createFanShape( mSandbox.toPhysics( getWindowSize() / 2 ), hull_vertices );
+  mSpikyBody = mSandbox.createFanShape( mScale.toPhysics( getWindowSize() / 2 ), hull_vertices );
 }
 
 void SandboxApp::createTextShape( const std::string &text, const ci::Vec2f &top_left )
@@ -186,10 +188,10 @@ void SandboxApp::createTextShape( const std::string &text, const ci::Vec2f &top_
   for( auto &c : text )
   {
     auto shape = f.getGlyphShape( f.getGlyphChar( c ) );
-    shape.scale( { mSandbox.toPhysics( 1 / scalar ), mSandbox.toPhysics( 1 / scalar ) } );
+    shape.scale( { mScale.toPhysics( 1 / scalar ), mScale.toPhysics( 1 / scalar ) } );
     auto mesh = Triangulator( shape, 1 ).calcMesh( Triangulator::WINDING_ODD );
-    mBodies.emplace_back( mSandbox.createShape( mSandbox.toPhysics( loc ), mesh, scalar ) );
-    loc.x += mSandbox.fromPhysics( shape.calcBoundingBox().getWidth() * scalar ) + 10.0f;
+    mBodies.emplace_back( mSandbox.createShape( mScale.toPhysics( loc ), mesh, scalar ) );
+    loc.x += mScale.fromPhysics( shape.calcBoundingBox().getWidth() * scalar ) + 10.0f;
   }
 }
 
@@ -202,7 +204,7 @@ void SandboxApp::draw()
 {
 	gl::clear( Color::black() );
 
-  mSandbox.debugDraw();
+  mSandbox.debugDraw( mScale.getPointsPerMeter() );
 }
 
 CINDER_APP_NATIVE( SandboxApp, RendererGl( RendererGl::AA_NONE ) )

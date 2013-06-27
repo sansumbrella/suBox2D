@@ -31,7 +31,6 @@
 
 /**
  Wrapper to make setting up a b2MouseJoint easy.
- Doesn't have super-great behavior in the latest version of box2d.
 */
 
 namespace sansumbrella
