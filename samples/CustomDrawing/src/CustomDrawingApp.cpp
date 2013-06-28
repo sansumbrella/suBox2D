@@ -38,6 +38,8 @@ using namespace std;
 /**
  Example demonstrating positioning user elements with physics bodies.
  Uses Box2DMouseJointer for basic interaction.
+
+ Press any key to create a new set of bubbles.
  */
 
 // something like this is a reasonable approach to managing a body in your
@@ -114,12 +116,21 @@ void CustomDrawingApp::setup()
   mSandbox.createBoundaryRect( bounds );
   mControl.connectUserSignals( getWindow(), mSandbox, mScale.getMetersPerPoint() );
 
-  for( int i = 0; i < 29; ++i )
+  auto createBubbles = [=]() -> void
   {
-    Vec2f loc{ Rand::randFloat( bounds.getX1(), bounds.getX2() ), Rand::randFloat( bounds.getY1(), bounds.getY2() ) };
-    float radius = Rand::randFloat( 10.0f, 100.0f );
-    mBubbles.emplace_back( Bubble{ mSandbox.createCircle( loc, mScale.toPhysics(radius) ), mScale.fromPhysics(loc), radius } );
-  }
+    mBubbles.clear();
+    for( int i = 0; i < 29; ++i )
+    {
+      Vec2f loc{ Rand::randFloat( bounds.getX1(), bounds.getX2() ), Rand::randFloat( bounds.getY1(), bounds.getY2() ) };
+      float radius = Rand::randFloat( 10.0f, 100.0f );
+      mBubbles.emplace_back( Bubble{ mSandbox.createCircle( loc, mScale.toPhysics(radius) ), mScale.fromPhysics(loc), radius } );
+    }
+  };
+
+  createBubbles();
+  getWindow()->getSignalKeyDown().connect( [=](KeyEvent &event) -> void {
+                                            createBubbles();
+                                          } );
 }
 
 void CustomDrawingApp::update()
