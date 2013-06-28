@@ -120,7 +120,7 @@ namespace box2d
     // related objects
     b2ContactFilter   mContactFilter;
     Renderer          mDebugRenderer;
-    unique_body_ptr mBoundaryBody;
+    unique_body_ptr   mBoundaryBody;
 
     //! Manage the lifetime of a b2Body with a unique_ptr and a custom deleter
     inline auto manage( b2Body *body ) -> unique_body_ptr

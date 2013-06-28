@@ -135,9 +135,6 @@ void CustomDrawingApp::setup()
                                           {
                                             createBubbles();
                                           } );
-#if defined( CINDER_COCOA_TOUCH )
-  getSignalSupportedOrientations().connect( [](){ return InterfaceOrientation::All; } );
-#endif
 }
 
 void CustomDrawingApp::update()
