@@ -5,7 +5,7 @@
 	id="com.sansumbrella.box2d"
 	author="David Wicks"
 	summary="Box2D sandbox and conversions"
-	url="git@github.com:sansumbrella/sc-Box2D.git"
+	url="git@github.com:sansumbrella/suBox2D.git"
 	>
 	<sourcePattern>src/Box2D/Collision/*.cpp</sourcePattern>
 	<headerPattern>src/Box2D/Collision/*.h</headerPattern>
