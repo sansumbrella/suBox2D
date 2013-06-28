@@ -106,8 +106,12 @@ private:
 
 void CustomDrawingApp::prepareSettings(Settings *settings)
 {
+#if not defined( CINDER_COCOA_TOUCH )
   settings->setWindowSize( 1024, 768 );
+  cout << "Setting window size" << endl;
+#else
   settings->enableMultiTouch( false );
+#endif
 }
 
 void CustomDrawingApp::setup()
@@ -151,8 +155,4 @@ void CustomDrawingApp::draw()
   }
 }
 
-#ifndef CINDER_GLES
-CINDER_APP_NATIVE( CustomDrawingApp, RendererGl )
-#else
 CINDER_APP_NATIVE( CustomDrawingApp, RendererGl( RendererGl::AA_NONE ) )
-#endif

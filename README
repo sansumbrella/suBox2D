@@ -1,4 +1,4 @@
-sc-Box2D is a simple wrapper for the Box2D physics engine intended for use
+suBox2D is a simple wrapper for the Box2D physics engine intended for use
 with the Cinder framework (libcinder.org).
 Wraps Box2D version 2.2.1
 
