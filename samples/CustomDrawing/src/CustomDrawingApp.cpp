@@ -131,9 +131,13 @@ void CustomDrawingApp::setup()
   };
 
   createBubbles();
-  getWindow()->getSignalKeyDown().connect( [=](KeyEvent &event) -> void {
+  getWindow()->getSignalKeyDown().connect( [=](KeyEvent &event) -> void
+                                          {
                                             createBubbles();
                                           } );
+#if defined( CINDER_COCOA_TOUCH )
+  getSignalSupportedOrientations().connect( [](){ return InterfaceOrientation::All; } );
+#endif
 }
 
 void CustomDrawingApp::update()
