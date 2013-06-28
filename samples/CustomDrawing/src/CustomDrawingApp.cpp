@@ -107,7 +107,7 @@ private:
 void CustomDrawingApp::prepareSettings(Settings *settings)
 {
   settings->setWindowSize( 1024, 768 );
-  settings->enableMultiTouch();
+  settings->enableMultiTouch( false );
 }
 
 void CustomDrawingApp::setup()
@@ -122,8 +122,8 @@ void CustomDrawingApp::setup()
     for( int i = 0; i < 29; ++i )
     {
       Vec2f loc{ Rand::randFloat( bounds.getX1(), bounds.getX2() ), Rand::randFloat( bounds.getY1(), bounds.getY2() ) };
-      float radius = Rand::randFloat( 10.0f, 100.0f );
-      mBubbles.emplace_back( Bubble{ mSandbox.createCircle( loc, mScale.toPhysics(radius) ), mScale.fromPhysics(loc), radius } );
+      float radius = Rand::randFloat( bounds.getWidth() * 0.01f, bounds.getWidth() * 0.1f );
+      mBubbles.emplace_back( Bubble{ mSandbox.createCircle( loc, radius ), mScale.fromPhysics(loc), mScale.fromPhysics(radius) } );
     }
   };
 
@@ -151,4 +151,8 @@ void CustomDrawingApp::draw()
   }
 }
 
+#ifndef CINDER_GLES
 CINDER_APP_NATIVE( CustomDrawingApp, RendererGl )
+#else
+CINDER_APP_NATIVE( CustomDrawingApp, RendererGl( RendererGl::AA_NONE ) )
+#endif

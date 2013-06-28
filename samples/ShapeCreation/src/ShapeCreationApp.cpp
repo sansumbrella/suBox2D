@@ -182,4 +182,4 @@ void ShapeCreationApp::draw()
   mSandbox.debugDraw( mScale.getPointsPerMeter() );
 }
 
-CINDER_APP_NATIVE( ShapeCreationApp, RendererGl( RendererGl::AA_NONE ) )
+CINDER_APP_NATIVE( ShapeCreationApp, RendererGl )
