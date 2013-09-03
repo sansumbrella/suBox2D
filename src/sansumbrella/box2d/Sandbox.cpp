@@ -80,11 +80,12 @@ unique_body_ptr Sandbox::createBody(const b2BodyDef &body_def)
   return manage( mWorld.CreateBody( &body_def ) );
 }
 
-unique_body_ptr Sandbox::createBox( const ci::Vec2f &pos, const ci::Vec2f &size )
+unique_body_ptr Sandbox::createBox( const ci::Vec2f &pos, const ci::Vec2f &size, float rotation )
 {
   b2BodyDef bodyDef;
 	bodyDef.position.Set(	pos.x,
                        pos.y );
+  bodyDef.angle = rotation;
 	bodyDef.type = b2_dynamicBody;
 
 	b2PolygonShape box;
