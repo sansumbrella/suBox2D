@@ -28,6 +28,7 @@
 #pragma once
 #include "Common.h"
 #include "Renderer.h"
+#include "ContactListener.h"
 
 namespace cinder
 { // forward declaration
@@ -109,6 +110,15 @@ namespace box2d
     //! Set how much time elapses with each physics simulation step
     inline void setTimeStep( float hz ){ mTimeStep = hz; }
 
+    //! assign function to be called when contacts start
+    inline void setBeginContactFn( const ContactListener::ContactFn &fn ){ mContactListener.setBeginContactFn( fn ); }
+    //! assign function to be called when contacts end
+    inline void setEndContactFn( const ContactListener::ContactFn &fn ){ mContactListener.setEndContactFn( fn ); }
+    //! assign function to be called before collision resolution (e.g. platforms)
+    inline void setPreSolveFn( const ContactListener::PreSolveFn &fn ){ mContactListener.setPreSolveFn( fn ); }
+    //! assign function to be called after collision resolution (e.g. breaking shapes)
+    inline void setPostSolveFn( const ContactListener::PostSolveFn &fn ){ mContactListener.setPostSolveFn( fn ); }
+
     //! set the filter function for collisions (see box2d docs)
     void setContactFilter( const b2ContactFilter &filter );
   private:
@@ -116,8 +126,9 @@ namespace box2d
     int     mPositionIterations = 3;
     float   mTimeStep = 1.0f / 60.0f;
     // the box2d world
-    b2World         mWorld = b2World( b2Vec2( 0, 10.0f ) );
+    b2World           mWorld = b2World( b2Vec2( 0, 10.0f ) );
     // related objects
+    ContactListener   mContactListener;
     b2ContactFilter   mContactFilter;
     Renderer          mDebugRenderer;
     unique_body_ptr   mBoundaryBody;

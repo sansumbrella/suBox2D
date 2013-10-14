@@ -36,6 +36,7 @@ using namespace std;
 Sandbox::Sandbox()
 {
   mWorld.SetDebugDraw( &mDebugRenderer );
+  mContactListener.listenToWorld( &mWorld );
 }
 
 void Sandbox::step()
