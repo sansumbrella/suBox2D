@@ -37,7 +37,7 @@ using namespace std;
 
 /**
  Example demonstrating positioning user elements with physics bodies.
- Uses Box2DMouseJointer for basic interaction.
+ Uses box2d::SimpleControl for basic interaction with bodies.
 
  Press any key to create a new set of bubbles.
  */
