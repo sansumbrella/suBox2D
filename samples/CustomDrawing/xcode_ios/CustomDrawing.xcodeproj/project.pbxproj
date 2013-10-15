@@ -13,6 +13,7 @@
 		05F5B36317EA4B2389A679BA /* b2PolygonShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EC8B92FB5CC14A1F83B51711 /* b2PolygonShape.cpp */; };
 		0C8234FBDD324ACD91CC0763 /* b2Collision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A89E6D4BC274119B5CB1F02 /* b2Collision.cpp */; };
 		0CB1760E492E4566A276C4E0 /* b2PulleyJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E532A9AC864A41F399CB7603 /* b2PulleyJoint.cpp */; };
+		15154C74180CE0D600CF90F9 /* ContactListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15154C73180CE0D600CF90F9 /* ContactListener.cpp */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		1F6D719DD25B466CB134F6FD /* b2GearJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 965C5BEE09494CAEA74D36F5 /* b2GearJoint.cpp */; };
@@ -89,6 +90,7 @@
 		117ED9C099FF4BC490EB9D6A /* b2Collision.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = b2Collision.h; path = ../../../src/Box2D/Collision/b2Collision.h; sourceTree = "<group>"; };
 		1327BACEC0DE435BAA7B769C /* b2TimeOfImpact.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = b2TimeOfImpact.h; path = ../../../src/Box2D/Collision/b2TimeOfImpact.h; sourceTree = "<group>"; };
 		1497B8C8DD314910B9CEA6BA /* b2WeldJoint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = b2WeldJoint.cpp; path = ../../../src/Box2D/Dynamics/Joints/b2WeldJoint.cpp; sourceTree = "<group>"; };
+		15154C73180CE0D600CF90F9 /* ContactListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ContactListener.cpp; path = ../../../src/sansumbrella/box2d/ContactListener.cpp; sourceTree = "<group>"; };
 		1B04A521580C4CF5B53FF42A /* b2CollideCircle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = b2CollideCircle.cpp; path = ../../../src/Box2D/Collision/b2CollideCircle.cpp; sourceTree = "<group>"; };
 		1BC9C693C2E14C238CD94A1F /* b2Contact.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = b2Contact.cpp; path = ../../../src/Box2D/Dynamics/Contacts/b2Contact.cpp; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -277,6 +279,7 @@
 		0FB2418AD9644281AB65816F /* box2d */ = {
 			isa = PBXGroup;
 			children = (
+				15154C73180CE0D600CF90F9 /* ContactListener.cpp */,
 				43260A10599C4944977C9897 /* Renderer.cpp */,
 				4D8D737CA55A4A3BA15DEE17 /* Sandbox.cpp */,
 				44B944DC2B574009A0F5281F /* Scale.cpp */,
@@ -507,6 +510,8 @@
 /* Begin PBXProject section */
 		00692BC614FF149000D0A05E /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 00692BC914FF149000D0A05E /* Build configuration list for PBXProject "CustomDrawing" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -568,6 +573,7 @@
 				B7C8835576BF4FEDAC1EB2B5 /* b2World.cpp in Sources */,
 				67397D3AD69D49DE87C4D224 /* b2WorldCallbacks.cpp in Sources */,
 				81AB70EE2872421CB9395DA0 /* b2ChainAndCircleContact.cpp in Sources */,
+				15154C74180CE0D600CF90F9 /* ContactListener.cpp in Sources */,
 				982DBD9893AA41828ED9BE9F /* b2ChainAndPolygonContact.cpp in Sources */,
 				E16C768EA3834B609AF73E1C /* b2CircleContact.cpp in Sources */,
 				F5F5DD2F1F3142AC8A15F0FA /* b2Contact.cpp in Sources */,
