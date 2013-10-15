@@ -35,4 +35,5 @@ namespace box2d
 {
   typedef std::unique_ptr<b2Body, std::function<void(b2Body*)>>   unique_body_ptr;
   typedef std::unique_ptr<b2Joint, std::function<void(b2Joint*)>> unique_joint_ptr;
+  typedef std::shared_ptr<b2Body> BodyRef;
 }
