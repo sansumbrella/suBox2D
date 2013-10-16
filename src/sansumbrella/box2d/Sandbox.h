@@ -134,10 +134,10 @@ namespace box2d
     unique_body_ptr   mBoundaryBody;
 
     //! Manage the lifetime of a b2Body with a unique_ptr and a custom deleter
-    inline auto manage( b2Body *body ) -> unique_body_ptr
-    { return { body, [this](b2Body *b){ mWorld.DestroyBody( b ); } }; }
+    inline unique_body_ptr manage( b2Body *body )
+    { return unique_body_ptr{ body, [this](b2Body *b){ mWorld.DestroyBody( b ); } }; }
     //! Manage the lifetime of a b2Joint with a unique_ptr and a custom deleter
-    inline auto manage( b2Joint *joint ) -> unique_joint_ptr
-    { return { joint, [this](b2Joint *j){ mWorld.DestroyJoint( j ); } }; }
+    inline unique_joint_ptr manage( b2Joint *joint )
+    { return unique_joint_ptr{ joint, [this](b2Joint *j){ mWorld.DestroyJoint( j ); } }; }
   };
 }
