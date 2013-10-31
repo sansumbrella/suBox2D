@@ -37,4 +37,48 @@ namespace box2d
   typedef std::unique_ptr<b2Joint, std::function<void(b2Joint*)>> unique_joint_ptr;
   typedef std::shared_ptr<b2Body> BodyRef;
   typedef std::weak_ptr<b2Body>   WeakBodyRef;
+
+  // wrapper around a b2Shape to handle polymorphism more easily
+  // does not own the shape due to box2d internals
+  class Shape
+  {
+  public:
+    explicit Shape( b2Shape *shape ):
+    mShape( shape )
+    {}
+    b2Vec2 getCenter() const
+    {
+      switch ( mShape->GetType() )
+      {
+        case b2Shape::e_circle:
+          return static_cast<b2CircleShape*>( mShape )->m_p;
+          break;
+        case b2Shape::e_polygon:
+          return static_cast<b2PolygonShape*>( mShape )->m_centroid;
+          break;
+        default:
+          break;
+      }
+      return b2Vec2( 0, 0 );
+    }
+    void offsetCenter( const ci::Vec2f &amount )
+    {
+      switch ( mShape->GetType() )
+      {
+        case b2Shape::e_circle:
+          static_cast<b2CircleShape*>( mShape )->m_p.x += amount.x;
+          static_cast<b2CircleShape*>( mShape )->m_p.y += amount.y;
+          break;
+        case b2Shape::e_polygon:
+          static_cast<b2PolygonShape*>( mShape )->m_centroid.x += amount.x;
+          static_cast<b2PolygonShape*>( mShape )->m_centroid.y += amount.y;
+          break;
+        default:
+          break;
+      }
+    }
+    b2Shape *get() { return mShape; }
+  private:
+    b2Shape  *mShape;
+  };
 }
