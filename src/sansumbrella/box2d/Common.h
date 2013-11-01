@@ -30,6 +30,7 @@
  Type declarations and header includes shared by files in library.
 */
 #include <Box2D/Box2D.h>
+#include <iostream>
 
 namespace box2d
 {
@@ -88,23 +89,24 @@ namespace box2d
         }
       }
     }
-    void transform( const b2Transform &transform )
+    void transform( const b2Transform &xf )
     {
       if( mShape->GetType() == b2Shape::e_polygon )
       { // this is where I could be messing up...
         b2PolygonShape *shape = static_cast<b2PolygonShape*>( mShape );
-        // Transform vertices and normals.
+        std::vector<b2Vec2> vertices;
+        // Transform vertices.
         for (int32 i = 0; i < shape->m_vertexCount; ++i)
         {
-          shape->m_vertices[i] = b2Mul( transform, shape->m_vertices[i]);
-          shape->m_normals[i] = b2Mul( transform.q, shape->m_normals[i]);
+          vertices.push_back( b2Mul( xf, shape->m_vertices[i] ) );
         }
-        shape->m_centroid = b2Mul( transform, shape->m_centroid );
+        // Set transformed shape (lets box2d handle the normal assignment)
+        shape->Set( &vertices[0], vertices.size() );
       }
       else if( mShape->GetType() == b2Shape::e_circle )
       {
         b2CircleShape *shape = static_cast<b2CircleShape*>( mShape );
-        shape->m_p = b2Mul( transform, shape->m_p );
+        shape->m_p = b2Mul( xf, shape->m_p );
       }
     }
     b2Shape *get() { return mShape; }
