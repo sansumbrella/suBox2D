@@ -350,6 +350,8 @@ public:
 	/// Get the list of all fixtures attached to this body.
 	b2Fixture* GetFixtureList();
 	const b2Fixture* GetFixtureList() const;
+	/// Get the count of fixtures attached to this body.
+	int GetFixtureCount() const;
 
 	/// Get the list of all joints attached to this body.
 	b2JointEdge* GetJointList();
@@ -385,7 +387,7 @@ private:
 	friend class b2ContactManager;
 	friend class b2ContactSolver;
 	friend class b2Contact;
-	
+
 	friend class b2DistanceJoint;
 	friend class b2GearJoint;
 	friend class b2WheelJoint;
@@ -700,6 +702,11 @@ inline b2Fixture* b2Body::GetFixtureList()
 inline const b2Fixture* b2Body::GetFixtureList() const
 {
 	return m_fixtureList;
+}
+
+inline int b2Body::GetFixtureCount() const
+{
+	return m_fixtureCount;
 }
 
 inline b2JointEdge* b2Body::GetJointList()
