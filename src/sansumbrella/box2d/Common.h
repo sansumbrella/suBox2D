@@ -46,20 +46,22 @@ namespace box2d
     explicit Shape( b2Shape *shape ):
     mShape( shape )
     {}
-    b2Vec2 getCenter() const
+    ci::Vec2f getCenter() const
     {
       switch ( mShape->GetType() )
       {
         case b2Shape::e_circle:
-          return static_cast<b2CircleShape*>( mShape )->m_p;
+          return ci::Vec2f( static_cast<b2CircleShape*>( mShape )->m_p.x,
+                            static_cast<b2CircleShape*>( mShape )->m_p.y );
           break;
         case b2Shape::e_polygon:
-          return static_cast<b2PolygonShape*>( mShape )->m_centroid;
+          return ci::Vec2f( static_cast<b2PolygonShape*>( mShape )->m_centroid.x,
+                            static_cast<b2PolygonShape*>( mShape )->m_centroid.y );
           break;
         default:
           break;
       }
-      return b2Vec2( 0, 0 );
+      return ci::Vec2f( 0, 0 );
     }
     void offsetCenter( const ci::Vec2f &amount )
     {
@@ -75,6 +77,34 @@ namespace box2d
           break;
         default:
           break;
+      }
+      if( mShape->GetType() == b2Shape::e_polygon )
+      {
+        b2PolygonShape *shape = static_cast<b2PolygonShape*>( mShape );
+        // Transform vertices and normals.
+        for (int32 i = 0; i < shape->m_vertexCount; ++i)
+        {
+          shape->m_vertices[i] += b2Vec2( amount.x, amount.y );
+        }
+      }
+    }
+    void transform( const b2Transform &transform )
+    {
+      if( mShape->GetType() == b2Shape::e_polygon )
+      { // this is where I could be messing up...
+        b2PolygonShape *shape = static_cast<b2PolygonShape*>( mShape );
+        // Transform vertices and normals.
+        for (int32 i = 0; i < shape->m_vertexCount; ++i)
+        {
+          shape->m_vertices[i] = b2Mul( transform, shape->m_vertices[i]);
+          shape->m_normals[i] = b2Mul( transform.q, shape->m_normals[i]);
+        }
+        shape->m_centroid = b2Mul( transform, shape->m_centroid );
+      }
+      else if( mShape->GetType() == b2Shape::e_circle )
+      {
+        b2CircleShape *shape = static_cast<b2CircleShape*>( mShape );
+        shape->m_p = b2Mul( transform, shape->m_p );
       }
     }
     b2Shape *get() { return mShape; }
