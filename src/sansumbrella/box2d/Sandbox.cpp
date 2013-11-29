@@ -175,7 +175,7 @@ unique_body_ptr Sandbox::createShape( const ci::Vec2f &centroid, const ci::TriMe
     { // flip the vertex order to be CCW
       vertices = { b2Vec2{a.x, a.y}, b2Vec2{c.x, c.y}, b2Vec2{b.x, b.y} };
     }
-    if( abs(area) > b2_epsilon )
+    if( abs(area) > b2_linearSlop * 0.5 )
     { // if the triangle is big enough for Box2D to consider
       shapes[i].Set( &vertices[0], vertices.size() );
 

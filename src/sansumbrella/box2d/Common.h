@@ -83,7 +83,7 @@ namespace box2d
       {
         b2PolygonShape *shape = static_cast<b2PolygonShape*>( mShape );
         // Transform vertices and normals.
-        for (int32 i = 0; i < shape->m_vertexCount; ++i)
+        for (int32 i = 0; i < shape->GetVertexCount(); ++i)
         {
           shape->m_vertices[i] += b2Vec2( amount.x, amount.y );
         }
@@ -96,7 +96,7 @@ namespace box2d
         b2PolygonShape *shape = static_cast<b2PolygonShape*>( mShape );
         std::vector<b2Vec2> vertices;
         // Transform vertices.
-        for (int32 i = 0; i < shape->m_vertexCount; ++i)
+        for (int32 i = 0; i < shape->GetVertexCount(); ++i)
         {
           vertices.push_back( b2Mul( xf, shape->m_vertices[i] ) );
         }

@@ -14,6 +14,7 @@
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
 		0505B071311443DEB6D2E42B /* b2Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8F38EEF8D92A4BC7A40B6D34 /* b2Timer.cpp */; };
 		15154C72180CE05800CF90F9 /* ContactListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15154C71180CE05800CF90F9 /* ContactListener.cpp */; };
+		15C7FE991848FF85003E4805 /* b2MotorJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15C7FE981848FF85003E4805 /* b2MotorJoint.cpp */; };
 		187736584DF14ABBB40089F9 /* b2PrismaticJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 122E73EDA9B44506826308D9 /* b2PrismaticJoint.cpp */; };
 		19BB0F27EC98471E96918D7F /* Scale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C1BCC0C890FA4DEDA145E955 /* Scale.cpp */; };
 		2522E0CA0F8C4F3099653AB5 /* b2ContactManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6A2FF179DB04545B6E62CBC /* b2ContactManager.cpp */; };
@@ -85,6 +86,7 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		122E73EDA9B44506826308D9 /* b2PrismaticJoint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = b2PrismaticJoint.cpp; path = ../../../src/Box2D/Dynamics/Joints/b2PrismaticJoint.cpp; sourceTree = "<group>"; };
 		15154C71180CE05800CF90F9 /* ContactListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ContactListener.cpp; path = ../../../src/sansumbrella/box2d/ContactListener.cpp; sourceTree = "<group>"; };
+		15C7FE981848FF85003E4805 /* b2MotorJoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = b2MotorJoint.cpp; path = ../../../src/Box2D/Dynamics/Joints/b2MotorJoint.cpp; sourceTree = "<group>"; };
 		1942E2B796E942269ACA3385 /* b2DistanceJoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = b2DistanceJoint.h; path = ../../../src/Box2D/Dynamics/Joints/b2DistanceJoint.h; sourceTree = "<group>"; };
 		1E8879388180407F98B81F49 /* b2ChainAndPolygonContact.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = b2ChainAndPolygonContact.cpp; path = ../../../src/Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.cpp; sourceTree = "<group>"; };
 		1F708341B0D24B078E7E0D4F /* Sandbox.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = Sandbox.cpp; path = ../../../src/sansumbrella/box2d/Sandbox.cpp; sourceTree = "<group>"; };
@@ -438,6 +440,7 @@
 		C5C00D8C9AA1482CA45D7B8B /* Joints */ = {
 			isa = PBXGroup;
 			children = (
+				15C7FE981848FF85003E4805 /* b2MotorJoint.cpp */,
 				D9A1022F2F924F48BCD2C9DD /* b2DistanceJoint.cpp */,
 				8D1DDC0CDB2B4606A32CEF15 /* b2FrictionJoint.cpp */,
 				EA70E1B9EACC4D27A9C96DC9 /* b2GearJoint.cpp */,
@@ -565,6 +568,7 @@
 				CB94E24546754EC3A19B2450 /* b2Math.cpp in Sources */,
 				4B4752E0EE5D4BB6AAA279CE /* b2Settings.cpp in Sources */,
 				60DC67A631FC4725960EC002 /* b2StackAllocator.cpp in Sources */,
+				15C7FE991848FF85003E4805 /* b2MotorJoint.cpp in Sources */,
 				0505B071311443DEB6D2E42B /* b2Timer.cpp in Sources */,
 				6082C68ABDBF4D2A9213F6DE /* b2Body.cpp in Sources */,
 				2522E0CA0F8C4F3099653AB5 /* b2ContactManager.cpp in Sources */,
