@@ -27,8 +27,10 @@
 
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
+#include "cinder/app/RendererGl.h"
 #include "cinder/Triangulate.h"
 #include "cinder/Rand.h"
+#include "cinder/Font.h"
 
 #include "suBox2D.h"
 
@@ -182,4 +184,4 @@ void ShapeCreationApp::draw()
   mSandbox.debugDraw( mScale.getPointsPerMeter() );
 }
 
-CINDER_APP_NATIVE( ShapeCreationApp, RendererGl )
+CINDER_APP_NATIVE( ShapeCreationApp, RendererGl( RendererGl::Options().antiAliasing( RendererGl::AA_MSAA_4 ) ) )
