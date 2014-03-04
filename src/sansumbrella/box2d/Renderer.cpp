@@ -57,6 +57,7 @@ void Renderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Co
   {
     path.lineTo( vertices[i].x, vertices[i].y );
   }
+  path.close();
 
   gl::color( color.r, color.g, color.b );
   gl::draw( path );
@@ -70,6 +71,7 @@ void Renderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const
   {
     path.lineTo( vertices[i].x, vertices[i].y );
   }
+  path.close();
 
   gl::enableAlphaBlending();
   gl::color( color.r, color.g, color.b, 0.5f );
