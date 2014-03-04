@@ -26,6 +26,7 @@
  */
 
 #include "cinder/app/AppNative.h"
+#include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Rand.h"
 
@@ -76,7 +77,7 @@ public:
     gl::pushModelView();
     gl::translate( mLoc );
     gl::drawSolidCircle( Vec2f::zero(), mRadius );
-    gl::rotate( mBody->GetAngle() * 180 / M_PI ); // box2d stores angle in radians
+    gl::rotate( mBody->GetAngle() * 180 / M_PI ); // box2d stores angle in radians, gl uses degrees
     gl::color( Color::black() );
     gl::drawLine( Vec2f{ -mRadius, 0 }, Vec2f{ mRadius, 0 } );
     gl::popModelView();
@@ -156,7 +157,7 @@ void CustomDrawingApp::draw()
 }
 
 #if defined( CINDER_COCOA_TOUCH )
-CINDER_APP_NATIVE( CustomDrawingApp, RendererGl( RendererGl::AA_NONE ) )
+CINDER_APP_NATIVE( CustomDrawingApp, RendererGl( RendererGl::Options().antialias( RendererGl::AA_NONE ) ) )
 #else
-CINDER_APP_NATIVE( CustomDrawingApp, RendererGl )
+CINDER_APP_NATIVE( CustomDrawingApp, RendererGl() )
 #endif
