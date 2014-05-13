@@ -53,10 +53,10 @@ void Sandbox::setContactFilter( const b2ContactFilter &filter )
 
 void Sandbox::debugDraw( float points_per_meter )
 {
-	gl::pushModelView();
+	gl::pushModelMatrix();
 	gl::scale( points_per_meter, points_per_meter );
   mWorld.DrawDebugData();
-  gl::popModelView();
+  gl::popModelMatrix();
 }
 
 unique_body_ptr Sandbox::createBody(const b2BodyDef &body_def, const b2FixtureDef &fixture_def)
