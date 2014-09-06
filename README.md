@@ -1,8 +1,10 @@
 # suBox2D
 
-suBox2D is a simple wrapper around the Box2D physics engine intended for use with the Cinder framework (libcinder.org).
-Wraps Box2D version 2.3.0
-Builds against [Cinder glNext](https://github.com/cinder/cinder/tree/glNext)
+suBox2D is a simple wrapper around Box2D physics for use with the Cinder framework.
+
+Wraps Box2D version 2.3.0  
+Builds against [Cinder glNext](https://github.com/cinder/cinder/tree/glNext)  
+Clone into your cinder/blocks/ directory to get started.
 
 ## Features
 - Sandbox for easier world and body creation
