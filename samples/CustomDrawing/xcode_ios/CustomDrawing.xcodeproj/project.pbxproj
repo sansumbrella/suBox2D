@@ -14,6 +14,7 @@
 		0C8234FBDD324ACD91CC0763 /* b2Collision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A89E6D4BC274119B5CB1F02 /* b2Collision.cpp */; };
 		0CB1760E492E4566A276C4E0 /* b2PulleyJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E532A9AC864A41F399CB7603 /* b2PulleyJoint.cpp */; };
 		15154C74180CE0D600CF90F9 /* ContactListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15154C73180CE0D600CF90F9 /* ContactListener.cpp */; };
+		1582189E19BB8E1300AAD280 /* b2MotorJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1582189D19BB8E1300AAD280 /* b2MotorJoint.cpp */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		1F6D719DD25B466CB134F6FD /* b2GearJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 965C5BEE09494CAEA74D36F5 /* b2GearJoint.cpp */; };
@@ -91,6 +92,14 @@
 		1327BACEC0DE435BAA7B769C /* b2TimeOfImpact.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = b2TimeOfImpact.h; path = ../../../src/Box2D/Collision/b2TimeOfImpact.h; sourceTree = "<group>"; };
 		1497B8C8DD314910B9CEA6BA /* b2WeldJoint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = b2WeldJoint.cpp; path = ../../../src/Box2D/Dynamics/Joints/b2WeldJoint.cpp; sourceTree = "<group>"; };
 		15154C73180CE0D600CF90F9 /* ContactListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ContactListener.cpp; path = ../../../src/sansumbrella/box2d/ContactListener.cpp; sourceTree = "<group>"; };
+		1582189619BB8DD000AAD280 /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Common.h; path = ../../../src/sansumbrella/box2d/Common.h; sourceTree = "<group>"; };
+		1582189719BB8DD000AAD280 /* ContactListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ContactListener.h; path = ../../../src/sansumbrella/box2d/ContactListener.h; sourceTree = "<group>"; };
+		1582189819BB8DD000AAD280 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Renderer.h; path = ../../../src/sansumbrella/box2d/Renderer.h; sourceTree = "<group>"; };
+		1582189919BB8DD000AAD280 /* Sandbox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Sandbox.h; path = ../../../src/sansumbrella/box2d/Sandbox.h; sourceTree = "<group>"; };
+		1582189A19BB8DD000AAD280 /* Scale.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Scale.h; path = ../../../src/sansumbrella/box2d/Scale.h; sourceTree = "<group>"; };
+		1582189B19BB8DD000AAD280 /* SimpleControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SimpleControl.h; path = ../../../src/sansumbrella/box2d/SimpleControl.h; sourceTree = "<group>"; };
+		1582189C19BB8E1300AAD280 /* b2MotorJoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = b2MotorJoint.h; path = ../../../src/Box2D/Dynamics/Joints/b2MotorJoint.h; sourceTree = "<group>"; };
+		1582189D19BB8E1300AAD280 /* b2MotorJoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = b2MotorJoint.cpp; path = ../../../src/Box2D/Dynamics/Joints/b2MotorJoint.cpp; sourceTree = "<group>"; };
 		1B04A521580C4CF5B53FF42A /* b2CollideCircle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = b2CollideCircle.cpp; path = ../../../src/Box2D/Collision/b2CollideCircle.cpp; sourceTree = "<group>"; };
 		1BC9C693C2E14C238CD94A1F /* b2Contact.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = b2Contact.cpp; path = ../../../src/Box2D/Dynamics/Contacts/b2Contact.cpp; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -279,6 +288,12 @@
 		0FB2418AD9644281AB65816F /* box2d */ = {
 			isa = PBXGroup;
 			children = (
+				1582189619BB8DD000AAD280 /* Common.h */,
+				1582189719BB8DD000AAD280 /* ContactListener.h */,
+				1582189819BB8DD000AAD280 /* Renderer.h */,
+				1582189919BB8DD000AAD280 /* Sandbox.h */,
+				1582189A19BB8DD000AAD280 /* Scale.h */,
+				1582189B19BB8DD000AAD280 /* SimpleControl.h */,
 				15154C73180CE0D600CF90F9 /* ContactListener.cpp */,
 				43260A10599C4944977C9897 /* Renderer.cpp */,
 				4D8D737CA55A4A3BA15DEE17 /* Sandbox.cpp */,
@@ -343,6 +358,8 @@
 		652D3B84C60049419C28F362 /* Joints */ = {
 			isa = PBXGroup;
 			children = (
+				1582189C19BB8E1300AAD280 /* b2MotorJoint.h */,
+				1582189D19BB8E1300AAD280 /* b2MotorJoint.cpp */,
 				0F0B136ED93A4B83B2E61D3C /* b2DistanceJoint.cpp */,
 				F66F030A9E1845DF99DA88DB /* b2FrictionJoint.cpp */,
 				965C5BEE09494CAEA74D36F5 /* b2GearJoint.cpp */,
@@ -566,6 +583,7 @@
 				EBEDC0CCA04D454C9BE68BDE /* b2Math.cpp in Sources */,
 				9DDC57BEEA154F8CA91ECD72 /* b2Settings.cpp in Sources */,
 				683D72D5BD6A4443A23ECC2F /* b2StackAllocator.cpp in Sources */,
+				1582189E19BB8E1300AAD280 /* b2MotorJoint.cpp in Sources */,
 				B38ACEE83A9D4AE88352CB54 /* b2Timer.cpp in Sources */,
 				FD413C1ED594441BB16BB956 /* b2Body.cpp in Sources */,
 				FC33B21055914706B55FF68D /* b2ContactManager.cpp in Sources */,

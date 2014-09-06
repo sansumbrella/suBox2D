@@ -157,8 +157,4 @@ void CustomDrawingApp::draw()
   }
 }
 
-#if defined( CINDER_COCOA_TOUCH )
-CINDER_APP_NATIVE( CustomDrawingApp, RendererGl( RendererGl::Options().antialias( RendererGl::AA_NONE ) ) )
-#else
 CINDER_APP_NATIVE( CustomDrawingApp, RendererGl() )
-#endif
