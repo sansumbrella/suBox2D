@@ -168,8 +168,10 @@ unique_body_ptr Sandbox::createShape( const ci::vec2 &centroid, const ci::TriMes
       c *= scale;
     }
     // Since we don't know anything about the quality of triangles from the mesh
-    // Check that the triangle is wound CCW (has positive area)
-    float area = (vec2{b-a}).cross( vec2{c-b} ) / 2;
+    // Ensure the triangle is wound CCW (has positive area)
+    vec2 ab( b - a );
+    vec2 bc( c - b );
+    float area = ( ab.x * bc.y - ab.y * bc.x ) / 2;
     array<b2Vec2, 3> vertices = { b2Vec2{a.x, a.y}, b2Vec2{b.x, b.y}, b2Vec2{c.x, c.y} };
     if( area < 0 )
     { // flip the vertex order to be CCW

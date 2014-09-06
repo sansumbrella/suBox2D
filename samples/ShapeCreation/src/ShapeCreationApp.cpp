@@ -118,7 +118,7 @@ void ShapeCreationApp::createSpikyShape()
   // create shape as a fan (works well with the radial vertices we defined)
   // much faster than generic triangulation, but only works on certain shapes
   // will crash if the triangles have negative (clockwise) area
-  mSpikyBody = mSandbox.createFanShape( mScale.toPhysics( getWindowSize() / 2 ), hull_vertices );
+  mSpikyBody = mSandbox.createFanShape( mScale.toPhysics( vec2(getWindowSize() / 2) ), hull_vertices );
 }
 
 void ShapeCreationApp::createTextShape( const string &text, const vec2 &top_left )

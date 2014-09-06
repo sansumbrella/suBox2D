@@ -28,6 +28,7 @@
 	<!-- suBox2D wrapper files. -->
 	<headerPattern>src/sansumbrella/*.h</headerPattern>
 	<sourcePattern>src/sansumbrella/*.cpp</sourcePattern>
+	<headerPattern>src/sansumbrella/box2d/*.h</headerPattern>
 	<sourcePattern>src/sansumbrella/box2d/*.cpp</sourcePattern>
 </block>
 <template>templates/Box2D Sandbox/template.xml</template>
