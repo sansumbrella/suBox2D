@@ -27,7 +27,6 @@
 
 #include "cinder/app/AppNative.h"
 #include "cinder/app/RendererGl.h"
-#include "cinder/gl/gl.h"
 #include "cinder/Rand.h"
 
 #include "suBox2D.h"
@@ -43,8 +42,10 @@ using namespace std;
  Press any key to create a new set of bubbles.
  */
 
-// something like this is a reasonable approach to managing a body in your
-// own structure
+
+/// Bubbles store a (smart) pointer to a Box2D body and use it to update their
+/// rendered positions every frame.
+/// This is a reasonable approach to managing a Box2D body in your own structure.
 class Bubble
 {
 public:
@@ -76,7 +77,7 @@ public:
     gl::color( mColor );
     gl::pushModelView();
     gl::translate( mLoc );
-    gl::drawSolidCircle( vec2::zero(), mRadius );
+    gl::drawSolidCircle( vec2( 0 ), mRadius );
     gl::rotate( mBody->GetAngle() * 180 / M_PI ); // box2d stores angle in radians, gl uses degrees
     gl::color( Color::black() );
     gl::drawLine( vec2{ -mRadius, 0 }, vec2{ mRadius, 0 } );
