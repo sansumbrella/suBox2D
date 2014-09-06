@@ -26,7 +26,6 @@
  */
 
 #include "cinder/app/AppNative.h"
-#include "cinder/gl/gl.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/Triangulate.h"
 #include "cinder/Rand.h"
@@ -60,7 +59,7 @@ public:
   void draw();
   void reset();
   void createBodies();
-  void createTextShape( const std::string &text, const ci::Vec2f &top_left );
+  void createTextShape( const std::string &text, const ci::vec2 &top_left );
   void createSpikyShape();
 private:
   b2::Sandbox                   mSandbox;
@@ -90,16 +89,16 @@ void ShapeCreationApp::reset()
 
 void ShapeCreationApp::createBodies()
 {
-  createTextShape( "Collapsed", Vec2f{ 200.0f, 100.0f } );
+  createTextShape( "Collapsed", vec2{ 200.0f, 100.0f } );
   createSpikyShape();
 
-  Vec2f loc = mScale.toPhysics( Vec2f{ Rand::randFloat(getWindowWidth()), getWindowHeight() / 2 + Rand::randFloat(getWindowHeight()/2) } );
+  vec2 loc = mScale.toPhysics( vec2{ Rand::randFloat(getWindowWidth()), getWindowHeight() / 2 + Rand::randFloat(getWindowHeight()/2) } );
   float radius = mScale.toPhysics( Rand::randFloat( 20.0f, 80.0f ) );
   // Create a circle at loc with radius (and hold onto its ptr)
   mBodies.emplace_back( mSandbox.createCircle( loc, radius ) );
 
-  loc = mScale.toPhysics( Vec2f{ Rand::randFloat(getWindowWidth()), getWindowHeight() / 2 + Rand::randFloat(getWindowHeight()/2) } );
-  Vec2f size = mScale.toPhysics( Vec2f{ Rand::randFloat( 20.0f, 100.0f ), Rand::randFloat( 20.0f, 100.0f ) } );
+  loc = mScale.toPhysics( vec2{ Rand::randFloat(getWindowWidth()), getWindowHeight() / 2 + Rand::randFloat(getWindowHeight()/2) } );
+  vec2 size = mScale.toPhysics( vec2{ Rand::randFloat( 20.0f, 100.0f ), Rand::randFloat( 20.0f, 100.0f ) } );
   // Create a box at loc with size (and hold onto its ptr)
   mBodies.emplace_back( mSandbox.createBox( loc, size ) );
 }
@@ -122,12 +121,12 @@ void ShapeCreationApp::createSpikyShape()
   mSpikyBody = mSandbox.createFanShape( mScale.toPhysics( getWindowSize() / 2 ), hull_vertices );
 }
 
-void ShapeCreationApp::createTextShape( const string &text, const Vec2f &top_left )
+void ShapeCreationApp::createTextShape( const string &text, const vec2 &top_left )
 {
   // create shape using Cinder's Triangulator to calculate the triangles
   // works on almost any arbitrary shape
   Font f{ "Arial", 128.0f };
-  Vec2f loc{ top_left };
+  vec2 loc{ top_left };
   // de-res the text before getting the physics outline
   // this scalar is just to make it much smaller when we triangulate
   float scalar = 10000.0f;
@@ -160,7 +159,7 @@ void ShapeCreationApp::mouseDown( MouseEvent event )
 {
   if( event.isAltDown() )
   {
-    mBodies.emplace_back( mSandbox.createCircle( mScale.toPhysics( Vec2f{event.getPos()} ), Rand::randFloat( 0.1f, 0.2f ) ) );
+    mBodies.emplace_back( mSandbox.createCircle( mScale.toPhysics( vec2{event.getPos()} ), Rand::randFloat( 0.1f, 0.2f ) ) );
   }
 }
 
@@ -168,7 +167,7 @@ void ShapeCreationApp::mouseDrag( MouseEvent event )
 {
   if( event.isAltDown() )
   {
-    mBodies.emplace_back( mSandbox.createCircle( mScale.toPhysics( Vec2f{event.getPos()} ), Rand::randFloat( 0.1, 0.2f ) ) );
+    mBodies.emplace_back( mSandbox.createCircle( mScale.toPhysics( vec2{event.getPos()} ), Rand::randFloat( 0.1, 0.2f ) ) );
   }
 }
 

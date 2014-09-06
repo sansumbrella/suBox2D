@@ -47,24 +47,24 @@ namespace box2d
     explicit Shape( b2Shape *shape ):
     mShape( shape )
     {}
-    ci::Vec2f getCenter() const
+    ci::vec2 getCenter() const
     {
       switch ( mShape->GetType() )
       {
         case b2Shape::e_circle:
-          return ci::Vec2f( static_cast<b2CircleShape*>( mShape )->m_p.x,
+          return ci::vec2( static_cast<b2CircleShape*>( mShape )->m_p.x,
                             static_cast<b2CircleShape*>( mShape )->m_p.y );
           break;
         case b2Shape::e_polygon:
-          return ci::Vec2f( static_cast<b2PolygonShape*>( mShape )->m_centroid.x,
+          return ci::vec2( static_cast<b2PolygonShape*>( mShape )->m_centroid.x,
                             static_cast<b2PolygonShape*>( mShape )->m_centroid.y );
           break;
         default:
           break;
       }
-      return ci::Vec2f( 0, 0 );
+      return ci::vec2( 0, 0 );
     }
-    void offsetCenter( const ci::Vec2f &amount )
+    void offsetCenter( const ci::vec2 &amount )
     {
       switch ( mShape->GetType() )
       {

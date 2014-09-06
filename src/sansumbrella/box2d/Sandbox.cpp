@@ -81,7 +81,7 @@ unique_body_ptr Sandbox::createBody(const b2BodyDef &body_def)
   return manage( mWorld.CreateBody( &body_def ) );
 }
 
-unique_body_ptr Sandbox::createBox( const ci::Vec2f &pos, const ci::Vec2f &size, float rotation )
+unique_body_ptr Sandbox::createBox( const ci::vec2 &pos, const ci::vec2 &size, float rotation )
 {
   b2BodyDef bodyDef;
 	bodyDef.position.Set(	pos.x,
@@ -101,7 +101,7 @@ unique_body_ptr Sandbox::createBox( const ci::Vec2f &pos, const ci::Vec2f &size,
   return createBody( bodyDef, bodyFixtureDef );
 }
 
-unique_body_ptr Sandbox::createCircle( const Vec2f &pos, float radius )
+unique_body_ptr Sandbox::createCircle( const vec2 &pos, float radius )
 {
   b2BodyDef bodyDef;
   bodyDef.position.Set(	pos.x, pos.y );
@@ -117,7 +117,7 @@ unique_body_ptr Sandbox::createCircle( const Vec2f &pos, float radius )
   return createBody( bodyDef, fixtureDef );
 }
 
-unique_body_ptr Sandbox::createFanShape(const ci::Vec2f &pos, const std::vector<b2Vec2> &hull_vertices)
+unique_body_ptr Sandbox::createFanShape(const ci::vec2 &pos, const std::vector<b2Vec2> &hull_vertices)
 {
   assert( hull_vertices.size() >= 3 );
   vector<b2PolygonShape> shapes( hull_vertices.size() );
@@ -148,7 +148,7 @@ unique_body_ptr Sandbox::createFanShape(const ci::Vec2f &pos, const std::vector<
   return createBody( bodyDef, fixtures );
 }
 
-unique_body_ptr Sandbox::createShape( const ci::Vec2f &centroid, const ci::TriMesh &mesh, float scale )
+unique_body_ptr Sandbox::createShape( const ci::vec2 &centroid, const ci::TriMesh &mesh, float scale )
 {
   const auto num_triangles = mesh.getNumTriangles();
   vector<b2PolygonShape> shapes( num_triangles );
@@ -159,7 +159,7 @@ unique_body_ptr Sandbox::createShape( const ci::Vec2f &centroid, const ci::TriMe
 
   for( auto i = 0; i < num_triangles; ++i )
   {
-    Vec2f a, b, c;
+    vec2 a, b, c;
     mesh.getTriangleVertices( i, &a, &b, &c );
     if( scale != 1.0f )
     { // resize the triangles if necessary
@@ -169,7 +169,7 @@ unique_body_ptr Sandbox::createShape( const ci::Vec2f &centroid, const ci::TriMe
     }
     // Since we don't know anything about the quality of triangles from the mesh
     // Check that the triangle is wound CCW (has positive area)
-    float area = (Vec2f{b-a}).cross( Vec2f{c-b} ) / 2;
+    float area = (vec2{b-a}).cross( vec2{c-b} ) / 2;
     array<b2Vec2, 3> vertices = { b2Vec2{a.x, a.y}, b2Vec2{b.x, b.y}, b2Vec2{c.x, c.y} };
     if( area < 0 )
     { // flip the vertex order to be CCW
@@ -200,7 +200,7 @@ void Sandbox::createBoundaryRect(ci::Rectf screen_bounds)
   const float w = screen_bounds.getWidth() / 2.0f;
   const float h = screen_bounds.getHeight() / 2.0f;
   // center x, y
-  const Vec2f upperLeft = screen_bounds.getUpperLeft();
+  const vec2 upperLeft = screen_bounds.getUpperLeft();
   const float x = upperLeft.x + w;
   const float y = upperLeft.y + h;
 

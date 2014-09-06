@@ -83,22 +83,22 @@ void Renderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const
 void Renderer::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
 {
   gl::color( color.r, color.g, color.b );
-  gl::drawStrokedCircle( Vec2f{center.x, center.y}, radius );
+  gl::drawStrokedCircle( vec2{center.x, center.y}, radius );
 }
 
 void Renderer::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color)
 {
   gl::enableAlphaBlending();
   gl::color( color.r, color.g, color.b, 0.5f );
-  gl::drawSolidCircle( Vec2f{ center.x, center.y }, radius, 16 );
+  gl::drawSolidCircle( vec2{ center.x, center.y }, radius, 16 );
   gl::disableAlphaBlending();
-  gl::drawStrokedCircle( Vec2f{center.x, center.y}, radius, 16 );
+  gl::drawStrokedCircle( vec2{center.x, center.y}, radius, 16 );
 }
 
 void Renderer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 {
   gl::color(color.r, color.g, color.b);
-  gl::drawLine( Vec2f{ p1.x, p1.y }, Vec2f{ p2.x, p2.y } );
+  gl::drawLine( vec2{ p1.x, p1.y }, vec2{ p2.x, p2.y } );
 }
 
 void Renderer::DrawTransform(const b2Transform& xf)
@@ -108,18 +108,18 @@ void Renderer::DrawTransform(const b2Transform& xf)
 
 	gl::color(1.0f, 0.0f, 0.0f);
 	p2 = p1 + k_axisScale * xf.q.GetXAxis();
-	gl::drawLine( Vec2f{ p1.x, p1.y }, Vec2f{ p2.x, p2.y } );
+	gl::drawLine( vec2{ p1.x, p1.y }, vec2{ p2.x, p2.y } );
 
 	gl::color(0.0f, 1.0f, 0.0f);
 	p2 = p1 + k_axisScale * xf.q.GetYAxis();
-	gl::drawLine( Vec2f{ p1.x, p1.y }, Vec2f{ p2.x, p2.y } );
+	gl::drawLine( vec2{ p1.x, p1.y }, vec2{ p2.x, p2.y } );
 }
 
 void Renderer::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 {
 	glLineWidth(size);
 	gl::color(color.r, color.g, color.b);
-	gl::drawSolidCircle( Vec2f( p.x, p.y ), size * 0.5f );
+	gl::drawSolidCircle( vec2( p.x, p.y ), size * 0.5f );
 	glLineWidth(1.0f);
 }
 

@@ -48,7 +48,7 @@ using namespace std;
 class Bubble
 {
 public:
-  Bubble( b2::unique_body_ptr &&b, const ci::Vec2f &l, float r ):
+  Bubble( b2::unique_body_ptr &&b, const ci::vec2 &l, float r ):
   mBody( move(b) ),
   mLoc( l ),
   mRadius( r ),
@@ -76,15 +76,15 @@ public:
     gl::color( mColor );
     gl::pushModelView();
     gl::translate( mLoc );
-    gl::drawSolidCircle( Vec2f::zero(), mRadius );
+    gl::drawSolidCircle( vec2::zero(), mRadius );
     gl::rotate( mBody->GetAngle() * 180 / M_PI ); // box2d stores angle in radians, gl uses degrees
     gl::color( Color::black() );
-    gl::drawLine( Vec2f{ -mRadius, 0 }, Vec2f{ mRadius, 0 } );
+    gl::drawLine( vec2{ -mRadius, 0 }, vec2{ mRadius, 0 } );
     gl::popModelView();
   }
 private:
   b2::unique_body_ptr mBody;
-  ci::Vec2f           mLoc;
+  ci::vec2           mLoc;
   float               mRadius;
   Color               mColor;
 };
@@ -125,7 +125,7 @@ void CustomDrawingApp::setup()
     mBubbles.clear();
     for( int i = 0; i < 29; ++i )
     {
-      Vec2f loc{ Rand::randFloat( bounds.getX1(), bounds.getX2() ), Rand::randFloat( bounds.getY1(), bounds.getY2() ) };
+      vec2 loc{ Rand::randFloat( bounds.getX1(), bounds.getX2() ), Rand::randFloat( bounds.getY1(), bounds.getY2() ) };
       float radius = Rand::randFloat( bounds.getWidth() * 0.01f, bounds.getWidth() * 0.1f );
       mBubbles.emplace_back( Bubble{ mSandbox.createCircle( loc, radius ), mScale.fromPhysics(loc), mScale.fromPhysics(radius) } );
     }
