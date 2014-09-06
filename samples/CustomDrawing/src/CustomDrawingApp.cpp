@@ -26,7 +26,7 @@
  */
 
 #include "cinder/app/AppNative.h"
-#include "cinder/gl/gl.h"
+#include "cinder/app/RendererGl.h"
 #include "cinder/Rand.h"
 
 #include "suBox2D.h"
@@ -42,12 +42,14 @@ using namespace std;
  Press any key to create a new set of bubbles.
  */
 
-// something like this is a reasonable approach to managing a body in your
-// own structure
+
+/// Bubbles store a (smart) pointer to a Box2D body and use it to update their
+/// rendered positions every frame.
+/// This is a reasonable approach to managing a Box2D body in your own structure.
 class Bubble
 {
 public:
-  Bubble( b2::unique_body_ptr &&b, const ci::Vec2f &l, float r ):
+  Bubble( b2::unique_body_ptr &&b, const ci::vec2 &l, float r ):
   mBody( move(b) ),
   mLoc( l ),
   mRadius( r ),
@@ -75,15 +77,15 @@ public:
     gl::color( mColor );
     gl::pushModelView();
     gl::translate( mLoc );
-    gl::drawSolidCircle( Vec2f::zero(), mRadius );
-    gl::rotate( mBody->GetAngle() * 180 / M_PI ); // box2d stores angle in radians
+    gl::drawSolidCircle( vec2( 0 ), mRadius );
+    gl::rotate( mBody->GetAngle() * 180 / M_PI ); // box2d stores angle in radians, gl uses degrees
     gl::color( Color::black() );
-    gl::drawLine( Vec2f{ -mRadius, 0 }, Vec2f{ mRadius, 0 } );
+    gl::drawLine( vec2{ -mRadius, 0 }, vec2{ mRadius, 0 } );
     gl::popModelView();
   }
 private:
   b2::unique_body_ptr mBody;
-  ci::Vec2f           mLoc;
+  ci::vec2           mLoc;
   float               mRadius;
   Color               mColor;
 };
@@ -124,7 +126,7 @@ void CustomDrawingApp::setup()
     mBubbles.clear();
     for( int i = 0; i < 29; ++i )
     {
-      Vec2f loc{ Rand::randFloat( bounds.getX1(), bounds.getX2() ), Rand::randFloat( bounds.getY1(), bounds.getY2() ) };
+      vec2 loc{ Rand::randFloat( bounds.getX1(), bounds.getX2() ), Rand::randFloat( bounds.getY1(), bounds.getY2() ) };
       float radius = Rand::randFloat( bounds.getWidth() * 0.01f, bounds.getWidth() * 0.1f );
       mBubbles.emplace_back( Bubble{ mSandbox.createCircle( loc, radius ), mScale.fromPhysics(loc), mScale.fromPhysics(radius) } );
     }
@@ -155,8 +157,4 @@ void CustomDrawingApp::draw()
   }
 }
 
-#if defined( CINDER_COCOA_TOUCH )
-CINDER_APP_NATIVE( CustomDrawingApp, RendererGl( RendererGl::AA_NONE ) )
-#else
-CINDER_APP_NATIVE( CustomDrawingApp, RendererGl )
-#endif
+CINDER_APP_NATIVE( CustomDrawingApp, RendererGl() )

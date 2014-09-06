@@ -7,6 +7,7 @@
 	summary="Box2D sandbox and conversions"
 	url="git@github.com:sansumbrella/suBox2D.git"
 	>
+	<!-- Box2D By Erin Catto -->
 	<sourcePattern>src/Box2D/Collision/*.cpp</sourcePattern>
 	<headerPattern>src/Box2D/Collision/*.h</headerPattern>
 	<sourcePattern>src/Box2D/Collision/Shapes/*.cpp</sourcePattern>
@@ -22,10 +23,13 @@
 	<sourcePattern>src/Box2D/Rope/*.cpp</sourcePattern>
 	<headerPattern>src/Box2D/Rope/*.h</headerPattern>
 	<header>src/Box2D/Box2d.h</header>
+	<includePath system="true">src</includePath>
+
+	<!-- suBox2D wrapper files. -->
 	<headerPattern>src/sansumbrella/*.h</headerPattern>
 	<sourcePattern>src/sansumbrella/*.cpp</sourcePattern>
+	<headerPattern>src/sansumbrella/box2d/*.h</headerPattern>
 	<sourcePattern>src/sansumbrella/box2d/*.cpp</sourcePattern>
-	<includePath system="true">src</includePath>
 </block>
 <template>templates/Box2D Sandbox/template.xml</template>
 </cinder>

@@ -18,6 +18,8 @@
 		0E7296E45E474B65B8D02274 /* b2Collision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA2DB1C21B8402D9B255486 /* b2Collision.cpp */; };
 		116EF9B7B8394E96907E0418 /* b2CollideEdge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B7FE1D4E407D48EDB48CE79F /* b2CollideEdge.cpp */; };
 		15154C76180CE0EF00CF90F9 /* ContactListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15154C75180CE0EF00CF90F9 /* ContactListener.cpp */; };
+		1582189319BB8C6300AAD280 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1582189219BB8C6300AAD280 /* CoreMedia.framework */; };
+		1582189519BB8C6C00AAD280 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1582189419BB8C6C00AAD280 /* AVFoundation.framework */; };
 		15C7FE9B1849045B003E4805 /* b2MotorJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15C7FE9A1849045B003E4805 /* b2MotorJoint.cpp */; };
 		1F45D58D94624872B296F863 /* b2Island.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B0DED9FC02B642AE94728955 /* b2Island.cpp */; };
 		206FB09391D44B34AFD93135 /* b2GearJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C2E46C1CCCD84519B8A3C66D /* b2GearJoint.cpp */; };
@@ -85,6 +87,14 @@
 		1439591E48B548CE8A04E506 /* b2MouseJoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = b2MouseJoint.h; path = ../../../src/Box2D/Dynamics/Joints/b2MouseJoint.h; sourceTree = "<group>"; };
 		14F2E48F4BB544C7986F6628 /* b2EdgeAndPolygonContact.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = b2EdgeAndPolygonContact.cpp; path = ../../../src/Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp; sourceTree = "<group>"; };
 		15154C75180CE0EF00CF90F9 /* ContactListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ContactListener.cpp; path = ../../../src/sansumbrella/box2d/ContactListener.cpp; sourceTree = "<group>"; };
+		1582188C19BB8C2300AAD280 /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Common.h; path = ../../../src/sansumbrella/box2d/Common.h; sourceTree = "<group>"; };
+		1582188D19BB8C2300AAD280 /* ContactListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ContactListener.h; path = ../../../src/sansumbrella/box2d/ContactListener.h; sourceTree = "<group>"; };
+		1582188E19BB8C2300AAD280 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Renderer.h; path = ../../../src/sansumbrella/box2d/Renderer.h; sourceTree = "<group>"; };
+		1582188F19BB8C2300AAD280 /* Sandbox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Sandbox.h; path = ../../../src/sansumbrella/box2d/Sandbox.h; sourceTree = "<group>"; };
+		1582189019BB8C2300AAD280 /* Scale.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Scale.h; path = ../../../src/sansumbrella/box2d/Scale.h; sourceTree = "<group>"; };
+		1582189119BB8C2300AAD280 /* SimpleControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SimpleControl.h; path = ../../../src/sansumbrella/box2d/SimpleControl.h; sourceTree = "<group>"; };
+		1582189219BB8C6300AAD280 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		1582189419BB8C6C00AAD280 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		15C7FE9A1849045B003E4805 /* b2MotorJoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = b2MotorJoint.cpp; path = ../../../src/Box2D/Dynamics/Joints/b2MotorJoint.cpp; sourceTree = "<group>"; };
 		1977EE62056243B2BC97D870 /* b2PolygonShape.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = b2PolygonShape.h; path = ../../../src/Box2D/Collision/Shapes/b2PolygonShape.h; sourceTree = "<group>"; };
 		1B3F6952F2A945CC824079E1 /* b2BlockAllocator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = b2BlockAllocator.h; path = ../../../src/Box2D/Common/b2BlockAllocator.h; sourceTree = "<group>"; };
@@ -192,6 +202,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1582189519BB8C6C00AAD280 /* AVFoundation.framework in Frameworks */,
+				1582189319BB8C6300AAD280 /* CoreMedia.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				0091D8F90E81B9330029341E /* OpenGL.framework in Frameworks */,
 				5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */,
@@ -309,6 +321,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1582189419BB8C6C00AAD280 /* AVFoundation.framework */,
+				1582189219BB8C6300AAD280 /* CoreMedia.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
@@ -478,6 +492,12 @@
 		FC237CC0AF9A4788A2F2D56B /* box2d */ = {
 			isa = PBXGroup;
 			children = (
+				1582188C19BB8C2300AAD280 /* Common.h */,
+				1582188D19BB8C2300AAD280 /* ContactListener.h */,
+				1582188E19BB8C2300AAD280 /* Renderer.h */,
+				1582188F19BB8C2300AAD280 /* Sandbox.h */,
+				1582189019BB8C2300AAD280 /* Scale.h */,
+				1582189119BB8C2300AAD280 /* SimpleControl.h */,
 				95F8831FDFFC4687ACF058D9 /* Renderer.cpp */,
 				4333E4A07D834CB985366F4E /* Sandbox.cpp */,
 				A71798480A1A418DA1F4D39A /* Scale.cpp */,
@@ -514,6 +534,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0510;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "CustomDrawing" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -660,7 +681,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = i386;
 				CINDER_PATH = ../../../../..;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -671,6 +691,7 @@
 					../../../src,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include";
 			};
@@ -680,7 +701,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = i386;
 				CINDER_PATH = ../../../../..;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
