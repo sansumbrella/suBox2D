@@ -32,6 +32,16 @@
 #include <Box2D/Box2D.h>
 #include <iostream>
 
+#include <functional>
+#include <vector>
+#include "cinder/Vector.h"
+#include "cinder/app/App.h"
+#include "cinder/gl/gl.h"
+
+ #ifdef WIN32
+#define __PRETTY_FUNCTION__ __FUNCSIG__
+#endif
+
 namespace box2d
 {
   typedef std::unique_ptr<b2Body, std::function<void(b2Body*)>>   unique_body_ptr;
