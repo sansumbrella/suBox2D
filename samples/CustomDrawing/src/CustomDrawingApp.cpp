@@ -78,7 +78,7 @@ public:
     gl::pushModelView();
     gl::translate( mLoc );
     gl::drawSolidCircle( vec2( 0 ), mRadius );
-    gl::rotate( mBody->GetAngle() * 180 / M_PI ); // box2d stores angle in radians, gl uses degrees
+    gl::rotate( mBody->GetAngle() );
     gl::color( Color::black() );
     gl::drawLine( vec2{ -mRadius, 0 }, vec2{ mRadius, 0 } );
     gl::popModelView();
