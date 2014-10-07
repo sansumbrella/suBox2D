@@ -32,11 +32,14 @@
 #include <Box2D/Box2D.h>
 #include <iostream>
 
+#if defined(CINDER_MSW) || defined(CINDER_WINRT)
+// Additional headers for Windows platform that lacks pch.
 #include <functional>
 #include <vector>
 #include "cinder/Vector.h"
 #include "cinder/app/App.h"
 #include "cinder/gl/gl.h"
+#endif
 
 namespace box2d
 {
