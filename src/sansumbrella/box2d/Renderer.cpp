@@ -125,7 +125,7 @@ void Renderer::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 
 void Renderer::DrawString(int x, int y, const char* string, ...)
 {
-	std::cout << "WARNING: " <<  __PRETTY_FUNCTION__ << " Not Yet Implemented" << std::endl;
+
 }
 
 void Renderer::DrawAABB(b2AABB* aabb, const b2Color& color)
