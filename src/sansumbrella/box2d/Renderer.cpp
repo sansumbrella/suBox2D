@@ -45,7 +45,7 @@ void Renderer::updateFlags()
   SetFlags( (drawShape * e_shapeBit) |
            (drawJoint * e_jointBit) |
            (drawAABB * e_aabbBit) |
-           (drawPairs * e_pairBit) |
+           (drawPair * e_pairBit) |
            (drawCenterOfMass * e_centerOfMassBit ) );
 }
 
@@ -59,7 +59,7 @@ void Renderer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Co
   }
   path.close();
 
-  gl::color( color.r, color.g, color.b );
+  gl::ScopedColor c( Color( color.r, color.g, color.b ) );
   gl::draw( path );
 }
 
@@ -73,10 +73,9 @@ void Renderer::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const
   }
   path.close();
 
-  gl::enableAlphaBlending();
-  gl::color( color.r, color.g, color.b, 0.5f );
+  gl::ScopedAlphaBlend blend( false );
+  gl::ScopedColor c( ColorA( color.r, color.g, color.b, 0.5f ) );
   gl::drawSolid( path );
-  gl::disableAlphaBlending();
   gl::draw( path );
 }
 
@@ -89,7 +88,7 @@ void Renderer::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& c
 void Renderer::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color)
 {
   gl::enableAlphaBlending();
-  gl::color( color.r, color.g, color.b, 0.5f );
+  gl::ScopedColor c( ColorA( color.r, color.g, color.b, 0.5f ) );
   gl::drawSolidCircle( vec2{ center.x, center.y }, radius, 16 );
   gl::disableAlphaBlending();
   gl::drawStrokedCircle( vec2{center.x, center.y}, radius, 16 );
@@ -106,30 +105,32 @@ void Renderer::DrawTransform(const b2Transform& xf)
 	b2Vec2 p1 = xf.p, p2;
 	const float32 k_axisScale = 0.4f;
 
+  gl::ScopedColor red( Color( 1, 0, 0 ) );
 	gl::color(1.0f, 0.0f, 0.0f);
 	p2 = p1 + k_axisScale * xf.q.GetXAxis();
 	gl::drawLine( vec2{ p1.x, p1.y }, vec2{ p2.x, p2.y } );
 
-	gl::color(0.0f, 1.0f, 0.0f);
+	gl::ScopedColor green( Color( 0, 1, 0 ) );
 	p2 = p1 + k_axisScale * xf.q.GetYAxis();
 	gl::drawLine( vec2{ p1.x, p1.y }, vec2{ p2.x, p2.y } );
 }
 
 void Renderer::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 {
-	glLineWidth(size);
-	gl::color(color.r, color.g, color.b);
+  gl::ScopedColor c( Color( color.r, color.g, color.b ) );
+  gl::lineWidth( size );
 	gl::drawSolidCircle( vec2( p.x, p.y ), size * 0.5f );
-	glLineWidth(1.0f);
+  gl::lineWidth( 1.0f );
 }
 
 void Renderer::DrawString(int x, int y, const char* string, ...)
 {
-
+  gl::ScopedColor c( Color( 1, 1, 1 ) );
+  gl::drawString( string, vec2( x, y ) );
 }
 
 void Renderer::DrawAABB(b2AABB* aabb, const b2Color& color)
 {
-	gl::color(color.r, color.g, color.b);
+  gl::ScopedColor c( Color( color.r, color.g, color.b ) );
   gl::drawStrokedRect( Rectf{ aabb->upperBound.x, aabb->upperBound.y, aabb->lowerBound.x, aabb->lowerBound.y }  );
 }
