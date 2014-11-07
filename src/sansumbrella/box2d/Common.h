@@ -110,7 +110,7 @@ namespace box2d
           vertices.push_back( b2Mul( xf, shape->m_vertices[i] ) );
         }
         // Set transformed shape (lets box2d handle the normal assignment)
-        shape->Set( &vertices[0], vertices.size() );
+        shape->Set( &vertices[0], (int32)vertices.size() );
       }
       else if( mShape->GetType() == b2Shape::e_circle )
       {
