@@ -26,6 +26,7 @@
  */
 
 #include "Sandbox.h"
+#include "Scale.h"
 #include "cinder/TriMesh.h"
 #include <array>
 
@@ -49,6 +50,11 @@ void Sandbox::setContactFilter( const b2ContactFilter &filter )
 {
 	mContactFilter = filter;
 	mWorld.SetContactFilter(&mContactFilter);
+}
+
+void Sandbox::debugDraw( const box2d::Scale &scale )
+{
+  debugDraw( scale.getPointsPerMeter() );
 }
 
 void Sandbox::debugDraw( float points_per_meter )

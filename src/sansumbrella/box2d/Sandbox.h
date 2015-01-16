@@ -37,6 +37,9 @@ namespace cinder
 
 namespace box2d
 {
+
+class Scale;
+
   /**
    Sandbox is a convenient way to manage a b2World.
    It keeps track of the world and the variables needed to step it in time.
@@ -62,6 +65,7 @@ namespace box2d
     void step();
     //! have a look at what's in the physics system (scaled up to screen space)
     void debugDraw( float points_per_meter );
+    void debugDraw( const Scale &scale );
 
     //! Create a boundary rectangle in screen coordinates; uses a b2ChainShape
     void createBoundaryRect( ci::Rectf screen_bounds );
