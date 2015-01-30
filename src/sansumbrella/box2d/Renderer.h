@@ -46,6 +46,7 @@ namespace box2d
     void DrawString(int x, int y, const char* string, ...);
     void DrawAABB(b2AABB* aabb, const b2Color& color);
 
+    void flush();
 /*
     void drawShapes( bool doDraw ) { drawShape = doDraw; updateFlags(); }
     void drawJoints( bool doDraw ) { drawJoint = doDraw; updateFlags(); }
@@ -60,5 +61,14 @@ namespace box2d
     int drawPair = 0;
     int drawCenterOfMass = 1;
     void updateFlags();
+
+    struct Vertex
+    {
+      ci::vec2    position;
+      ci::ColorA  color;
+    };
+
+    std::vector<Vertex> _triangle_vertices;
+    std::vector<Vertex> _line_vertices;
   };
 }
