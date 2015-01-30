@@ -45,11 +45,11 @@ Renderer::~Renderer()
 
 void Renderer::updateFlags()
 {
-  SetFlags( (drawShape * e_shapeBit) |
-           (drawJoint * e_jointBit) |
-           (drawAABB * e_aabbBit) |
-           (drawPair * e_pairBit) |
-           (drawCenterOfMass * e_centerOfMassBit) );
+  SetFlags( (_draw_shape * e_shapeBit) |
+           (_draw_joint * e_jointBit) |
+           (_draw_aabb * e_aabbBit) |
+           (_draw_pair * e_pairBit) |
+           (_draw_center_of_mass * e_centerOfMassBit) );
 }
 
 void Renderer::flush()

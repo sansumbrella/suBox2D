@@ -40,33 +40,34 @@ namespace box2d
     // b2Draw interface overrides.
     //
 
-    void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;
-    void DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;
-    void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color) override;
-    void DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color) override;
-    void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) override;
-    void DrawTransform(const b2Transform& xf) override;
+    void DrawPolygon (const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;
+    void DrawSolidPolygon (const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;
+    void DrawCircle (const b2Vec2& center, float32 radius, const b2Color& color) override;
+    void DrawSolidCircle (const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color) override;
+    void DrawSegment (const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) override;
+    void DrawTransform (const b2Transform& xf) override;
 
     //
-    // Render flags for Box2D.
+    // Set render flags for Box2D.
     // Decide whether to draw different parts of physics.
     //
 
-    void drawShapes( bool doDraw ) { drawShape = doDraw; updateFlags(); }
-    void drawJoints( bool doDraw ) { drawJoint = doDraw; updateFlags(); }
-    void drawAABBs( bool doDraw ) { drawAABB = doDraw; updateFlags(); }
-    void drawPairs( bool doDraw ) { drawPair = doDraw; updateFlags(); }
-    void drawCentersOfMass( bool doDraw ) { drawCenterOfMass = doDraw; updateFlags(); }
+    void drawShapes (bool doDraw) { _draw_shape = doDraw; updateFlags(); }
+    void drawJoints (bool doDraw) { _draw_joint = doDraw; updateFlags(); }
+    void drawAABBs (bool doDraw) { _draw_aabb = doDraw; updateFlags(); }
+    void drawPairs (bool doDraw) { _draw_pair = doDraw; updateFlags(); }
+    void drawCentersOfMass (bool doDraw) { _draw_center_of_mass = doDraw; updateFlags(); }
 
     /// Draw using OpenGL and clear out drawing buffers.
     void flush();
 
   private:
-    int drawShape = 1;
-    int drawJoint = 1;
-    int drawAABB = 0;
-    int drawPair = 0;
-    int drawCenterOfMass = 1;
+    int _draw_shape = 1;
+    int _draw_joint = 1;
+    int _draw_aabb = 0;
+    int _draw_pair = 0;
+    int _draw_center_of_mass = 1;
+
     void updateFlags();
 
     struct Vertex
