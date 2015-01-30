@@ -2,7 +2,7 @@
 
 suBox2D is a simple wrapper around Box2D physics for use with the Cinder framework.
 
-Wraps Box2D version 2.3.0  
+Wraps Box2D version 2.3.1  
 Builds against [Cinder glNext](https://github.com/cinder/cinder/tree/glNext)  
 Clone into your cinder/blocks/ directory to get started.
 
