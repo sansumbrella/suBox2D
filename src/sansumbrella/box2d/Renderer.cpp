@@ -49,7 +49,7 @@ void Renderer::updateFlags()
            (drawJoint * e_jointBit) |
            (drawAABB * e_aabbBit) |
            (drawPair * e_pairBit) |
-           (drawCenterOfMass * e_centerOfMassBit ) );
+           (drawCenterOfMass * e_centerOfMassBit) );
 }
 
 void Renderer::flush()
@@ -216,38 +216,4 @@ void Renderer::DrawTransform(const b2Transform& transform)
 
   _line_vertices.push_back(Vertex{center, green});
   _line_vertices.push_back(Vertex{up, green});
-}
-
-void Renderer::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
-{
-  vec2 pos = vec2(p.x, p.y);
-
-  ColorA c(color.r, color.g, color.b);
-
-  _line_vertices.push_back(Vertex{pos, c});
-  _line_vertices.push_back(Vertex{pos, c});
-}
-
-void Renderer::DrawString(int x, int y, const char* string, ...)
-{
-  gl::ScopedColor c( Color( 1, 1, 1 ) );
-  gl::drawString( string, vec2( x, y ) );
-}
-
-void Renderer::DrawAABB(b2AABB* aabb, const b2Color& color)
-{
-  const Rectf outline( aabb->upperBound.x, aabb->upperBound.y, aabb->lowerBound.x, aabb->lowerBound.y );
-  const ColorA c( color.r, color.g, color.b );
-
-  _line_vertices.push_back(Vertex{outline.getUpperRight(), c});
-  _line_vertices.push_back(Vertex{outline.getUpperLeft(), c});
-
-  _line_vertices.push_back(Vertex{outline.getUpperLeft(), c});
-  _line_vertices.push_back(Vertex{outline.getLowerLeft(), c});
-
-  _line_vertices.push_back(Vertex{outline.getLowerLeft(), c});
-  _line_vertices.push_back(Vertex{outline.getLowerRight(), c});
-
-  _line_vertices.push_back(Vertex{outline.getLowerRight(), c});
-  _line_vertices.push_back(Vertex{outline.getUpperRight(), c});
 }
