@@ -62,6 +62,7 @@ void Sandbox::debugDraw( float points_per_meter )
 	gl::pushModelMatrix();
 	gl::scale( points_per_meter, points_per_meter );
   mWorld.DrawDebugData();
+  mDebugRenderer.flush();
   gl::popModelMatrix();
 }
 
