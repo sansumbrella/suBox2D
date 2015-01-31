@@ -52,11 +52,11 @@ namespace box2d
     // Decide whether to draw different parts of physics.
     //
 
-    void drawShapes (bool doDraw) { _draw_shape = doDraw; updateFlags(); }
-    void drawJoints (bool doDraw) { _draw_joint = doDraw; updateFlags(); }
-    void drawAABBs (bool doDraw) { _draw_aabb = doDraw; updateFlags(); }
-    void drawPairs (bool doDraw) { _draw_pair = doDraw; updateFlags(); }
-    void drawCentersOfMass (bool doDraw) { _draw_center_of_mass = doDraw; updateFlags(); }
+    void displayShapes (bool doDraw) { _draw_shape = doDraw; updateFlags(); }
+    void displayJoints (bool doDraw) { _draw_joint = doDraw; updateFlags(); }
+    void displayAABBs (bool doDraw) { _draw_aabb = doDraw; updateFlags(); }
+    void displayPairs (bool doDraw) { _draw_pair = doDraw; updateFlags(); }
+    void displayCentersOfMass (bool doDraw) { _draw_center_of_mass = doDraw; updateFlags(); }
 
     /// Draw using OpenGL and clear out drawing buffers.
     void flush();

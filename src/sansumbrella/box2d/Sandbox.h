@@ -90,8 +90,9 @@ class Scale;
     unique_joint_ptr createJoint( const b2JointDef &joint_def );
 
     //! Direct access to the box2d world
-    b2World& getWorld()
-    { return mWorld; }
+    b2World& getWorld() { return mWorld; }
+
+    Renderer& getDebugRenderer() { return mDebugRenderer; }
 
     // Convenience methods for some b2world functions
 
