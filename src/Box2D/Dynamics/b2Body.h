@@ -172,6 +172,9 @@ public:
 	/// @return the current world rotation angle in radians.
 	float32 GetAngle() const;
 
+  /// Set the angle in radians.
+  void SetAngle(float32 angle);
+
 	/// Get the world position of the center of mass.
 	const b2Vec2& GetWorldCenter() const;
 
@@ -390,7 +393,7 @@ private:
 	friend class b2ContactManager;
 	friend class b2ContactSolver;
 	friend class b2Contact;
-	
+
 	friend class b2DistanceJoint;
 	friend class b2FrictionJoint;
 	friend class b2GearJoint;
@@ -484,6 +487,11 @@ inline const b2Vec2& b2Body::GetPosition() const
 inline float32 b2Body::GetAngle() const
 {
 	return m_sweep.a;
+}
+
+inline void b2Body::SetAngle(float32 angle)
+{
+	m_sweep.a = m_sweep.a0 = angle;
 }
 
 inline const b2Vec2& b2Body::GetWorldCenter() const
