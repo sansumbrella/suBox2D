@@ -25,7 +25,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "cinder/app/AppNative.h"
+#include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/Triangulate.h"
 #include "cinder/Rand.h"
@@ -48,9 +48,8 @@ using namespace std;
  'r' to reset (destroy all bodies)
  */
 
-class ShapeCreationApp : public AppNative {
+class ShapeCreationApp : public App {
 public:
-  void prepareSettings( Settings *settings );
   void setup();
   void mouseDown( MouseEvent event );
   void mouseDrag( MouseEvent event );
@@ -69,10 +68,6 @@ private:
   vector<b2::unique_body_ptr>   mBodies;
 };
 
-void ShapeCreationApp::prepareSettings( Settings *settings )
-{
-  settings->setWindowSize( 1024, 768 );
-}
 
 void ShapeCreationApp::setup()
 {
@@ -183,4 +178,8 @@ void ShapeCreationApp::draw()
   mSandbox.debugDraw( mScale.getPointsPerMeter() );
 }
 
-CINDER_APP_NATIVE( ShapeCreationApp, RendererGl( RendererGl::Options().antiAliasing( RendererGl::AA_MSAA_4 ) ) )
+
+CINDER_APP( ShapeCreationApp, RendererGl( RendererGl::Options().msaa( 4 ) ), []( App::Settings *settings ) {
+    settings->setWindowSize( 1024, 768 );
+} )
+
