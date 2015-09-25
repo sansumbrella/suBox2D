@@ -61,7 +61,7 @@ void Renderer::flush()
 
   gl::ScopedVao         vao_scope(vao);
   gl::ScopedBuffer      vbo_scope(vbo);
-  gl::ScopedAlphaBlend  blend(true);
+  gl::ScopedBlendAlpha  blend;
 
   vao->replacementBindBegin();
   auto position_loc = shader->getAttribSemanticLocation(geom::POSITION);
