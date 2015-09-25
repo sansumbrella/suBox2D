@@ -25,7 +25,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "cinder/app/AppNative.h"
+#include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/Rand.h"
 
@@ -90,9 +90,9 @@ private:
   Color               mColor;
 };
 
-class CustomDrawingApp : public AppNative {
+class CustomDrawingApp : public App {
 public:
-  void prepareSettings( Settings *settings );
+//  void prepareSettings( App::Settings *settings );
   void setup();
   void update();
   void draw();
@@ -105,15 +105,15 @@ private:
   b2::SimpleControl   mControl;
   vector<Bubble>      mBubbles;
 };
-
-void CustomDrawingApp::prepareSettings(Settings *settings)
-{
-#if not defined( CINDER_COCOA_TOUCH )
-  settings->setWindowSize( 1024, 768 );
-#else
-  settings->enableMultiTouch( false );
-#endif
-}
+//
+//void CustomDrawingApp::prepareSettings(App::Settings *settings)
+//{
+//#if not defined( CINDER_COCOA_TOUCH )
+//  settings->setWindowSize( 1024, 768 );
+//#else
+//  settings->enableMultiTouch( false );
+//#endif
+//}
 
 void CustomDrawingApp::setup()
 {
@@ -157,4 +157,10 @@ void CustomDrawingApp::draw()
   }
 }
 
-CINDER_APP_NATIVE( CustomDrawingApp, RendererGl() )
+CINDER_APP( CustomDrawingApp, RendererGl, []( App::Settings *settings ) {
+#if not defined( CINDER_COCOA_TOUCH )
+    settings->setWindowSize( 1024, 768 );
+#else
+    settings->enableMultiTouch( false );
+#endif
+} )
