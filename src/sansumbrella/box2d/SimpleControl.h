@@ -50,7 +50,7 @@ namespace box2d
     unique_joint_ptr  mMouseJoint;
     // an empty body, modeled after the earlier box2d ground_body
     unique_body_ptr   mMouseBody;
-    std::array<ci::signals::connection, 3> mMouseConnections;
+    std::array<ci::signals::Connection, 3> mMouseConnections;
     // handlers basic user interaction
     void mouseDown( ci::app::MouseEvent &event, Sandbox &sandbox, float scale );
     void mouseDrag( ci::app::MouseEvent &event, float scale );
